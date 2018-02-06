@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:repository="http://www.springframework.org/schema/data/repository"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.3.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.8.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+		http://www.springframework.org/schema/data/repository http://www.springframework.org/schema/data/repository/spring-repository-1.11.xsd">
+
+	<context:property-placeholder location="classpath:application.properties" />
+
+	<beans:bean
+		class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
+
+	<beans:bean id="dbSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<beans:property name="driverClassName" value="${database.driverClassName}" />
+		<beans:property name="url" value="${database.url}" />
+		<beans:property name="username" value="${database.username}" />
+		<beans:property name="password" value="${database.password}" />
+		<beans:property name="connectionProperties"
+			value="defaultRowPrefetch=1000;defaultBatchValue=1000;connectionPool=0"></beans:property>
+	</beans:bean>
+
+	<beans:bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<beans:property name="packagesToScan" value="ro.inf.ucv.admitere.entity" />
+		<beans:property name="persistenceUnitName" value="persistenceUnit" />
+		<beans:property name="dataSource" ref="dbSource" />
+		<beans:property name="jpaVendorAdapter">
+			<beans:bean
+				class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+				<beans:property name="showSql" value="${database.hibernate.show_sql}" />
+			</beans:bean>
+		</beans:property>
+		<beans:property name="jpaPropertyMap">
+			<beans:map>
+				<beans:entry key="hibernate.dialect"
+					value="org.hibernate.dialect.MySQL5InnoDBDialect" />
+				<beans:entry key="hibernate.connection.release_mode"
+					value="after_transaction" />
+				<beans:entry key="hibernate.hbm2ddl.auto" value="${database.hibernate.hbm2ddl.auto}" />
+				<beans:entry key="hibernate.format_sql" value="${database.hibernate.format_sql}" />
+				<beans:entry key="show_sql" value="${database.hibernate.show_sql}" />
+			</beans:map>
+		</beans:property>
+	</beans:bean>
+
+	<beans:bean id="transactionManager"
+		class="org.springframework.orm.jpa.JpaTransactionManager">
+		<beans:property name="entityManagerFactory" ref="entityManagerFactory" />
+	</beans:bean>
+
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+	<jpa:repositories base-package="ro.inf.ucv.admitere.repository" />
+
+	<jdbc:initialize-database enabled="true"
+		data-source="dbSource" separator=";">
+		<jdbc:script location="classpath:init/sql/drop-tables.sql" />
+		<jdbc:script location="classpath:init/sql/create-tables.sql" />
+		<jdbc:script location="classpath:init/sql/countries.sql" />
+		<jdbc:script location="classpath:init/sql/states.sql" />
+		<jdbc:script location="classpath:init/sql/cities.sql" />
+	</jdbc:initialize-database>
+
+	<beans:import resource="security-context.xml" />
+</beans:beans>
