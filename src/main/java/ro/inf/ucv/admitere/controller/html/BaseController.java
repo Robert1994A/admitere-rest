@@ -8,8 +8,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 
 import ro.inf.ucv.admitere.captcha.AttemptsService;
 import ro.inf.ucv.admitere.captcha.CaptchaService;
@@ -108,6 +106,10 @@ public class BaseController {
 
 	protected BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10, new SecureRandom());
 
+	protected String generateString() {
+		return encoder.encode(stringGenerator.getRandomString());
+	}
+
 	private Locale locale = LocaleContextHolder.getLocale();
 
 	public String getMessage(String key, Object[] args, Locale locale) {
@@ -123,8 +125,4 @@ public class BaseController {
 		return locale;
 	}
 
-	@InitBinder
-	private void initBinder(WebDataBinder binder) {
-		binder.setValidator(profileValidator);
-	}
 }

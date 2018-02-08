@@ -14,6 +14,9 @@
 </head>
 <body ng-controller="homeController">
 
+	<i id="container-loader" style="display: none;"
+		class="fa fa-spinner fa-pulse fa-spin fa-5x fa-fw"></i>
+
 	<!-- Include main navigation bar -->
 	<jsp:include page="include/main-navbar.jsp" />
 

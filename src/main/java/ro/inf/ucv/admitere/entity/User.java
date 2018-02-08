@@ -71,12 +71,15 @@ public class User implements Serializable {
 	@JoinTable
 	private List<Role> roles;
 
+	@JsonIgnore
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Profile profile;
 
+	@JsonIgnore
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Faculty faculty;
 
+	@JsonIgnore
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private University university;
 
@@ -174,6 +177,14 @@ public class User implements Serializable {
 
 	public void setUniversity(University university) {
 		this.university = university;
+	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", username=" + username + ", email=" + email + ", password=" + password
+				+ ", registerToken=" + registerToken + ", recoverPaswordToken=" + recoverPaswordToken
+				+ ", creationDate=" + creationDate + ", enabled=" + enabled + ", roles=" + roles + ", profile="
+				+ profile + ", faculty=" + faculty + ", university=" + university + "]";
 	}
 
 }

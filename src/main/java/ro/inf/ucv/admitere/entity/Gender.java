@@ -59,4 +59,9 @@ public class Gender implements Serializable {
 		this.name = name;
 	}
 
+	@Override
+	public String toString() {
+		return "Gender [id=" + id + ", name=" + name + ", creationDate=" + creationDate + "]";
+	}
+
 }

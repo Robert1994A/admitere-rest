@@ -38,26 +38,26 @@ import ro.inf.ucv.admitere.enumerations.NomenclatureType;
 @Controller
 public class InitController extends BaseController {
 
-	public void initDatabaseUsers(int numberOfUsers) throws Exception {
+	public void initDatabaseUsers(int numberOfUsers, boolean flush) throws Exception {
 		Role roleAdmin = new Role();
 		roleAdmin.setName("ROLE_ADMIN");
 		roleAdmin.setCreationDate(new Date());
-		roleService.save(roleAdmin);
+		roleService.save(roleAdmin, flush);
 
 		Role roleFaculty = new Role();
 		roleFaculty.setName("ROLE_FACULTY");
 		roleFaculty.setCreationDate(new Date());
-		roleService.save(roleFaculty);
+		roleService.save(roleFaculty, flush);
 
 		Role roleUniversity = new Role();
 		roleUniversity.setName("ROLE_UNIVERSITY");
 		roleUniversity.setCreationDate(new Date());
-		roleService.save(roleUniversity);
+		roleService.save(roleUniversity, flush);
 
 		Role roleUser = new Role();
 		roleUser.setName("ROLE_USER");
 		roleUser.setCreationDate(new Date());
-		roleService.save(roleUser);
+		roleService.save(roleUser, flush);
 
 		List<Role> rolesAdmin = new ArrayList<Role>();
 		rolesAdmin.add(roleUniversity);
@@ -88,7 +88,7 @@ public class InitController extends BaseController {
 			userAdmin.setPassword(encoder.encode(username));
 			userAdmin.setRoles(rolesAdmin);
 			userAdmin.setRecoverPaswordToken(generateString());
-			userService.save(userAdmin);
+			userService.save(userAdmin, flush);
 		}
 
 		for (int i = 0; i < numberOfUsers; i++) {
@@ -102,7 +102,7 @@ public class InitController extends BaseController {
 			moderator.setPassword(encoder.encode(username));
 			moderator.setRoles(rolesFaculty);
 			moderator.setRecoverPaswordToken(generateString());
-			userService.save(moderator);
+			userService.save(moderator, flush);
 		}
 
 		for (int i = 0; i < numberOfUsers; i++) {
@@ -116,7 +116,7 @@ public class InitController extends BaseController {
 			userFaculty.setPassword(encoder.encode(username));
 			userFaculty.setRoles(rolesFaculty);
 			userFaculty.setRecoverPaswordToken(generateString());
-			userService.save(userFaculty);
+			userService.save(userFaculty, flush);
 		}
 
 		for (int i = 0; i < numberOfUsers; i++) {
@@ -130,38 +130,34 @@ public class InitController extends BaseController {
 			user.setPassword(username);
 			user.setRoles(rolesUser);
 			user.setRecoverPaswordToken(generateString());
-			userService.save(user);
+			userService.save(user, flush);
 		}
-	}
-
-	String generateString() {
-		return encoder.encode(stringGenerator.getRandomString());
 	}
 
 	@GetMapping("/init")
 	public void home(Model model) throws Exception {
 		if (userService.count() == 0) {
-			initDatabaseUsers(30);
-			initProfileData();
-			initSampleNomenclature();
-			initUniversities();
+			initDatabaseUsers(30, true);
+			initProfileData(true);
+			initSampleNomenclature(true);
+			initUniversities(true);
 		}
 	}
 
-	private void initSampleNomenclature() {
+	private void initSampleNomenclature(boolean flush) {
 		SampleNomenclature sampleNomenclature = new SampleNomenclature("Nota BAC", NomenclatureType.BACCALUAREATE);
 		SampleNomenclature sampleNomenclature1 = new SampleNomenclature("Interview", NomenclatureType.INTERVIEW);
 		SampleNomenclature sampleNomenclature2 = new SampleNomenclature("Other", NomenclatureType.OTHER);
 		SampleNomenclature sampleNomenclature3 = new SampleNomenclature("Transcript", NomenclatureType.TRANSCRIPT);
 		SampleNomenclature sampleNomenclature4 = new SampleNomenclature("Written test", NomenclatureType.WRITTEN_TEST);
-		sampleNomenclatureService.saveAndFlush(sampleNomenclature);
-		sampleNomenclatureService.saveAndFlush(sampleNomenclature1);
-		sampleNomenclatureService.saveAndFlush(sampleNomenclature2);
-		sampleNomenclatureService.saveAndFlush(sampleNomenclature3);
-		sampleNomenclatureService.saveAndFlush(sampleNomenclature4);
+		sampleNomenclatureService.save(sampleNomenclature, flush);
+		sampleNomenclatureService.save(sampleNomenclature1, flush);
+		sampleNomenclatureService.save(sampleNomenclature2, flush);
+		sampleNomenclatureService.save(sampleNomenclature3, flush);
+		sampleNomenclatureService.save(sampleNomenclature4, flush);
 	}
 
-	private void initUniversities() {
+	private void initUniversities(boolean flush) {
 		ClassLoader classLoader = getClass().getClassLoader();
 		File universitiesFile = new File(classLoader.getResource("init/universities.csv").getFile());
 		try {
@@ -187,7 +183,7 @@ public class InitController extends BaseController {
 					faculties.add(faculty);
 				}
 				university.setFaculties(faculties);
-				universityService.save(university);
+				universityService.save(university, flush);
 				counter += 1;
 			}
 		} catch (Exception e) {
@@ -195,49 +191,48 @@ public class InitController extends BaseController {
 		}
 	}
 
-	private void initProfileData() {
+	private void initProfileData(boolean flush) {
 		// Initialize gender
-		genderService.saveAndFlush(new Gender("Female"));
-		genderService.saveAndFlush(new Gender("Male"));
-		genderService.saveAndFlush(new Gender("Other"));
+		genderService.save(new Gender("Female"), flush);
+		genderService.save(new Gender("Male"), flush);
+		genderService.save(new Gender("Other"), flush);
 
 		// Initialize citizenship
-		citizenshipService.saveAndFlush(new Citizenship("Romanian"));
-		citizenshipService.saveAndFlush(new Citizenship("English"));
-		citizenshipService.saveAndFlush(new Citizenship("American"));
-		citizenshipService.saveAndFlush(new Citizenship("Other"));
+		citizenshipService.save(new Citizenship("Romanian"), flush);
+		citizenshipService.save(new Citizenship("English"), flush);
+		citizenshipService.save(new Citizenship("American"), flush);
+		citizenshipService.save(new Citizenship("Other"), flush);
 
 		// Initialize ethnicity
-		ethnicityService.saveAndFlush(new Ethnicity("Romanian"));
-		ethnicityService.saveAndFlush(new Ethnicity("English"));
-		ethnicityService.saveAndFlush(new Ethnicity("Other"));
+		ethnicityService.save(new Ethnicity("Romanian"), flush);
+		ethnicityService.save(new Ethnicity("English"), flush);
+		ethnicityService.save(new Ethnicity("Other"), flush);
 
 		// Initialize family situation
-		familySituationService.saveAndFlush(new FamilySituation("Orphan by a parent"));
-		familySituationService.saveAndFlush(new FamilySituation("Orphan by both parents"));
-		familySituationService.saveAndFlush(new FamilySituation("Other"));
+		familySituationService.save(new FamilySituation("Orphan by a parent"), flush);
+		familySituationService.save(new FamilySituation("Orphan by both parents"), flush);
+		familySituationService.save(new FamilySituation("Other"), flush);
 
 		// Initialize marital status
-		maritalStatusService.saveAndFlush(new MaritalStatus("Married"));
-		maritalStatusService.saveAndFlush(new MaritalStatus("Unmarried"));
-		maritalStatusService.saveAndFlush(new MaritalStatus("Divorced"));
-		maritalStatusService.saveAndFlush(new MaritalStatus("Widow(er)"));
+		maritalStatusService.save(new MaritalStatus("Married"), flush);
+		maritalStatusService.save(new MaritalStatus("Unmarried"), flush);
+		maritalStatusService.save(new MaritalStatus("Divorced"), flush);
+		maritalStatusService.save(new MaritalStatus("Widow(er)"), flush);
 
 		// Initialize religion
-		religionService.saveAndFlush(new Religion("Orthodox"));
-		religionService.saveAndFlush(new Religion("Catholic"));
-		religionService.saveAndFlush(new Religion("Other"));
+		religionService.save(new Religion("Orthodox"), flush);
+		religionService.save(new Religion("Catholic"), flush);
+		religionService.save(new Religion("Other"), flush);
 
 		// Initialize medical condition
-		medicalConditionService.saveAndFlush(new MedicalCondition("Grade 1 handicap"));
-		medicalConditionService.saveAndFlush(new MedicalCondition("Grade 2 handicap"));
-		medicalConditionService.saveAndFlush(new MedicalCondition("Serious and incurable diseases"));
+		medicalConditionService.save(new MedicalCondition("Grade 1 handicap"), flush);
+		medicalConditionService.save(new MedicalCondition("Grade 2 handicap"), flush);
+		medicalConditionService.save(new MedicalCondition("Serious and incurable diseases"), flush);
 
 		// Initialize social situation
-		socialSituationService.saveAndFlush(new SocialSituation("Institutionalized"));
-		socialSituationService.saveAndFlush(new SocialSituation("In placement"));
-		socialSituationService.saveAndFlush(new SocialSituation("Derived from the single parent family"));
-		socialSituationService.saveAndFlush(new SocialSituation("Other"));
+		socialSituationService.save(new SocialSituation("Institutionalized"), flush);
+		socialSituationService.save(new SocialSituation("In placement"), flush);
+		socialSituationService.save(new SocialSituation("Derived from the single parent family"), flush);
+		socialSituationService.save(new SocialSituation("Other"), flush);
 	}
-
 }

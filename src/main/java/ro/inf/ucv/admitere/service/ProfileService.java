@@ -5,20 +5,19 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import ro.inf.ucv.admitere.entity.Profile;
 import ro.inf.ucv.admitere.entity.User;
-import ro.inf.ucv.admitere.exceptions.NotAuthenticatedException;
-import ro.inf.ucv.admitere.exceptions.NotFoundException;
 import ro.inf.ucv.admitere.repository.ProfileRepository;
 
 @Service
 @Transactional
 public class ProfileService {
+
+	private static final Logger logger = Logger.getLogger(ProfileService.class);
 
 	@Autowired
 	private ProfileRepository profileRepository;
@@ -27,11 +26,13 @@ public class ProfileService {
 	private UserService userService;
 
 	public List<Profile> findAll() {
-		return profileRepository.findAll();
-	}
-
-	public Page<Profile> findAll(PageRequest pageRequest) {
-		return profileRepository.findAll(pageRequest);
+		List<Profile> profiles = null;
+		try {
+			profiles = profileRepository.findAll();
+		} catch (Exception e) {
+			logger.error("Find all profiles: ", e);
+		}
+		return profiles;
 	}
 
 	/**
@@ -41,15 +42,23 @@ public class ProfileService {
 	 * @param principal
 	 * @throws Exception
 	 */
-	public void save(Profile profile, Principal principal) throws Exception {
-		if (principal == null) {
-			throw new NotAuthenticatedException();
+	public Profile save(Profile profile, Principal principal) throws Exception {
+		Profile savedProfile = null;
+		try {
+			if (profile != null && principal != null) {
+				User authenticatedUser = userService.findByUsername(principal.getName());
+				if (authenticatedUser != null) {
+					if (authenticatedUser.getProfile() == null) {
+						savedProfile = profileRepository.save(profile);
+						authenticatedUser.setProfile(savedProfile);
+						userService.save(authenticatedUser, false);
+					}
+				}
+			}
+		} catch (Exception e) {
+			logger.error("Save profile: ", e);
 		}
-		User authenticatedUser = userService.findByUsername(principal.getName());
-		if (authenticatedUser == null) {
-			throw new NotFoundException();
-		}
-		authenticatedUser.setProfile(profileRepository.save(profile));
-		userService.save(authenticatedUser);
+
+		return savedProfile;
 	}
 }

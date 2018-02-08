@@ -59,4 +59,9 @@ public class Ethnicity implements Serializable {
 		this.creationDate = creationDate;
 	}
 
+	@Override
+	public String toString() {
+		return "Ethnicity [id=" + id + ", name=" + name + ", creationDate=" + creationDate + "]";
+	}
+
 }

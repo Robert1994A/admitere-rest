@@ -25,11 +25,6 @@
 	src="<c:url value="/resources/javascript/core/app.js"/>"></script>
 <!-- /Theme JS files -->
 
-<!-- Loading overlay -->
-<script type="text/javascript"
-	src="<c:url value="/resources/javascript/loadingoverlay.min.js"/>"></script>
-<!-- Loading overlay -->
-
 <!--Angular-->
 <script type="text/javascript"
 	src="<c:url value="/resources/angular/angular-1.6.7.js"/>"></script>
@@ -64,6 +59,9 @@
 
 <script type="text/javascript"
 	src="<c:url value="/resources/angular/controllers/user-controller.js"/>"></script>
+
+<script type="text/javascript"
+	src="<c:url value="/resources/angular/controllers/universities-controller.js"/>"></script>
 
 <script type="text/javascript"
 	src="<c:url value="/resources/angular/controllers/profile-controller.js"/>"></script>

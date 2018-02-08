@@ -2,37 +2,60 @@ package ro.inf.ucv.admitere.service;
 
 import java.util.List;
 import javax.transaction.Transactional;
+
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ro.inf.ucv.admitere.entity.FamilySituation;
 import ro.inf.ucv.admitere.repository.FamilySituationRepository;
+import ro.inf.ucv.admitere.utils.PrimitiveUtils;
 
 @Service
 @Transactional
 public class FamilySituationService {
 
+	private static final Logger logger = Logger.getLogger(FamilySituationService.class);
+
 	@Autowired
 	private FamilySituationRepository familySituationRepository;
 
 	public List<FamilySituation> findAll() {
-		return familySituationRepository.findAll();
+		List<FamilySituation> familySituations = null;
+		try {
+			familySituations = familySituationRepository.findAll();
+		} catch (Exception e) {
+			logger.error("Find all family situations: ", e);
+		}
+		return familySituations;
 	}
 
-	public Page<FamilySituation> findAll(PageRequest pageRequest) {
-		return familySituationRepository.findAll(pageRequest);
-	}
+	public FamilySituation save(FamilySituation familySituation, boolean flush) {
+		FamilySituation savedFamilySituation = null;
+		try {
+			if (familySituation != null) {
+				if (flush) {
+					savedFamilySituation = familySituationRepository.saveAndFlush(familySituation);
+				} else {
+					savedFamilySituation = familySituationRepository.save(familySituation);
+				}
+			}
+		} catch (Exception e) {
+			logger.error("Save family situation: " + familySituation, e);
+		}
 
-	public FamilySituation saveAndFlush(FamilySituation familySituation) {
-		return familySituationRepository.saveAndFlush(familySituation);
+		return savedFamilySituation;
 	}
 
 	public FamilySituation findOne(Integer id) {
 		FamilySituation familySituation = null;
-		if (id != null && id >= 0) {
-			familySituation = familySituationRepository.findById(id).get();
+		try {
+			if (PrimitiveUtils.isValid(id)) {
+				familySituation = familySituationRepository.findById(id).get();
+			}
+		} catch (Exception e) {
+			logger.error("Find family situation by id: " + id, e);
 		}
+
 		return familySituation;
 	}
 }

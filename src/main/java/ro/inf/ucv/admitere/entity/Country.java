@@ -23,7 +23,7 @@ public class Country implements Serializable {
 
 	@Id
 	@GeneratedValue
-	private Long id;
+	private Integer id;
 
 	@NotBlank
 	private String name;
@@ -52,11 +52,11 @@ public class Country implements Serializable {
 		this.name = name;
 	}
 
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -98,6 +98,12 @@ public class Country implements Serializable {
 
 	public void setPhoneCode(String phoneCode) {
 		this.phoneCode = phoneCode;
+	}
+
+	@Override
+	public String toString() {
+		return "Country [id=" + id + ", name=" + name + ", creationDate=" + creationDate + ", sortName=" + sortName
+				+ ", phoneCode=" + phoneCode + ", states=" + states + "]";
 	}
 
 }

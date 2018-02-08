@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -35,13 +36,16 @@ public class AddmisionSpecialization implements Serializable {
 	private Date creationDate = new Date();
 
 	@NotNull
+	@Column(name = "specialization_type")
 	private SpecializationType specializationType;
 
 	@NotNull
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "specialization_nomenclature")
 	private SpecializationNomenclature specializationNomenclature;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "specialization_sample")
 	private SpecializationSample specializationSample;
 
 	@OneToMany(mappedBy = "addmisionSpecialization", cascade = CascadeType.ALL)

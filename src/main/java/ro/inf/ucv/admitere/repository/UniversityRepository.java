@@ -10,6 +10,7 @@ import ro.inf.ucv.admitere.entity.University;
 @Repository
 public interface UniversityRepository extends JpaRepository<University, Long> {
 
-	Page<University> findByNameOrUrlAllIgnoreCaseContaining(String search, String search2, Pageable pageable);
+	Page<University> findByNameOrUrlOrDescriptionAllIgnoreCaseContaining(String search, String search2,
+			Pageable pageable);
 
 }

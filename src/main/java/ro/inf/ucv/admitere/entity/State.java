@@ -26,7 +26,7 @@ public class State implements Serializable {
 
 	@Id
 	@GeneratedValue
-	private Long id;
+	private Integer id;
 
 	@NotBlank
 	private String name;
@@ -50,11 +50,11 @@ public class State implements Serializable {
 		this.name = name;
 	}
 
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -88,6 +88,12 @@ public class State implements Serializable {
 
 	public void setCreationDate(Date creationDate) {
 		this.creationDate = creationDate;
+	}
+
+	@Override
+	public String toString() {
+		return "State [id=" + id + ", name=" + name + ", creationDate=" + creationDate + ", country=" + country
+				+ ", cities=" + cities + "]";
 	}
 
 }

@@ -24,7 +24,7 @@ public class City implements Serializable {
 
 	@Id
 	@GeneratedValue
-	private Long id;
+	private Integer id;
 
 	@NotBlank
 	private String name;
@@ -44,11 +44,11 @@ public class City implements Serializable {
 		this.name = name;
 	}
 
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -76,4 +76,8 @@ public class City implements Serializable {
 		this.creationDate = creationDate;
 	}
 
+	@Override
+	public String toString() {
+		return "City [id=" + id + ", name=" + name + ", creationDate=" + creationDate + ", state=" + state + "]";
+	}
 }

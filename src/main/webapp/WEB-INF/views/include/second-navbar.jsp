@@ -11,22 +11,22 @@
 		<ul class="nav navbar-nav">
 			<li><a href="#!/"><i class="icon-home5 position-left"></i>
 					Dashboard</a></li>
-			<li><a href="#!/contact"><i
-					class="icon-envelop3 position-left"></i> Contact </a></li>
-			<li><a href="#!/universities"><i
-					class="icon-graduation position-left"></i> Universities</a></li>
-			<li><a href="#!/profile"><i
-					class="icon-profile position-left"></i> Profile</a></li>
+			<security:authorize access="isAuthenticated()">
+				<li><a href="#!/universities"><i
+						class="icon-graduation position-left"></i> Universities</a></li>
+				<li><a href="#!/profile"><i
+						class="icon-profile position-left"></i> Profile</a></li>
+				<li><a href="#!/users"><i class="icon-users4 position-left"></i>
+						Users </a></li>
+			</security:authorize>
 			<li><a href="#!/about"><i class="icon-info3 position-left"></i>
 					About </a></li>
-			<li><a href="#!/users"><i class="icon-users4 position-left"></i>
-					Users </a></li>
-
+			<li><a href="#!/contact"><i
+					class="icon-envelop3 position-left"></i> Contact </a></li>
 			<security:authorize access="!isAuthenticated()">
 				<li><a href="#!/login"><i
 						class="icon-arrow-right6 position-left"></i> Login </a></li>
 			</security:authorize>
-
 			<!-- 
 			<li class="dropdown"><a href="#" class="dropdown-toggle"
 				data-toggle="dropdown"> <i class="icon-strategy position-left"></i>

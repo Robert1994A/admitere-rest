@@ -4,37 +4,57 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import ro.inf.ucv.admitere.entity.MedicalCondition;
 import ro.inf.ucv.admitere.repository.MedicalConditionRepository;
+import ro.inf.ucv.admitere.utils.PrimitiveUtils;
 
 @Service
 @Transactional
 public class MedicalConditionService {
 
+	private static final Logger logger = Logger.getLogger(MedicalConditionService.class);
+
 	@Autowired
 	private MedicalConditionRepository medicalConditionRepository;
 
 	public List<MedicalCondition> findAll() {
-		return medicalConditionRepository.findAll();
+		List<MedicalCondition> medicalConditions = null;
+		try {
+			medicalConditions = medicalConditionRepository.findAll();
+		} catch (Exception e) {
+			logger.error("Find all medical conditions: ", e);
+		}
+		return medicalConditions;
 	}
 
-	public Page<MedicalCondition> findAll(PageRequest pageRequest) {
-		return medicalConditionRepository.findAll(pageRequest);
-	}
-
-	public MedicalCondition saveAndFlush(MedicalCondition medicalCondition) {
-		return medicalConditionRepository.saveAndFlush(medicalCondition);
+	public MedicalCondition save(MedicalCondition medicalCondition, boolean flush) {
+		MedicalCondition savedMedicalCondition = null;
+		try {
+			if (medicalCondition != null) {
+				if (flush) {
+					savedMedicalCondition = medicalConditionRepository.saveAndFlush(medicalCondition);
+				} else {
+					savedMedicalCondition = medicalConditionRepository.save(medicalCondition);
+				}
+			}
+		} catch (Exception e) {
+			logger.error("Save medical condition: " + medicalCondition, e);
+		}
+		return savedMedicalCondition;
 	}
 
 	public MedicalCondition findOne(Integer id) {
 		MedicalCondition medicalCondition = null;
-		if (id != null && id >= 0) {
-			medicalCondition = medicalConditionRepository.findById(id).get();
+		try {
+			if (PrimitiveUtils.isValid(id)) {
+				medicalCondition = medicalConditionRepository.findById(id).get();
+			}
+		} catch (Exception e) {
+			logger.error("Find medical condition by id: ", e);
 		}
 
 		return medicalCondition;

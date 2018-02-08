@@ -59,4 +59,8 @@ public class MaritalStatus implements Serializable {
 		this.creationDate = creationDate;
 	}
 
+	@Override
+	public String toString() {
+		return "MaritalStatus [id=" + id + ", name=" + name + ", creationDate=" + creationDate + "]";
+	}
 }

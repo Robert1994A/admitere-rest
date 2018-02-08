@@ -71,7 +71,7 @@ public class ProfileValidator implements Validator {
 
 	@Override
 	public boolean supports(Class<?> clazz) {
-		return clazz.equals(Profile.class);
+		return Profile.class.equals(clazz);
 	}
 
 	@Override

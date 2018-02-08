@@ -59,4 +59,9 @@ public class SocialSituation implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	@Override
+	public String toString() {
+		return "SocialSituation [id=" + id + ", name=" + name + ", creationDate=" + creationDate + "]";
+	}
 }

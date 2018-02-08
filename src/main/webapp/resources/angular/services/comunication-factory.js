@@ -22,7 +22,7 @@ admitereApp.factory('comunicationFactory', function($http, config) {
 					// Stay silent.
 					// console.log(data);
 				} else {
-					finallyCalback(data);
+					// finallyCalback(data);
 				}
 			});
 		},

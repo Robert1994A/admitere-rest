@@ -10,16 +10,16 @@ var admitereApp = angular.module(
 var loaderInterceptor = function($q) {
 	return {
 		request : function(config) {
-			$.LoadingOverlay("show");
+			// Show loader
 			return config;
 		},
 
 		response : function(result) {
-			$.LoadingOverlay("hide");
+			// Hide loader
 			return result;
 		},
 		responseError : function(rejection) {
-			$.LoadingOverlay("hide");
+			// Hide loader.
 			return $q.reject(rejection);
 		}
 	}
@@ -29,6 +29,9 @@ admitereApp.run(function($rootScope, $templateCache) {
 	$rootScope.$on('$viewContentLoaded', function() {
 		// $templateCache.removeAll();
 	});
+	$rootScope.isAuthenticated = false;
+
+	$rootScope.authenticatedUser = {};
 
 	$rootScope.dateFormat = 'dd-MMMM-yyyy';
 
@@ -53,6 +56,32 @@ admitereApp.run(function($rootScope, $templateCache) {
 		pagination.first = data.first;
 		pagination.numberOfElements = data.numberOfElements;
 	}
+
+	$rootScope.getAuthenticatedUserDetails = function() {
+		var successCallback = function(response) {
+			$rootScope.isAuthenticated = true;
+			$rootScope.authenticatedUser = response.content;
+		};
+
+		var errorCallback = function(response) {
+			$rootScope.isAuthenticated = false;
+		};
+
+		comunicationFactory.makeRequest("/security/authenticationDetails",
+				"GET", null, successCallback, errorCallback, null);
+	};
+
+	$rootScope.showLoader = function(containerId) {
+		document.getElementById("container-loader").style.display = "block";
+		document.getElementById(containerId).style.display = "none";
+	};
+
+	$rootScope.hideLoader = function(containerId) {
+		setTimeout(function() {
+			document.getElementById("container-loader").style.display = "none";
+			document.getElementById(containerId).style.display = "block";
+		}, 500)
+	};
 });
 
 // configure our routes
@@ -168,6 +197,5 @@ angular.module('ui.bootstrap').config(function($provide) {
 admitereApp.constant('config', {
 	appName : 'Admitere application',
 	appVersion : 1.0,
-	apiUrl : 'http://localhost/api/',
 	url : 'http://localhost/'
 });

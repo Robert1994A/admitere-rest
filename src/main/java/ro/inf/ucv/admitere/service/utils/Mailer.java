@@ -69,7 +69,7 @@ public class Mailer {
 				}
 			}
 			if (!found) {
-				throw new Exception("Must set at least one recipient.");
+				throw new Exception("Must set at least one recipient to send email.");
 			}
 			if (StringUtils.isNotBlank(mailSubject)) {
 				helper.setSubject(mailSubject);
@@ -79,7 +79,7 @@ public class Mailer {
 			}
 			mailSender.send(message);
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("Send email error: ", e);
 		}
 	}
 

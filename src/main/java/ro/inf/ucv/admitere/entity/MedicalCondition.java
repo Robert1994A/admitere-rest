@@ -59,4 +59,9 @@ public class MedicalCondition implements Serializable {
 		this.creationDate = creationDate;
 	}
 
+	@Override
+	public String toString() {
+		return "MedicalCondition [id=" + id + ", name=" + name + ", creationDate=" + creationDate + "]";
+	}
+
 }

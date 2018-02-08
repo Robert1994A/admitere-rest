@@ -1,5 +1,7 @@
 package ro.inf.ucv.admitere.service;
 
+import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -8,13 +10,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import ro.inf.ucv.admitere.entity.Role;
+import ro.inf.ucv.admitere.entity.User;
 import ro.inf.ucv.admitere.repository.RoleRepository;
 import ro.inf.ucv.admitere.service.utils.PaginationUtils;
+import ro.inf.ucv.admitere.utils.PrimitiveUtils;
 import ro.inf.ucv.admitere.wrapper.SearchModel;
 
 @Service
@@ -27,17 +30,36 @@ public class RoleService {
 	private RoleRepository roleRepository;
 
 	@Autowired
+	private UserService userService;
+
+	@Autowired
 	private PaginationUtils paginationUtils;
 
-	public void save(Role role) throws Exception {
-		if (roleRepository.countByName(role.getName()) == 1) {
-			throw new Exception("Role with name " + role.getName() + " already exist!");
+	public Role save(Role role, boolean flush) {
+		Role savedRole = null;
+		try {
+			if (role != null) {
+				if (flush) {
+					savedRole = roleRepository.saveAndFlush(role);
+				} else {
+					savedRole = roleRepository.save(role);
+				}
+			}
+		} catch (Exception e) {
+			logger.error("Save role: " + role, e);
 		}
-		roleRepository.save(role);
+
+		return savedRole;
 	}
 
 	public List<Role> findAll() {
-		return roleRepository.findAll();
+		List<Role> roles = null;
+		try {
+			roles = roleRepository.findAll();
+		} catch (Exception e) {
+			logger.error("Find all roles: ", e);
+		}
+		return roles;
 	}
 
 	public Role findByName(String name) {
@@ -53,27 +75,55 @@ public class RoleService {
 		return role;
 	}
 
-	public Page<Role> findAll(PageRequest pageRequest) {
-		return roleRepository.findAll(pageRequest);
-	}
-
 	public Page<Role> search(SearchModel searchModel) {
-		Pageable pageable = paginationUtils.getPageRequest(new Role(), searchModel);
-		return roleRepository.findAll(pageable);
-	}
-
-	public void deleteById(Long id) {
-		if (id != null && id >= 0) {
-			roleRepository.deleteById(id);
+		Page<Role> roles = null;
+		try {
+			Pageable pageable = paginationUtils.getPageRequest(new Role(), searchModel);
+			roles = roleRepository.findAll(pageable);
+		} catch (Exception e) {
+			logger.error("Search roles: " + searchModel, e);
 		}
+
+		return roles;
 	}
 
-	public Role findById(Long id) {
+	public void deleteById(Integer id) {
+		try {
+			if (PrimitiveUtils.isValid(id)) {
+				roleRepository.deleteById(id);
+			}
+		} catch (Exception e) {
+			logger.error("Delete role by id: " + id, e);
+		}
+
+	}
+
+	public Role findById(Integer id) {
 		Role role = null;
-		if (id != null) {
-			role = roleRepository.findById(id).get();
+		try {
+			if (PrimitiveUtils.isValid(id)) {
+				role = roleRepository.findById(id).get();
+			}
+		} catch (Exception e) {
+			logger.error("Find role by id: " + id, e);
 		}
 
 		return role;
+	}
+
+	public List<Role> getUserRoles(Principal principal) {
+		List<Role> roles = new ArrayList<>();
+		try {
+			if (principal != null) {
+				User user = userService.findByUsername(principal.getName());
+				if (user != null) {
+					roles = user.getRoles();
+				}
+			}
+		} catch (Exception e) {
+			logger.error("Get user roles for " + principal, e);
+		}
+
+		return roles;
 	}
 }

@@ -16,6 +16,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "university")
 public class University implements Serializable {
@@ -43,7 +45,8 @@ public class University implements Serializable {
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private ContactInformation contactInformation;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JsonIgnore
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Faculty> faculties;
 
 	public University() {
@@ -113,5 +116,11 @@ public class University implements Serializable {
 
 	public void setCreationDate(Date creationDate) {
 		this.creationDate = creationDate;
+	}
+
+	@Override
+	public String toString() {
+		return "University [id=" + id + ", name=" + name + ", description=" + description + ", url=" + url
+				+ ", creationDate=" + creationDate + ", contactInformation=" + contactInformation + "]";
 	}
 }

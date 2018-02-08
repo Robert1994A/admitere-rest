@@ -71,4 +71,10 @@ public class ContactInformation implements Serializable {
 		this.creationDate = creationDate;
 	}
 
+	@Override
+	public String toString() {
+		return "ContactInformation [id=" + id + ", email=" + email + ", phoneNumber=" + phoneNumber + ", creationDate="
+				+ creationDate + "]";
+	}
+
 }

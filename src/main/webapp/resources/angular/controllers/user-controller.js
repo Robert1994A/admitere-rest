@@ -1,12 +1,14 @@
 // Users page controller.
 admitereApp.controller('usersController', function($scope, $rootScope,
 		$timeout, $uibModal, comunicationFactory, config) {
+	$scope.containerId = "users-container";
 	$scope.usersFound = true;
 	$scope.pagination = {};
 	$scope.users = [];
 	$scope.page = {};
 
 	$scope.paginate = function(page, pageSize, search) {
+		$rootScope.showLoader($scope.containerId);
 		var successCallback = function(response) {
 			if (response.data.content == undefined) {
 				$scope.usersFound = false;
@@ -18,9 +20,14 @@ admitereApp.controller('usersController', function($scope, $rootScope,
 			if ($scope.users.length == 0) {
 				$scope.usersFound = false;
 			}
+			$rootScope.hideLoader($scope.containerId);
 		};
+
+		var errorCallback = function(response) {
+			$rootScope.hideLoader($scope.containerId);
+		}
 		comunicationFactory.makeRequest("users?pageNumber=" + page, "GET",
-				null, successCallback, null, null);
+				null, successCallback, errorCallback, null);
 	};
 
 	$scope.refresh = function() {
@@ -80,6 +87,8 @@ admitereApp.controller('userDetailsController', function($scope, $rootScope,
 // User details modal controller.
 admitereApp.controller('userProfileController', function($scope, $rootScope,
 		$uibModalInstance, comunicationFactory) {
+	$scope.profileFound = false;
+	
 	// Retrieve user details.
 	userProfile($rootScope.userIDModal);
 
@@ -87,6 +96,7 @@ admitereApp.controller('userProfileController', function($scope, $rootScope,
 	function userProfile(id) {
 		var successCallback = function(response) {
 			$scope.profile = response.data.content;
+			$scope.profileFound = true;
 		};
 
 		comunicationFactory.makeRequest("users/" + id + "/profile", "GET",

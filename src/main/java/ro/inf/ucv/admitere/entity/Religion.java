@@ -59,4 +59,9 @@ public class Religion implements Serializable {
 		this.creationDate = creationDate;
 	}
 
+	@Override
+	public String toString() {
+		return "Religion [id=" + id + ", name=" + name + ", creationDate=" + creationDate + "]";
+	}
+
 }

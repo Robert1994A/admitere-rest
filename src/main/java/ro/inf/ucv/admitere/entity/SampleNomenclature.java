@@ -72,4 +72,10 @@ public class SampleNomenclature implements Serializable {
 		this.nomenclatureType = nomenclatureType;
 	}
 
+	@Override
+	public String toString() {
+		return "SampleNomenclature [id=" + id + ", name=" + name + ", creationDate=" + creationDate
+				+ ", nomenclatureType=" + nomenclatureType + "]";
+	}
+
 }

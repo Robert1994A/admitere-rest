@@ -13,11 +13,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table
+@Table(name = "enrolled_user")
 public class EnrolledUser {
 
 	@GeneratedValue(generator = "uuid")
@@ -26,12 +28,16 @@ public class EnrolledUser {
 	@Id
 	private String id;
 
+	@NotNull
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private User user;
 
+	@NotNull
+	@NotEmpty
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<SampleResult> sampleResults;
 
+	@NotNull
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "addmission_specialization_id")
 	private AddmisionSpecialization addmisionSpecialization;

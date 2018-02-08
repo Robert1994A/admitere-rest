@@ -1,14 +1,13 @@
 // Profile controller.
 admitereApp.controller('profileController', function($scope, $rootScope,
 		comunicationFactory) {
+	$scope.cotainerId = "profile-container";
 	$scope.profile = {};
 	$scope.countries = [];
 	$scope.states = [];
 	$scope.cities = [];
 	$scope.profileData = {};
 	$scope.profile.birthDate = $rootScope.maxDate;
-
-	initInterfaceData();
 
 	function initInterfaceData() {
 		var successCallback = function(response) {
@@ -78,13 +77,15 @@ admitereApp.controller('profileController', function($scope, $rootScope,
 	}
 
 	$scope.getProfile = function() {
+		$rootScope.showLoader($scope.cotainerId);
 		var successCallback = function(response) {
 			$scope.profileCreated = true;
-			console.log("Get profile success", response);
+			$rootScope.hideLoader($scope.cotainerId);
 		};
 
 		var errorCallback = function(response) {
-			console.log("Get profile error", response);
+			initInterfaceData();
+			$rootScope.hideLoader($scope.cotainerId);
 		};
 
 		comunicationFactory.makeRequest("profile", "GET", $scope.profile,
@@ -94,6 +95,8 @@ admitereApp.controller('profileController', function($scope, $rootScope,
 
 	$scope.getProfile();
 
+	
+	
 	$scope.clear = function() {
 		$scope.profile.birthDate = null;
 	};

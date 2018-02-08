@@ -58,4 +58,9 @@ public class Citizenship implements Serializable {
 	public void setCreationDate(Date creationDate) {
 		this.creationDate = creationDate;
 	}
+
+	@Override
+	public String toString() {
+		return "Citizenship [id=" + id + ", name=" + name + ", creationDate=" + creationDate + "]";
+	}
 }

@@ -23,7 +23,7 @@ public class Role implements Serializable {
 
 	@Id
 	@GeneratedValue
-	private Long id;
+	private Integer id;
 
 	@NotNull
 	@Column(unique = true)
@@ -44,11 +44,11 @@ public class Role implements Serializable {
 		this.users = users;
 	}
 
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -66,6 +66,11 @@ public class Role implements Serializable {
 
 	public void setCreationDate(Date creationDate) {
 		this.creationDate = creationDate;
+	}
+
+	@Override
+	public String toString() {
+		return "Role [id=" + id + ", name=" + name + ", creationDate=" + creationDate + "]";
 	}
 
 }

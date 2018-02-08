@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import ro.inf.ucv.admitere.entity.Profile;
@@ -31,14 +32,18 @@ public class UserService {
 	@Autowired
 	private PaginationUtils paginationUtils;
 
-	public User save(User user) {
+	public User save(User user, boolean flush) {
 		User savedUser = null;
 		try {
 			if (user != null) {
-				savedUser = userRepository.save(user);
+				if (flush) {
+					savedUser = userRepository.saveAndFlush(user);
+				} else {
+					savedUser = userRepository.save(user);
+				}
 			}
 		} catch (Exception e) {
-			logger.error("Save user: ", e);
+			logger.error("Save user: " + user, e);
 		}
 
 		return savedUser;
@@ -184,5 +189,9 @@ public class UserService {
 
 	public long count() {
 		return userRepository.count();
+	}
+
+	public List<User> searchAdvanced(Specification<User> specification) {
+		return userRepository.findAll(specification);
 	}
 }

@@ -1,6 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<div class="panel panel-default">
+<div class="panel panel-default" id="universities-container">
 	<div class="panel-heading">
 		<h4 class="panel-title">Universities</h4>
 	</div>
@@ -38,23 +38,11 @@
 				</table>
 			</div>
 
-			<div class="datatable-footer">
-				<div style="float: left" class="bg-primary text-highlight">Page
-					{{pagination.number}} / {{pagination.totalPages}}</div>
-				<div style="float: right">
-					<paging class="pagination" page="pagination.number"
-						page-size="pagination.size" total="pagination.totalElements"
-						hide-if-empty="true" ul-class="pagination" active-class="active"
-						disabled-class="disabled" show-prev-next="true"
-						show-first-last="true" text-next="Next" text-prev="Previous"
-						text-first="First" text-last="Last"
-						paging-action="paginate(page, pageSize, total)"> </paging>
-				</div>
-			</div>
+			<span ng-include src="'include/pagination.html'"></span>
 		</div>
 
 		<div class="row" ng-if="!universitiesFound">
-			<span ng-messages-include="no-data-found.html"></span>
+			<span ng-include src="'no-data-found.html'"></span>
 		</div>
 	</div>
 </div>

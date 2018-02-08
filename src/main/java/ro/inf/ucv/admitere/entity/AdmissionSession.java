@@ -15,6 +15,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import ro.inf.ucv.admitere.service.utils.ConfigurationUtils;
@@ -25,14 +26,17 @@ public class AdmissionSession implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	@GeneratedValue(generator = "uuid")
+	@GenericGenerator(name = "uuid", strategy = "uuid2")
+	@Column
 	@Id
-	@GeneratedValue
-	private Long id;
+	private String id;
 
 	@NotBlank
 	private String name;
 
 	@Column(name = "creation_date")
+	@DateTimeFormat(pattern = ConfigurationUtils.DATE_FORMAT)
 	private Date creationDate = new Date();
 
 	@NotNull
@@ -50,11 +54,11 @@ public class AdmissionSession implements Serializable {
 		this.name = name;
 	}
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -89,5 +93,4 @@ public class AdmissionSession implements Serializable {
 	public void setAddmisionSpecialization(List<AddmisionSpecialization> addmisionSpecialization) {
 		this.addmisionSpecialization = addmisionSpecialization;
 	}
-
 }

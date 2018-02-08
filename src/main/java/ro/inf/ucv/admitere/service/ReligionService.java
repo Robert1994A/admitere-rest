@@ -4,38 +4,58 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import ro.inf.ucv.admitere.entity.Religion;
 import ro.inf.ucv.admitere.repository.ReligionRepository;
+import ro.inf.ucv.admitere.utils.PrimitiveUtils;
 
 @Service
 @Transactional
 public class ReligionService {
+	private static final Logger logger = Logger.getLogger(ReligionService.class);
 
 	@Autowired
 	private ReligionRepository religionRepository;
 
 	public List<Religion> findAll() {
-		return religionRepository.findAll();
+		List<Religion> religions = null;
+		try {
+			religions = religionRepository.findAll();
+		} catch (Exception e) {
+			logger.error("Find all religions: ", e);
+		}
+		return religions;
 	}
 
-	public Page<Religion> findAll(PageRequest pageRequest) {
-		return religionRepository.findAll(pageRequest);
-	}
-
-	public Religion saveAndFlush(Religion religion) {
-		return religionRepository.saveAndFlush(religion);
+	public Religion save(Religion religion, boolean flush) {
+		Religion savedReligion = null;
+		try {
+			if (religion != null) {
+				if (flush) {
+					savedReligion = religionRepository.saveAndFlush(religion);
+				} else {
+					savedReligion = religionRepository.save(religion);
+				}
+			}
+		} catch (Exception e) {
+			logger.error("Save religion: " + religion, e);
+		}
+		return savedReligion;
 	}
 
 	public Religion findOne(Integer id) {
 		Religion religion = null;
-		if (id != null && id >= 0) {
-			religion = religionRepository.findById(id).get();
+		try {
+			if (PrimitiveUtils.isValid(id)) {
+				religion = religionRepository.findById(id).get();
+			}
+		} catch (Exception e) {
+			logger.error("Find religion by id: " + id, e);
 		}
+
 		return religion;
 	}
 }

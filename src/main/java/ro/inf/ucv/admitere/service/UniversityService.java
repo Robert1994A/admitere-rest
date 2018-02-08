@@ -2,10 +2,10 @@ package ro.inf.ucv.admitere.service;
 
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -27,15 +27,29 @@ public class UniversityService {
 	private PaginationUtils paginationUtils;
 
 	public Page<University> findAll(Pageable pageable) {
-		return universityRepository.findAll(pageable);
+		Page<University> universities = null;
+		try {
+			universities = universityRepository.findAll(pageable);
+		} catch (Exception e) {
+			logger.error("Find universities(pageable): ", e);
+		}
+		return universities;
 	}
 
-	public Page<University> findAll(PageRequest pageRequest) {
-		return universityRepository.findAll(pageRequest);
-	}
-
-	public University save(University university) {
-		return universityRepository.save(university);
+	public University save(University university, boolean flush) {
+		University savedUniversity = null;
+		try {
+			if (university != null) {
+				if (flush) {
+					savedUniversity = universityRepository.saveAndFlush(university);
+				} else {
+					savedUniversity = universityRepository.save(university);
+				}
+			}
+		} catch (Exception e) {
+			logger.error("Save university: " + university, e);
+		}
+		return savedUniversity;
 	}
 
 	public Page<University> inteligentPagination(SearchModel searchModel) {
@@ -43,20 +57,20 @@ public class UniversityService {
 		try {
 			if (searchModel != null) {
 				Pageable pageable = paginationUtils.getPageRequest(new University(), searchModel);
-				if (searchModel.getSearch() != null && searchModel.getSearch().trim().length() > 0) {
+				if (StringUtils.isNotBlank(searchModel.getSearch())) {
 					universities = pagination(searchModel.getSearch(), pageable);
 				} else {
 					universities = findAll(pageable);
 				}
 			}
 		} catch (Exception e) {
-			logger.error("Find universities: ", e);
+			logger.error("Find universities: " + searchModel, e);
 		}
 
 		return universities;
 	}
 
 	public Page<University> pagination(String search, Pageable pageable) {
-		return universityRepository.findByNameOrUrlAllIgnoreCaseContaining(search, search, pageable);
+		return universityRepository.findByNameOrUrlOrDescriptionAllIgnoreCaseContaining(search, search, pageable);
 	}
 }

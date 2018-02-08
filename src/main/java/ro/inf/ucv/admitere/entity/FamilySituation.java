@@ -11,7 +11,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
 @Table
-@Entity(name = "family_siguation")
+@Entity(name = "family_situation")
 public class FamilySituation implements Serializable {
 
 	private static final long serialVersionUID = -3474523963413980217L;
@@ -57,5 +57,10 @@ public class FamilySituation implements Serializable {
 
 	public void setCreationDate(Date creationDate) {
 		this.creationDate = creationDate;
+	}
+
+	@Override
+	public String toString() {
+		return "FamilySituation [id=" + id + ", name=" + name + ", creationDate=" + creationDate + "]";
 	}
 }

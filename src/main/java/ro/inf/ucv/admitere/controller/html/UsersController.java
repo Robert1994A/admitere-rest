@@ -19,5 +19,4 @@ public class UsersController extends BaseController {
 	public String getUserProfileModal() {
 		return "modals/userProfile";
 	}
-
 }

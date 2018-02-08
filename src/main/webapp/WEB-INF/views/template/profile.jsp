@@ -1,4 +1,4 @@
-<div class="panel panel-default">
+<div class="panel panel-default" id="profile-container">
 	<div class="panel-heading">
 		<h4 class="panel-title">Profile</h4>
 	</div>
