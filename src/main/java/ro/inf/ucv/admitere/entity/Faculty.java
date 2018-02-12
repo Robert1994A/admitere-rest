@@ -2,7 +2,7 @@ package ro.inf.ucv.admitere.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -25,10 +25,9 @@ public class Faculty implements Serializable {
 
 	@Id
 	@GeneratedValue
-	private Long id;
+	private Integer id;
 
 	@NotBlank
-	@Column(unique = true)
 	private String name;
 
 	@NotBlank
@@ -38,7 +37,7 @@ public class Faculty implements Serializable {
 	private String url;
 
 	@Column(name = "creation_date")
-	private Date creationDate;
+	private Date creationDate = new Date();
 
 	@NotNull
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -46,30 +45,29 @@ public class Faculty implements Serializable {
 	private ContactInformation contactInformation;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private Set<SpecializationNomenclature> specializations;
+	private List<FacultyDomainNomenclature> facultyDomainNomenclatures;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private Set<AdmissionSession> admissionSessions;
+	private List<AdmissionSession> admissionSessions;
 
 	public Faculty() {
 		super();
 	}
 
 	public Faculty(@NotBlank String name, @NotBlank String description, @NotBlank String url,
-			@NotNull ContactInformation contactInformation, Set<SpecializationNomenclature> specializations) {
+			@NotNull ContactInformation contactInformation) {
 		super();
 		this.name = name;
 		this.description = description;
 		this.url = url;
 		this.contactInformation = contactInformation;
-		this.specializations = specializations;
 	}
 
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -89,14 +87,6 @@ public class Faculty implements Serializable {
 		this.description = description;
 	}
 
-	public Set<SpecializationNomenclature> getSpecializations() {
-		return specializations;
-	}
-
-	public void setSpecializations(Set<SpecializationNomenclature> specializations) {
-		this.specializations = specializations;
-	}
-
 	public ContactInformation getContactInformation() {
 		return contactInformation;
 	}
@@ -113,11 +103,11 @@ public class Faculty implements Serializable {
 		this.creationDate = creationDate;
 	}
 
-	public Set<AdmissionSession> getAdmissionSessions() {
+	public List<AdmissionSession> getAdmissionSessions() {
 		return admissionSessions;
 	}
 
-	public void setAdmissionSessions(Set<AdmissionSession> admissionSessions) {
+	public void setAdmissionSessions(List<AdmissionSession> admissionSessions) {
 		this.admissionSessions = admissionSessions;
 	}
 
@@ -128,4 +118,18 @@ public class Faculty implements Serializable {
 	public void setUrl(String url) {
 		this.url = url;
 	}
+
+	public List<FacultyDomainNomenclature> getFacultyDomainNomenclatures() {
+		return facultyDomainNomenclatures;
+	}
+
+	public void setFacultyDomainNomenclatures(List<FacultyDomainNomenclature> facultyDomainNomenclatures) {
+		this.facultyDomainNomenclatures = facultyDomainNomenclatures;
+	}
+
+	@Override
+	public String toString() {
+		return "Faculty [name=" + name + "]";
+	}
+
 }

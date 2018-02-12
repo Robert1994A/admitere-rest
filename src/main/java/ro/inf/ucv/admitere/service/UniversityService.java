@@ -1,5 +1,7 @@
 package ro.inf.ucv.admitere.service;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.StringUtils;
@@ -30,6 +32,16 @@ public class UniversityService {
 		Page<University> universities = null;
 		try {
 			universities = universityRepository.findAll(pageable);
+		} catch (Exception e) {
+			logger.error("Find universities(pageable): ", e);
+		}
+		return universities;
+	}
+
+	public List<University> findAll() {
+		List<University> universities = null;
+		try {
+			universities = universityRepository.findAll();
 		} catch (Exception e) {
 			logger.error("Find universities(pageable): ", e);
 		}
@@ -72,5 +84,13 @@ public class UniversityService {
 
 	public Page<University> pagination(String search, Pageable pageable) {
 		return universityRepository.findByNameOrUrlOrDescriptionAllIgnoreCaseContaining(search, search, pageable);
+	}
+
+	public void saveUniversities(List<University> universitiesList, boolean flush) {
+		if (universitiesList != null && !universitiesList.isEmpty()) {
+			for (University university : universitiesList) {
+				this.save(university, flush);
+			}
+		}
 	}
 }

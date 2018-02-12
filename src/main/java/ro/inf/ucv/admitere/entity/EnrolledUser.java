@@ -39,7 +39,7 @@ public class EnrolledUser {
 
 	@NotNull
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "addmission_specialization_id")
+	@JoinColumn(name = "addmission_specialization")
 	private AddmisionSpecialization addmisionSpecialization;
 
 	public String getId() {

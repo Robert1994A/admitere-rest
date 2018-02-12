@@ -197,5 +197,6 @@ angular.module('ui.bootstrap').config(function($provide) {
 admitereApp.constant('config', {
 	appName : 'Admitere application',
 	appVersion : 1.0,
-	url : 'http://localhost/'
+	url : 'http://localhost/',
+	perPage: 25
 });

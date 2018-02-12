@@ -62,7 +62,7 @@ public class User implements Serializable {
 	private String recoverPaswordToken;
 
 	@Column(name = "creation_date")
-	private Date creationDate;
+	private Date creationDate = new Date();
 
 	private boolean enabled;
 

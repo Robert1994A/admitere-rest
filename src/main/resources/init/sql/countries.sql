@@ -1,4 +1,4 @@
-INSERT INTO `countries` (`id`, `sortname`, `name`, `phonecode`) VALUES
+INSERT INTO `countries` (`id`, `sort_name`, `name`, `phone_code`) VALUES
 (1, 'AF', 'Afghanistan', 93),
 (2, 'AL', 'Albania', 355),
 (3, 'DZ', 'Algeria', 213),

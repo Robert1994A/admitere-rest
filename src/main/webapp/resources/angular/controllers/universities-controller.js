@@ -1,10 +1,10 @@
 // Universities controller.
 admitereApp.controller('universitiesController', function($scope, $rootScope,
-		comunicationFactory) {
+		comunicationFactory, config) {
 	$scope.containerId = "universities-container";
 	$scope.universitiesFound = true;
 	$scope.search = "";
-	$scope.perPage = 10;
+	$scope.perPage = config.perPage;
 	$scope.pageNumber = 0;
 	$scope.pagination = {};
 	$scope.universities = [];

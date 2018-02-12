@@ -51,4 +51,10 @@ public class SpecializationSample implements Serializable {
 		this.creationDate = creationDate;
 	}
 
+	@Override
+	public String toString() {
+		return "SpecializationSample [id=" + id + ", creationDate=" + creationDate + ", percent=" + percent
+				+ ", sampleNomenclature=" + sampleNomenclature + "]";
+	}
+
 }

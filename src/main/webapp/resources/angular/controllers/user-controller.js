@@ -6,6 +6,9 @@ admitereApp.controller('usersController', function($scope, $rootScope,
 	$scope.pagination = {};
 	$scope.users = [];
 	$scope.page = {};
+	$scope.search = "";
+	$scope.perPage = config.perPage;
+	$scope.pageNumber = 0;
 
 	$scope.paginate = function(page, pageSize, search) {
 		$rootScope.showLoader($scope.containerId);
@@ -31,34 +34,36 @@ admitereApp.controller('usersController', function($scope, $rootScope,
 	};
 
 	$scope.refresh = function() {
-		$scope.paginate(0, 10, "");
+		$scope.paginate(0, config.perPage, "");
 	};
 
 	// Find all users.
-	$scope.paginate(0, 10, "");
+	$scope.paginate(0, $scope.perPage, $scope.search);
 
 	// Get user details.
 	$scope.userDetails = function(userID) {
 		// Open user details modal.
 		$uibModal.open({
+			scope : $scope,
 			animation : true,
 			templateUrl : 'modals/userDetails.html',
 			controller : 'userDetailsController'
 		});
 
-		$rootScope.userIDModal = userID;
+		$scope.userIDModal = userID;
 	};
 
 	// Get user details.
 	$scope.userProfile = function(userID) {
 		// Open user details modal.
 		$uibModal.open({
+			scope : $scope,
 			animation : true,
 			templateUrl : 'modals/userProfile.html',
 			controller : 'userProfileController'
 		});
 
-		$rootScope.userIDModal = userID;
+		$scope.userIDModal = userID;
 	};
 });
 
@@ -66,7 +71,7 @@ admitereApp.controller('usersController', function($scope, $rootScope,
 admitereApp.controller('userDetailsController', function($scope, $rootScope,
 		$uibModalInstance, comunicationFactory) {
 	// Retrieve user details.
-	userDetails($rootScope.userIDModal);
+	userDetails($scope.userIDModal);
 
 	// Get user details based on his identifier.
 	function userDetails(id) {
@@ -88,11 +93,11 @@ admitereApp.controller('userDetailsController', function($scope, $rootScope,
 admitereApp.controller('userProfileController', function($scope, $rootScope,
 		$uibModalInstance, comunicationFactory) {
 	$scope.profileFound = false;
-	
-	// Retrieve user details.
-	userProfile($rootScope.userIDModal);
 
-	// Get user details based on his identifier.
+	// Retrieve user profile.
+	userProfile($scope.userIDModal);
+
+	// Get user profile based on his identifier.
 	function userProfile(id) {
 		var successCallback = function(response) {
 			$scope.profile = response.data.content;

@@ -2,7 +2,7 @@ package ro.inf.ucv.admitere.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -26,7 +26,7 @@ public class University implements Serializable {
 
 	@Id
 	@GeneratedValue
-	private Long id;
+	private Integer id;
 
 	@NotBlank
 	private String name;
@@ -47,7 +47,7 @@ public class University implements Serializable {
 
 	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private Set<Faculty> faculties;
+	private List<Faculty> faculties;
 
 	public University() {
 		super();
@@ -62,11 +62,11 @@ public class University implements Serializable {
 		this.contactInformation = contactInformation;
 	}
 
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -94,11 +94,11 @@ public class University implements Serializable {
 		this.description = description;
 	}
 
-	public Set<Faculty> getFaculties() {
+	public List<Faculty> getFaculties() {
 		return faculties;
 	}
 
-	public void setFaculties(Set<Faculty> faculties) {
+	public void setFaculties(List<Faculty> faculties) {
 		this.faculties = faculties;
 	}
 
@@ -120,7 +120,7 @@ public class University implements Serializable {
 
 	@Override
 	public String toString() {
-		return "University [id=" + id + ", name=" + name + ", description=" + description + ", url=" + url
-				+ ", creationDate=" + creationDate + ", contactInformation=" + contactInformation + "]";
+		return "University [name=" + name + "]";
 	}
+
 }

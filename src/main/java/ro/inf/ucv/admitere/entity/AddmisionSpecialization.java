@@ -20,7 +20,7 @@ import javax.validation.constraints.NotNull;
 import ro.inf.ucv.admitere.enumerations.SpecializationType;
 
 @Entity
-@Table
+@Table(name = "addmision_specialization")
 public class AddmisionSpecialization implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -41,14 +41,14 @@ public class AddmisionSpecialization implements Serializable {
 
 	@NotNull
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "specialization_nomenclature")
-	private SpecializationNomenclature specializationNomenclature;
+	@JoinColumn(name = "faculty_specialization_nomenclature")
+	private FacultySpecializationNomenclature facultySpecializationNomenclature;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "specialization_sample")
 	private SpecializationSample specializationSample;
 
-	@OneToMany(mappedBy = "addmisionSpecialization", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "addmisionSpecialization", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<EnrolledUser> enrolledUsers;
 
 	public Long getId() {
@@ -83,12 +83,13 @@ public class AddmisionSpecialization implements Serializable {
 		this.specializationType = specializationType;
 	}
 
-	public SpecializationNomenclature getSpecializationNomenclature() {
-		return specializationNomenclature;
+	public FacultySpecializationNomenclature getFacultySpecializationNomenclature() {
+		return facultySpecializationNomenclature;
 	}
 
-	public void setSpecializationNomenclature(SpecializationNomenclature specializationNomenclature) {
-		this.specializationNomenclature = specializationNomenclature;
+	public void setFacultySpecializationNomenclature(
+			FacultySpecializationNomenclature facultySpecializationNomenclature) {
+		this.facultySpecializationNomenclature = facultySpecializationNomenclature;
 	}
 
 	public SpecializationSample getSpecializationSample() {

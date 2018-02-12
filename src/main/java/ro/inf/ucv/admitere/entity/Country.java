@@ -33,11 +33,11 @@ public class Country implements Serializable {
 	private Date creationDate = new Date();
 
 	@NotBlank
-	@Column(name = "sortname")
+	@Column(name = "sort_name")
 	private String sortName;
 
 	@NotBlank
-	@Column(name = "phonecode")
+	@Column(name = "phone_code")
 	private String phoneCode;
 
 	@JsonIgnore

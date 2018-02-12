@@ -47,4 +47,9 @@ public class SampleResult {
 		this.value = value;
 	}
 
+	@Override
+	public String toString() {
+		return "SampleResult [id=" + id + ", sampleNomenclature=" + sampleNomenclature + ", value=" + value + "]";
+	}
+
 }

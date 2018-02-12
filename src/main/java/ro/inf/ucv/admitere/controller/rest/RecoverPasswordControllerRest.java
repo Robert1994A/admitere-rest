@@ -54,8 +54,8 @@ public class RecoverPasswordControllerRest extends BaseController {
 			if (newPassword.equals(retypeNewPassword)) {
 				User user = userService.findByRecoverPaswordToken(recoverToken);
 				if (user != null) {
-					user.setPassword(encoder.encode(newPassword));
-					user.setRecoverPaswordToken(generateString());
+					user.setPassword(securityUtils.encode(newPassword));
+					user.setRecoverPaswordToken(securityUtils.getEncodedRandomString());
 					user.setEnabled(true);
 					userService.save(user, true);
 					return new ResponseEntity<Response>(HttpStatus.OK);

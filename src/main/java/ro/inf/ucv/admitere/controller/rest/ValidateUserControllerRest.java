@@ -29,7 +29,7 @@ public class ValidateUserControllerRest extends BaseController {
 				return new ResponseEntity<Response>(HttpStatus.NOT_FOUND);
 			}
 			user.setEnabled(true);
-			user.setRegisterToken(generateString());
+			user.setRegisterToken(securityUtils.getEncodedRandomString());
 			userService.save(user, true);
 			HashMap<String, String> context = new HashMap<>();
 			context.put("username", user.getUsername());

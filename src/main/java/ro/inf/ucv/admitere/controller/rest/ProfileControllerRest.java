@@ -54,23 +54,7 @@ public class ProfileControllerRest extends BaseController {
 		return new ResponseEntity<ProfileWrapper>(createProfileWrapper(), HttpStatus.OK);
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
-	protected ProfileWrapper createProfileWrapper() {
-		ProfileWrapper profileWrapper = new ProfileWrapper();
-		profileWrapper.setCitizenships(citizenshipService.findAll());
-		profileWrapper.setEthnicities(ethnicityService.findAll());
-		profileWrapper.setFamilySituations(familySituationService.findAll());
-		profileWrapper.setGenders(genderService.findAll());
-		profileWrapper.setMaritalStatus(maritalStatusService.findAll());
-		profileWrapper.setMedicalConditions(medicalConditionService.findAll());
-		profileWrapper.setReligions(religionService.findAll());
-		profileWrapper.setSocialSituations(socialSituationService.findAll());
 
-		return profileWrapper;
-	}
 
 	@InitBinder
 	private void initBinder(WebDataBinder binder) {

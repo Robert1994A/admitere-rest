@@ -31,6 +31,10 @@
 			access="isAuthenticated()" />
 		<security:intercept-url pattern="/pages/profile**"
 			access="isAuthenticated()" />
+		<security:intercept-url pattern="/pages/users**"
+			access="isAuthenticated()" />
+		<security:intercept-url pattern="/pages/universities**"
+			access="isAuthenticated()" />
 
 		<security:csrf disabled="false" />
 

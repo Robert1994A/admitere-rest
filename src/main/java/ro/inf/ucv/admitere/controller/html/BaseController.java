@@ -1,12 +1,10 @@
 package ro.inf.ucv.admitere.controller.html;
 
-import java.security.SecureRandom;
 import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 
 import ro.inf.ucv.admitere.captcha.AttemptsService;
@@ -15,6 +13,7 @@ import ro.inf.ucv.admitere.service.CitizenshipService;
 import ro.inf.ucv.admitere.service.CityService;
 import ro.inf.ucv.admitere.service.CountryService;
 import ro.inf.ucv.admitere.service.EthnicityService;
+import ro.inf.ucv.admitere.service.FacultyService;
 import ro.inf.ucv.admitere.service.FamilySituationService;
 import ro.inf.ucv.admitere.service.GenderService;
 import ro.inf.ucv.admitere.service.MaritalStatusService;
@@ -29,8 +28,9 @@ import ro.inf.ucv.admitere.service.SocialSituationService;
 import ro.inf.ucv.admitere.service.UserService;
 import ro.inf.ucv.admitere.service.utils.ConfigurationUtils;
 import ro.inf.ucv.admitere.service.utils.Mailer;
-import ro.inf.ucv.admitere.service.utils.StringGenerator;
+import ro.inf.ucv.admitere.service.utils.SecurityUtils;
 import ro.inf.ucv.admitere.validator.ProfileValidator;
+import ro.inf.ucv.admitere.wrapper.ProfileWrapper;
 
 @Controller
 public class BaseController {
@@ -81,6 +81,9 @@ public class BaseController {
 	protected UniversityService universityService;
 
 	@Autowired
+	protected FacultyService facultyService;
+
+	@Autowired
 	protected SampleNomenclatureService sampleNomenclatureService;
 
 	@Autowired
@@ -102,13 +105,7 @@ public class BaseController {
 	private MessageSource messageSource;
 
 	@Autowired
-	protected StringGenerator stringGenerator;
-
-	protected BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10, new SecureRandom());
-
-	protected String generateString() {
-		return encoder.encode(stringGenerator.getRandomString());
-	}
+	protected SecurityUtils securityUtils;
 
 	private Locale locale = LocaleContextHolder.getLocale();
 
@@ -125,4 +122,21 @@ public class BaseController {
 		return locale;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
+	protected ProfileWrapper createProfileWrapper() {
+		ProfileWrapper profileWrapper = new ProfileWrapper();
+		profileWrapper.setCitizenships(citizenshipService.findAll());
+		profileWrapper.setEthnicities(ethnicityService.findAll());
+		profileWrapper.setFamilySituations(familySituationService.findAll());
+		profileWrapper.setGenders(genderService.findAll());
+		profileWrapper.setMaritalStatus(maritalStatusService.findAll());
+		profileWrapper.setMedicalConditions(medicalConditionService.findAll());
+		profileWrapper.setReligions(religionService.findAll());
+		profileWrapper.setSocialSituations(socialSituationService.findAll());
+
+		return profileWrapper;
+	}
 }

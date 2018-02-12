@@ -42,16 +42,16 @@ public class RegisterControllerRest extends BaseController {
 			try {
 				String responseToken = request.getParameter("g-recaptcha-response");
 				captchaService.processResponse(responseToken);
-				Role roleUser = roleService.findByName("USER");
+				Role roleUser = roleService.findByName("ROLE_USER");
 				List<Role> roles = new ArrayList<>();
 				roles.add(roleUser);
-				String registerToken = generateString();
+				String registerToken = securityUtils.getEncodedRandomString();
 				user.setEnabled(false);
 				user.setCreationDate(new Date());
 				user.setRecoverPaswordToken(registerToken);
 				user.setRegisterToken(registerToken);
 				user.setRoles(roles);
-				user.setPassword(encoder.encode(user.getPassword()));
+				user.setPassword(securityUtils.encode(user.getPassword()));
 				userService.save(user, true);
 				HashMap<String, String> velocityContext = new HashMap<>();
 				velocityContext.put("linkToValidate",
