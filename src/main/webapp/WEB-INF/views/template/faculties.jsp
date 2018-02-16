@@ -1,20 +1,18 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<div class="panel panel-default" id="universities-container">
+
+<div class="panel panel-default border-grey" id="faculties-container">
 	<div class="panel-heading">
-		<h4 class="panel-title">Universities</h4>
+		<h4 class="panel-title">Faculties</h4>
 		<div class="heading-elements">
 			<button type="button" ui-sref=".add()"
 				class="btn btn-primary heading-btn">
-				<i class="icon-plus3 position-left"></i> Add new university
+				<i class="icon-plus3 position-left"></i> Add new faculty
 			</button>
 		</div>
 	</div>
 	<div class="panel-body">
-		<div class="row" ng-if="universitiesFound">
-			<!-- Include search form -->
-			<span ng-include src="'include/search.html'"></span>
-
-			<table class="table table-responsive table-hover">
+		<div class="row" ng-if="facultiesFound">
+			<table class="table table-responsive">
 				<thead>
 					<tr>
 						<th>Id</th>
@@ -23,13 +21,12 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr ng-repeat="university in universities">
-						<td>{{university.id}}</td>
-						<td>{{university.name}}</td>
+					<tr ng-repeat="faculty in faculties">
+						<td>{{faculty.id}}</td>
+						<td>{{faculty.name}}</td>
 						<td>
 							<div class="btn-group">
-								<button type="button"
-									ui-sref=".detail({universityId: university.id})"
+								<button type="button" ui-sref=".detail({facultyId: faculty.id})"
 									class="btn btn-primary btn-icon">
 									<i class="icon-info3"></i>
 								</button>
@@ -38,11 +35,8 @@
 					</tr>
 				</tbody>
 			</table>
-
-			<span ng-include src="'include/pagination.html'"></span>
 		</div>
-
-		<div class="row" ng-if="!universitiesFound">
+		<div class="row" ng-if="!facultiesFound">
 			<span ng-include src="'no-data-found.html'"></span>
 		</div>
 	</div>

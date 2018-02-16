@@ -28,10 +28,10 @@ public class ProfileControllerRest extends BaseController {
 	@GetMapping("/profile")
 	private ResponseEntity<Profile> profile(Principal principal) throws Exception {
 		Profile profile = userService.getProfile(principal);
-		if (profile == null) {
-			return new ResponseEntity<Profile>(HttpStatus.NOT_FOUND);
+		if (profile != null && profile.getId() != null) {
+			return new ResponseEntity<Profile>(profile, HttpStatus.OK);
 		}
-		return new ResponseEntity<Profile>(profile, HttpStatus.OK);
+		return new ResponseEntity<Profile>(HttpStatus.NOT_FOUND);
 	}
 
 	@PostMapping(value = "/profile", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -53,8 +53,6 @@ public class ProfileControllerRest extends BaseController {
 	private ResponseEntity<ProfileWrapper> getProfileDetails() throws Exception {
 		return new ResponseEntity<ProfileWrapper>(createProfileWrapper(), HttpStatus.OK);
 	}
-
-
 
 	@InitBinder
 	private void initBinder(WebDataBinder binder) {

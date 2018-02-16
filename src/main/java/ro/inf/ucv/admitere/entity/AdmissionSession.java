@@ -15,6 +15,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -35,6 +37,8 @@ public class AdmissionSession implements Serializable {
 	@NotBlank
 	private String name;
 
+	private boolean enabled = false;
+
 	@Column(name = "creation_date")
 	@DateTimeFormat(pattern = ConfigurationUtils.DATE_FORMAT)
 	private Date creationDate = new Date();
@@ -44,7 +48,8 @@ public class AdmissionSession implements Serializable {
 	@DateTimeFormat(pattern = ConfigurationUtils.DATE_FORMAT)
 	private Date expirationDate;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@Fetch(value = FetchMode.SUBSELECT)
 	private List<AddmisionSpecialization> addmisionSpecialization;
 
 	public AdmissionSession() {
@@ -68,6 +73,14 @@ public class AdmissionSession implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
 	}
 
 	public Date getCreationDate() {

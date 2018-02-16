@@ -35,8 +35,7 @@
 <script type="text/javascript"
 	src="<c:url value="/resources/angular/angular-messages.js"/>"></script>
 
-<script type="text/javascript"
-	src="<c:url value="/resources/angular/ui-bootstrap-tpls-2.5.0.js"/>"></script>
+
 
 <script type="text/javascript"
 	src="<c:url value="/resources/angular/angular-animate.js"/>"></script>
@@ -46,11 +45,20 @@
 <!-- End angular -->
 
 <!-- Directives -->
-<script type="text/javascript"
-	src="<c:url value="/resources/angular/directives/pagination.js"/>"></script>
-<!-- End directives -->
+<!-- End Directives -->
 
-<!-- My java scripts -->
+<!-- Modules -->
+<script type="text/javascript"
+	src="<c:url value="/resources/angular/modules/angular-breadcrumb.js"/>"></script>
+
+<script type="text/javascript"
+	src="<c:url value="/resources/angular/modules/angular-ui-router.js"/>"></script>
+
+<script type="text/javascript"
+	src="<c:url value="/resources/angular/modules/ui-bootstrap-tpls-2.5.0.js"/>"></script>
+<!-- End modules -->
+
+<!-- My scripts -->
 <script type="text/javascript"
 	src="<c:url value="/resources/angular/app.js"/>"></script>
 
@@ -64,8 +72,11 @@
 	src="<c:url value="/resources/angular/controllers/universities-controller.js"/>"></script>
 
 <script type="text/javascript"
+	src="<c:url value="/resources/angular/controllers/faculties-controller.js"/>"></script>
+
+<script type="text/javascript"
 	src="<c:url value="/resources/angular/controllers/profile-controller.js"/>"></script>
 
 <script type="text/javascript"
 	src="<c:url value="/resources/angular/controllers/controllers.js"/>"></script>
-<!-- End java scripts -->
+<!-- End scripts -->

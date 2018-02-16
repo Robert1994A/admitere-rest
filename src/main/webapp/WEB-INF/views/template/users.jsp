@@ -1,14 +1,11 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <div class="panel panel-default" id="users-container">
-	<div class="panel-heading">
-		<h4 class="panel-title">Users</h4>
-	</div>
 	<div class="panel-body">
 		<div class="row" ng-if="usersFound">
-
+			<!-- Include search form -->
 			<span ng-include src="'include/search.html'"></span>
 
-			<div class="table-responsive">
+			<div class="table table-responsive table-hover">
 				<table class="table">
 					<thead>
 						<tr>
@@ -26,27 +23,28 @@
 								ng-class="user.enabled ? 'label label-success' : 'label label-danger'">{{user.enabled}}</span></td>
 							<td>
 								<div class="btn-group">
-									<button type="button" class="btn btn-primary dropdown-toggle"
-										data-toggle="dropdown" aria-expanded="false">
-										Action <span class="caret"></span>
+									<button type="button" ng-click="userProfile(user.id)"
+										class="btn btn-primary btn-icon">
+										<i class="icon-info3"></i>
 									</button>
-									<ul class="dropdown-menu">
-										<li><a ng-click="userDetails(user.id)">Details</a></li>
-										<li><a ng-click="userProfile(user.id)">Profile</a></li>
-									</ul>
+									<button type="button" ng-click="userDetails(user.id)"
+										class="btn btn-primary btn-icon">
+										<i class="icon-menu62"></i>
+									</button>
 								</div>
 							</td>
 						</tr>
 					</tbody>
 				</table>
+
+				<!-- Include pagination -->
+				<span ng-include src="'include/pagination.html'"></span>
 			</div>
-
-			<span ng-include src="'include/pagination.html'"></span>
 		</div>
-	</div>
 
-	<div class="row" ng-if="!usersFound">
-		<span ng-include src="'no-data-found.html'"></span>
+		<div class="row" ng-if="!usersFound">
+			<span ng-include src="'no-data-found.html'"></span>
+		</div>
 	</div>
 </div>
 

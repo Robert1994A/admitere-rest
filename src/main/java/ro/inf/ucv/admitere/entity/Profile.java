@@ -19,10 +19,16 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 import ro.inf.ucv.admitere.service.utils.ConfigurationUtils;
 
 @Entity
 @Table(name = "profile")
+@JsonInclude(value = Include.NON_EMPTY)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Profile implements Serializable {
 
 	private static final long serialVersionUID = 3383857456765662613L;
@@ -72,7 +78,7 @@ public class Profile implements Serializable {
 	private String street;
 
 	@Column(name = "creation_date")
-	private Date creationDate;
+	private Date creationDate = new Date();
 
 	@NotNull
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -128,6 +134,11 @@ public class Profile implements Serializable {
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "state_id")
 	private State state;
+
+	@NotNull
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "user_id")
+	private User user;
 
 	public Profile() {
 		super();
@@ -307,6 +318,14 @@ public class Profile implements Serializable {
 
 	public void setCreationDate(Date creationDate) {
 		this.creationDate = creationDate;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 }

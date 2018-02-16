@@ -17,6 +17,9 @@ import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import ro.inf.ucv.admitere.enumerations.SpecializationType;
 
 @Entity
@@ -44,11 +47,12 @@ public class AddmisionSpecialization implements Serializable {
 	@JoinColumn(name = "faculty_specialization_nomenclature")
 	private FacultySpecializationNomenclature facultySpecializationNomenclature;
 
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "specialization_sample")
 	private SpecializationSample specializationSample;
 
-	@OneToMany(mappedBy = "addmisionSpecialization", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "addmisionSpecialization", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@Fetch(value = FetchMode.SUBSELECT)
 	private List<EnrolledUser> enrolledUsers;
 
 	public Long getId() {

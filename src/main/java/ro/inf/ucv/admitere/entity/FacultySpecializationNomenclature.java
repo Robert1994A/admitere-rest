@@ -48,7 +48,7 @@ public class FacultySpecializationNomenclature implements Serializable {
 	@Column(name = "creation_date")
 	private Date creationDate = new Date();
 
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "contact_information")
 	private ContactInformation contactInformation;
 

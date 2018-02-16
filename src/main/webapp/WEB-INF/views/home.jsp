@@ -23,6 +23,15 @@
 	<!-- Include second navigation bar -->
 	<jsp:include page="include/second-navbar.jsp" />
 
+	
+	<div class="page-header">
+		<div class="page-header-content">
+			<div class="page-title">
+				<div class="breadcrumb breadcrumb-caret" ncy-breadcrumb></div>
+			</div>
+		</div>
+	</div>
+
 	<!-- Page container -->
 	<div class="page-container">
 
@@ -30,7 +39,7 @@
 		<div class="page-content">
 
 			<!-- Main content -->
-			<div class="content-wrapper" ng-view></div>
+			<ui-view class="content-wrapper"></ui-view>
 			<!-- /main content -->
 
 		</div>

@@ -17,8 +17,14 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "faculty")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Faculty implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -44,10 +50,12 @@ public class Faculty implements Serializable {
 	@JoinColumn(name = "contact_information")
 	private ContactInformation contactInformation;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@Fetch(value = FetchMode.SUBSELECT)
 	private List<FacultyDomainNomenclature> facultyDomainNomenclatures;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@Fetch(value = FetchMode.SUBSELECT)
 	private List<AdmissionSession> admissionSessions;
 
 	public Faculty() {

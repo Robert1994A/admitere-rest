@@ -2,43 +2,58 @@
 admitereApp.controller('usersController', function($scope, $rootScope,
 		$timeout, $uibModal, comunicationFactory, config) {
 	$scope.containerId = "users-container";
-	$scope.usersFound = true;
+	$scope.usersFound = false;
 	$scope.pagination = {};
 	$scope.users = [];
 	$scope.page = {};
-	$scope.search = "";
+
+	// Search initialization.
+	$scope.searchText = "";
+	$scope.sortDirection = config.sortDirection;
+	$scope.sortBy = config.sortBy;
 	$scope.perPage = config.perPage;
 	$scope.pageNumber = 0;
+	// End search initialization.
 
-	$scope.paginate = function(page, pageSize, search) {
+	$scope.paginate = function() {
 		$rootScope.showLoader($scope.containerId);
 		var successCallback = function(response) {
 			if (response.data.content == undefined) {
-				$scope.usersFound = false;
 				return;
 			}
 			$scope.users = response.data.content.content;
 			$rootScope.extractPagination($scope.pagination,
 					response.data.content);
-			if ($scope.users.length == 0) {
-				$scope.usersFound = false;
+			if ($scope.users.length > 0) {
+				$scope.usersFound = true;
 			}
 			$rootScope.hideLoader($scope.containerId);
 		};
 
 		var errorCallback = function(response) {
+			$scope.users = [];
+			$scope.usersFound = false;
 			$rootScope.hideLoader($scope.containerId);
 		}
-		comunicationFactory.makeRequest("users?pageNumber=" + page, "GET",
-				null, successCallback, errorCallback, null);
+
+		if ($scope.pagination.number != null
+				&& $scope.pagination.number != undefined) {
+			$scope.pageNumber = $scope.pagination.number;
+		}
+
+		var request = $rootScope.generateSearchRequest($scope.pageNumber,
+				$scope.perPage, $scope.searchText, $scope.sortBy,
+				$scope.sortDirection);
+		comunicationFactory.makeRequest("users" + request, "GET", null,
+				successCallback, errorCallback, null);
 	};
 
-	$scope.refresh = function() {
-		$scope.paginate(0, config.perPage, "");
+	$scope.search = function() {
+		$scope.paginate();
 	};
 
 	// Find all users.
-	$scope.paginate(0, $scope.perPage, $scope.search);
+	$scope.search();
 
 	// Get user details.
 	$scope.userDetails = function(userID) {

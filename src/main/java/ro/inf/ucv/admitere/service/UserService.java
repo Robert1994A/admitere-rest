@@ -66,10 +66,10 @@ public class UserService {
 		User user = null;
 		try {
 			if (StringUtils.isNotBlank(username)) {
-				user = userRepository.findByUsername(username.trim());
+				user = userRepository.findByUsername(username);
 			}
 		} catch (Exception e) {
-			logger.error("Find user by username: ", e);
+			logger.error("Find user by username: " + username, e);
 		}
 
 		return user;
@@ -77,9 +77,14 @@ public class UserService {
 
 	public Page<User> findAll(Pageable pageable) {
 		Page<User> users = null;
-		if (pageable != null) {
-			users = userRepository.findAll(pageable);
+		try {
+			if (pageable != null) {
+				users = userRepository.findAll(pageable);
+			}
+		} catch (Exception e) {
+			logger.error("Find all users with pageable: ", e);
 		}
+
 		return users;
 	}
 

@@ -25,12 +25,8 @@ public class PaginationUtils {
 		int pageNumber = searchModel.getPageNumber();
 		int pageSize = searchModel.getPageSize();
 		String sortBy = searchModel.getSortBy();
-		String sortDirection = null;
-		Direction direction = searchModel.getDirection();
-		if (direction != null) {
-			sortDirection = direction.name();
-		}
-		return getPageRequest(object, pageNumber, pageSize, sortDirection, sortBy);
+		String direction = searchModel.getDirection();
+		return getPageRequest(object, pageNumber, pageSize, direction, sortBy);
 	}
 
 	public Pageable getPageRequest(Object object, Integer pageNumber, Integer pageSize, String sortDirection,

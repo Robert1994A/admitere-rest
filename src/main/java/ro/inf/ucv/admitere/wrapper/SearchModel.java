@@ -1,13 +1,9 @@
 package ro.inf.ucv.admitere.wrapper;
 
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-
-import org.springframework.data.domain.Sort.Direction;
 
 public class SearchModel {
 
-	@NotNull
 	private String search = "";
 
 	@Min(1)
@@ -16,7 +12,7 @@ public class SearchModel {
 	@Min(0)
 	private Integer pageNumber = 0;
 
-	private Direction direction;
+	private String direction;
 
 	private String sortBy;
 
@@ -36,11 +32,11 @@ public class SearchModel {
 		this.pageSize = pageSize;
 	}
 
-	public Direction getDirection() {
+	public String getDirection() {
 		return direction;
 	}
 
-	public void setDirection(Direction direction) {
+	public void setDirection(String direction) {
 		this.direction = direction;
 	}
 

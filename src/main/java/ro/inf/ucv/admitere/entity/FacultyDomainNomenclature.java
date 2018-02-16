@@ -13,6 +13,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 @Entity
 @Table(name = "faculty_domain_nomenclature")
 public class FacultyDomainNomenclature {
@@ -33,7 +36,8 @@ public class FacultyDomainNomenclature {
 	@Column(name = "creation_date")
 	private Date creationDate = new Date();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@Fetch(value = FetchMode.SUBSELECT)
 	private List<FacultySpecializationNomenclature> facultySpecializationNomenclatures;
 
 	public FacultyDomainNomenclature() {
