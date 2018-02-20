@@ -5,7 +5,7 @@
 <!-- Main navigation bar -->
 <div class="navbar navbar-inverse">
 	<div class="navbar-header">
-		<a class="navbar-brand" href="#!/"><img
+		<a class="navbar-brand" ui-sref="home()"><img
 			src="<c:url value="/resources/images/logo_light.png"/>"></a>
 		<ul class="nav navbar-nav pull-right visible-xs-block">
 			<li><a data-toggle="collapse" data-target="#navbar-mobile"><i
@@ -24,18 +24,11 @@
 					<li><a class="deutsch"><img
 							src="<c:url value="/resources/images/flags/de.png"/>" alt="">
 							Deutsch</a></li>
-					<li><a class="ukrainian"><img
-							src="<c:url value="/resources/images/flags/ua.png"/>" alt="">
-							Українська</a></li>
 					<li><a class="english"><img
 							src="<c:url value="/resources/images/flags/gb.png"/>" alt="">
 							English</a></li>
 					<li><a class="espana"><img
-							src="<c:url value="/resources/images/flags/es.png"/>" alt="">
-							España</a></li>
-					<li><a class="russian"><img
-							src="<c:url value="/resources/images/flags/ru.png"/>" alt="">
-							Русский</a></li>
+							src="<c:url value="/resources/images/flags/es.png"/>" alt="">Espa�ol</a></li>
 				</ul></li>
 			<security:authorize access="isAuthenticated()">
 				<li class="dropdown dropdown-user"><a class="dropdown-toggle"
@@ -44,11 +37,12 @@
 								property="principal.username" /> </span> <i class="caret"></i>
 				</a>
 					<ul class="dropdown-menu dropdown-menu-right">
-						<li><a href="#!/profile"><i class="icon-user-plus"></i>
+						<li><a ui-sref="profile()"><i class="icon-user-plus"></i>
 								My profile</a></li>
-						<li><a href="#!/account"><i class="icon-cog5"></i> My
+						<li><a ui-sref="account()"><i class="icon-cog5"></i> My
 								account</a></li>
-						<li><a><i class="icon-switch2"></i> Logout</a></li>
+						<li><a id="logout-button"><i class="icon-switch2"></i>
+								Logout</a></li>
 					</ul></li>
 			</security:authorize>
 		</ul>

@@ -7,7 +7,8 @@
 <link href="<c:url value="/resources/css/icons/icomoon/styles.css" />"
 	rel="stylesheet" type="text/css">
 
-<link href="<c:url value="/resources/css/icons/fontawesome/css/fontawesome-all.min.css" />"
+<link
+	href="<c:url value="/resources/css/icons/fontawesome/css/fontawesome-all.min.css" />"
 	rel="stylesheet" type="text/css">
 
 <link href="<c:url value="/resources/css/bootstrap.css" />"

@@ -27,3 +27,8 @@ admitereApp.controller('notFoundController', function($scope) {
 admitereApp.controller('registerController', function($scope) {
 
 });
+
+// Register controller.
+admitereApp.controller('accountController', function($scope) {
+
+});

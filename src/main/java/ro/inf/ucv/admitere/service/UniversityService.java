@@ -1,5 +1,6 @@
 package ro.inf.ucv.admitere.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import ro.inf.ucv.admitere.entity.AdmissionSession;
 import ro.inf.ucv.admitere.entity.Faculty;
 import ro.inf.ucv.admitere.entity.FacultyDomainNomenclature;
+import ro.inf.ucv.admitere.entity.FacultySpecializationNomenclature;
 import ro.inf.ucv.admitere.entity.University;
 
 import ro.inf.ucv.admitere.repository.UniversityRepository;
@@ -122,7 +124,8 @@ public class UniversityService {
 				if (university != null) {
 					List<Faculty> faculties = university.getFaculties();
 					if (faculties != null && !faculties.isEmpty()) {
-						faculty = faculties.stream().filter(currentFaculty -> currentFaculty.getId() == facultyId)
+						faculty = faculties.stream()
+								.filter(currentFaculty -> currentFaculty.getId().intValue() == facultyId.intValue())
 								.findFirst().orElse(null);
 					}
 				}
@@ -163,5 +166,22 @@ public class UniversityService {
 		}
 
 		return admissionSessions;
+	}
+
+	public List<FacultySpecializationNomenclature> getFacultySpecializations(Integer universityId, Integer facultyId) {
+		List<FacultySpecializationNomenclature> facultySpecializationNomenclatures = null;
+		List<FacultyDomainNomenclature> facultyDomainNomenclatures = getFacultyDomains(universityId, facultyId);
+		if (facultyDomainNomenclatures != null && !facultyDomainNomenclatures.isEmpty()) {
+			facultySpecializationNomenclatures = new ArrayList<>();
+			for (FacultyDomainNomenclature facultyDomainNomenclature : facultyDomainNomenclatures) {
+				List<FacultySpecializationNomenclature> facultySpecializationNomenclaturesForDomain = facultyDomainNomenclature
+						.getFacultySpecializationNomenclatures();
+				if (facultySpecializationNomenclaturesForDomain != null
+						&& !facultySpecializationNomenclaturesForDomain.isEmpty()) {
+					facultySpecializationNomenclatures.addAll(facultySpecializationNomenclaturesForDomain);
+				}
+			}
+		}
+		return facultySpecializationNomenclatures;
 	}
 }

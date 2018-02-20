@@ -1,11 +1,8 @@
-<div class="datatable-footer">
-	<div style="float: left" class="bg-primary text-highlight">Page
-		{{pagination.number}} / {{pagination.totalPages}}</div>
-	<div style="float: right">
-		<ul uib-pagination
-			ng-change="paginate()"
-			total-items="pagination.totalElements" ng-model="pagination.number"
-			max-size="pagination.totalPages" class="pagination-sm"
-			boundary-links="true" num-pages="pagination.totalPages"></ul>
-	</div>
+<div class="datatable-footer center">
+	<span class="pagination-sm" uib-pagination previous-text="&laquo;"
+		next-text="&raquo;" total-items="pagination.totalElements"
+		items-per-page="pagination.numberOfElements"
+		ng-model="pagination.number" max-size="5" boundary-link-numbers="true"
+		force-ellipses="true" num-pages="pagination.totalPages"
+		ng-click="paginate()"></span>
 </div>

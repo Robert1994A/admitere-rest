@@ -12,6 +12,7 @@ import ro.inf.ucv.admitere.controller.html.BaseController;
 import ro.inf.ucv.admitere.entity.AdmissionSession;
 import ro.inf.ucv.admitere.entity.Faculty;
 import ro.inf.ucv.admitere.entity.FacultyDomainNomenclature;
+import ro.inf.ucv.admitere.entity.FacultySpecializationNomenclature;
 import ro.inf.ucv.admitere.entity.University;
 import ro.inf.ucv.admitere.wrapper.Response;
 import ro.inf.ucv.admitere.wrapper.SearchModel;
@@ -69,6 +70,18 @@ public class UniversityControllerRest extends BaseController {
 				facultyId);
 		if (facultyDomainNomenclatures != null && !facultyDomainNomenclatures.isEmpty()) {
 			return new ResponseEntity<Response>(new Response(facultyDomainNomenclatures), HttpStatus.OK);
+		}
+
+		return new ResponseEntity<Response>(HttpStatus.NOT_FOUND);
+	}
+
+	@GetMapping("/universities/{universityId}/faculties/{facultyId}/specializations")
+	public ResponseEntity<Response> getSpecializationsByFaculty(@PathVariable("universityId") Integer universityId,
+			@PathVariable("facultyId") Integer facultyId) throws Exception {
+		List<FacultySpecializationNomenclature> facultySpecializationNomenclatures = universityService
+				.getFacultySpecializations(universityId, facultyId);
+		if (facultySpecializationNomenclatures != null && !facultySpecializationNomenclatures.isEmpty()) {
+			return new ResponseEntity<Response>(new Response(facultySpecializationNomenclatures), HttpStatus.OK);
 		}
 
 		return new ResponseEntity<Response>(HttpStatus.NOT_FOUND);

@@ -9,6 +9,12 @@ public class UsersController extends BaseController {
 	public String getUsersHTML() {
 		return "template/users";
 	}
+	
+	@GetMapping("/pages/add_user.html")
+	public String getAddUsesHTML() {
+		return "template/add_user";
+	}
+
 
 	@GetMapping("/modals/userDetails.html")
 	public String getUserDetailsModal() {

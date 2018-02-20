@@ -19,6 +19,7 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -136,13 +137,10 @@ public class Profile implements Serializable {
 	private State state;
 
 	@NotNull
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JsonIgnore
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
-
-	public Profile() {
-		super();
-	}
 
 	public String getId() {
 		return id;
@@ -214,6 +212,22 @@ public class Profile implements Serializable {
 
 	public void setInitialsName(String initialsName) {
 		this.initialsName = initialsName;
+	}
+
+	public String getStreet() {
+		return street;
+	}
+
+	public void setStreet(String street) {
+		this.street = street;
+	}
+
+	public Date getCreationDate() {
+		return creationDate;
+	}
+
+	public void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
 	}
 
 	public Gender getGender() {
@@ -302,22 +316,6 @@ public class Profile implements Serializable {
 
 	public void setState(State state) {
 		this.state = state;
-	}
-
-	public String getStreet() {
-		return street;
-	}
-
-	public void setStreet(String street) {
-		this.street = street;
-	}
-
-	public Date getCreationDate() {
-		return creationDate;
-	}
-
-	public void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
 	}
 
 	public User getUser() {

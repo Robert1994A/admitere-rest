@@ -57,7 +57,7 @@ public class UsersControllerRest extends BaseController {
 			User user = userService.findOne(id);
 			if (user != null) {
 				Profile profile = user.getProfile();
-				if (profile != null && profile.getId() != null) {
+				if (profile != null) {
 					return new ResponseEntity<Response>(new Response(profile), HttpStatus.OK);
 				}
 			}

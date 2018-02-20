@@ -18,6 +18,9 @@
 
 <script type="text/javascript"
 	src="<c:url value="/resources/javascript/drilldown.js" />"></script>
+
+<script type="text/javascript"
+	src="<c:url value="/resources/javascript/uniform.min.js" />"></script>
 <!-- End Core JS files -->
 
 <!-- Theme JS files -->
@@ -34,8 +37,6 @@
 
 <script type="text/javascript"
 	src="<c:url value="/resources/angular/angular-messages.js"/>"></script>
-
-
 
 <script type="text/javascript"
 	src="<c:url value="/resources/angular/angular-animate.js"/>"></script>

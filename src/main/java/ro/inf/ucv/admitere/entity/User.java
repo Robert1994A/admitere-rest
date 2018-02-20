@@ -16,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.LazyCollection;
@@ -41,11 +42,17 @@ public class User implements Serializable {
 
 	@UniqueUsername(message = "This username already exist! Please try another one!")
 	@UniqueCnp(message = "This cnp was already registered")
+	@Column(unique = true)
 	@NotBlank
 	private String username;
 
-	@UniqueEmail(message = "")
+	@UniqueEmail(message = "This email already exist")
+	@Column(unique = true)
 	private String email;
+
+	@NotEmpty
+	@Column(unique = true)
+	private String phoneNumber;
 
 	@JsonIgnore
 	@NotBlank
@@ -72,7 +79,7 @@ public class User implements Serializable {
 	private List<Role> roles;
 
 	@JsonIgnore
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
 	private Profile profile;
 
 	@JsonIgnore
@@ -177,6 +184,14 @@ public class User implements Serializable {
 
 	public void setUniversity(University university) {
 		this.university = university;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 
 	@Override

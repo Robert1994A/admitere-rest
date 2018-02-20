@@ -26,12 +26,12 @@ import ro.inf.ucv.admitere.wrapper.Response;
 public class ProfileControllerRest extends BaseController {
 
 	@GetMapping("/profile")
-	private ResponseEntity<Profile> profile(Principal principal) throws Exception {
+	private ResponseEntity<Response> profile(Principal principal) throws Exception {
 		Profile profile = userService.getProfile(principal);
 		if (profile != null && profile.getId() != null) {
-			return new ResponseEntity<Profile>(profile, HttpStatus.OK);
+			return new ResponseEntity<Response>(new Response(profile), HttpStatus.OK);
 		}
-		return new ResponseEntity<Profile>(HttpStatus.NOT_FOUND);
+		return new ResponseEntity<Response>(HttpStatus.NOT_FOUND);
 	}
 
 	@PostMapping(value = "/profile", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

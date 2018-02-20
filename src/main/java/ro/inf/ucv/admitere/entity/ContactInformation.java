@@ -24,6 +24,7 @@ public class ContactInformation implements Serializable {
 	private String email;
 
 	@NotBlank
+	@Column(name = "phone_numbers")
 	private String phoneNumber;
 
 	@Column(name = "creation_date")

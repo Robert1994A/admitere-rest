@@ -3,18 +3,18 @@ admitereApp.controller('universitiesController', function($scope, $rootScope,
 		$log, comunicationFactory, config) {
 	$scope.containerId = "universities-container";
 	$scope.universitiesFound = false;
-	$scope.search = "";
-	$scope.perPage = config.perPage;
-	$scope.pageNumber = 0;
-	$scope.pagination = {};
 	$scope.universities = [];
-	$scope.page = {};
-	$scope.universityNavigationOpened = true;
 
-	$scope.paginate = function(page, pageSize, search) {
-		if (page > 0) {
-			page = page - 1;
-		}
+	// Search initialization.
+	$scope.pagination = {};
+	$scope.searchText = "";
+	$scope.sortDirection = config.sortDirection;
+	$scope.sortBy = config.sortBy;
+	$scope.perPage = config.perPage;
+	$scope.pageNumber = 1;
+	// End search initialization.
+
+	$scope.paginate = function() {
 		$rootScope.showLoader($scope.containerId);
 		var successCallback = function(response) {
 			if (response.data.content == undefined) {
@@ -23,7 +23,6 @@ admitereApp.controller('universitiesController', function($scope, $rootScope,
 			$scope.universities = response.data.content.content;
 			$rootScope.extractPagination($scope.pagination,
 					response.data.content);
-			// $log.info($scope.pagination);
 			if ($scope.universities.length > 0) {
 				$scope.universitiesFound = true;
 			}
@@ -31,14 +30,28 @@ admitereApp.controller('universitiesController', function($scope, $rootScope,
 		};
 
 		var errorCallback = function(response) {
+			$scope.universities = [];
+			$scope.universitiesFound = false;
 			$rootScope.hideLoader($scope.containerId);
-		};
+		}
 
-		comunicationFactory.makeRequest("universities?pageNumber=" + page,
-				"GET", null, successCallback, errorCallback, "");
+		if ($scope.pagination.number != null
+				&& $scope.pagination.number != undefined) {
+			$scope.pageNumber = $scope.pagination.number;
+		}
+
+		var request = $rootScope.generateSearchRequest($scope.pageNumber,
+				$scope.perPage, $scope.searchText, $scope.sortBy,
+				$scope.sortDirection);
+		comunicationFactory.makeRequest("universities" + request, "GET", null,
+				successCallback, errorCallback, null);
 	};
 
-	$scope.paginate($scope.pageNumber, $scope.perPage, $scope.search);
+	$scope.paginate();
+
+	$scope.search = function() {
+		$scope.paginate();
+	};
 });
 
 admitereApp.controller('universityController', function($scope, $rootScope,
@@ -98,101 +111,4 @@ admitereApp.controller('universityFacultiesController', function($scope,
 	};
 
 	$scope.getFaculties();
-
-});
-
-admitereApp.controller('facultyController', function($scope, $rootScope,
-		$state, $log, comunicationFactory, config) {
-	$scope.faculty = {};
-	$scope.containerId = "faculty-container";
-	$scope.getFaculty = function() {
-		$rootScope.showLoader($scope.containerId);
-		var successCallback = function(response) {
-			if (response.data.content == undefined) {
-				return;
-			}
-			$scope.faculty = response.data.content;
-			$rootScope.hideLoader($scope.containerId);
-		};
-
-		var errorCallback = function(response) {
-			$rootScope.hideLoader($scope.containerId);
-			$state.go('^');
-		};
-
-		comunicationFactory.makeRequest("universities/"
-				+ $state.params.universityId + "/faculties/"
-				+ $state.params.facultyId, "GET", null, successCallback,
-				errorCallback, "");
-	};
-
-	$scope.getFaculty();
-
-});
-
-admitereApp.controller('facultyDomainsController', function($scope, $rootScope,
-		$state, $log, comunicationFactory, config) {
-	$scope.domains = {};
-	$scope.domainsFound = false;
-	$scope.containerId = "domains-container";
-	$scope.getFacultyDomains = function() {
-		$rootScope.showLoader($scope.containerId);
-		var successCallback = function(response) {
-			if (response.data.content == undefined) {
-				return;
-			}
-			$scope.domains = response.data.content;
-			if ($scope.domains.length > 0) {
-				$scope.domainsFound = true;
-			}
-			$rootScope.hideLoader($scope.containerId);
-		};
-
-		var errorCallback = function(response) {
-			$rootScope.hideLoader($scope.containerId);
-		};
-
-		comunicationFactory.makeRequest("universities/"
-				+ $state.params.universityId + "/faculties/"
-				+ $state.params.facultyId + "/domains", "GET", null,
-				successCallback, errorCallback, "");
-	};
-
-	$scope.getFacultyDomains();
-
-});
-
-admitereApp.controller('facultySessionsController', function($scope,
-		$rootScope, $state, $log, comunicationFactory, config) {
-	$scope.sessions = {};
-	$scope.sessionsFound = false;
-	$scope.containerId = "sessions-container";
-	$scope.getFacultySessions = function() {
-		$rootScope.showLoader($scope.containerId);
-		var successCallback = function(response) {
-			if (response.data.content == undefined) {
-				return;
-			}
-			$scope.sessions = response.data.content;
-			if ($scope.sessions.length > 0) {
-				$scope.sessionsFound = true;
-			}
-			$rootScope.hideLoader($scope.containerId);
-		};
-
-		var errorCallback = function(response) {
-			$rootScope.hideLoader($scope.containerId);
-		};
-
-		comunicationFactory.makeRequest("universities/"
-				+ $state.params.universityId + "/faculties/"
-				+ $state.params.facultyId + "/sessions", "GET", null,
-				successCallback, errorCallback, "");
-	};
-
-	$scope.getFacultySessions();
-});
-
-admitereApp.controller('facultyAddSessionController', function($scope,
-		$rootScope, $state, $log, comunicationFactory, config) {
 });

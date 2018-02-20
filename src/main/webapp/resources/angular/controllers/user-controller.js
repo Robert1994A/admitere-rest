@@ -3,16 +3,15 @@ admitereApp.controller('usersController', function($scope, $rootScope,
 		$timeout, $uibModal, comunicationFactory, config) {
 	$scope.containerId = "users-container";
 	$scope.usersFound = false;
-	$scope.pagination = {};
 	$scope.users = [];
-	$scope.page = {};
 
 	// Search initialization.
+	$scope.pagination = {};
 	$scope.searchText = "";
 	$scope.sortDirection = config.sortDirection;
 	$scope.sortBy = config.sortBy;
 	$scope.perPage = config.perPage;
-	$scope.pageNumber = 0;
+	$scope.pageNumber = 1;
 	// End search initialization.
 
 	$scope.paginate = function() {
@@ -116,7 +115,9 @@ admitereApp.controller('userProfileController', function($scope, $rootScope,
 	function userProfile(id) {
 		var successCallback = function(response) {
 			$scope.profile = response.data.content;
-			$scope.profileFound = true;
+			if ($scope.profile && $scope.profile != null) {
+				$scope.profileFound = true;
+			}
 		};
 
 		comunicationFactory.makeRequest("users/" + id + "/profile", "GET",
@@ -127,4 +128,10 @@ admitereApp.controller('userProfileController', function($scope, $rootScope,
 	$scope.cancel = function() {
 		$uibModalInstance.close();
 	};
+});
+
+// Add user controller.
+admitereApp.controller('addUserController', function($scope, $rootScope,
+		comunicationFactory) {
+
 });

@@ -15,6 +15,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+
 @Entity
 @Table(name = "faculty_specialization_nomenclature")
 public class FacultySpecializationNomenclature implements Serializable {
@@ -35,14 +36,17 @@ public class FacultySpecializationNomenclature implements Serializable {
 	@NotBlank
 	private String url;
 
+	@Column(name = "maximum_number_of_places")
 	private int maxNumberOfPlaces;
 
 	@NotBlank
+	@Column(name = "form_of_learning")
 	private String formOfLearning;
 
 	@NotBlank
 	private String accreditation;
 
+	@Column(name = "number_of_credits")
 	private int numberOfCredits;
 
 	@Column(name = "creation_date")

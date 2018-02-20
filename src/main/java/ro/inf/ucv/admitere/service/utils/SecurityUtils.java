@@ -19,8 +19,12 @@ public class SecurityUtils {
 		return RandomStringUtils.random(256, true, true);
 	}
 
-	public String getUsernameString() {
+	public String getUsernameCNPString() {
 		return RandomStringUtils.random(13, false, true);
+	}
+
+	public String getSmallRandomString() {
+		return RandomStringUtils.random(10, true, false);
 	}
 
 	public String getEncodedRandomString() {

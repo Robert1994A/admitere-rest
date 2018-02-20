@@ -3,6 +3,16 @@
 	<div class="panel-heading">
 		<h4 class="panel-title">Universities</h4>
 		<div class="heading-elements">
+			<form class="heading-form" action="#">
+				<div class="form-group has-feedback">
+					<input type="search" class="form-control"
+						ng-init="searchUniversity.name=''" ng-model="searchUniversity.name"
+						placeholder="Search...">
+					<div class="form-control-feedback">
+						<i class="icon-search4 text-size-base text-muted"></i>
+					</div>
+				</div>
+			</form>
 			<button type="button" ui-sref=".add()"
 				class="btn btn-primary heading-btn">
 				<i class="icon-plus3 position-left"></i> Add new university
@@ -17,15 +27,29 @@
 			<table class="table table-responsive table-hover">
 				<thead>
 					<tr>
-						<th>Id</th>
 						<th>Name</th>
+						<th>Contact</th>
 						<th>Actions</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr ng-repeat="university in universities">
-						<td>{{university.id}}</td>
+					<tr
+						ng-repeat="university in universities | filter:searchUniversity">
 						<td>{{university.name}}</td>
+						<td>
+							<p>
+								<i class="icon-envelope"></i>
+								{{university.contactInformation.email}}
+							</p>
+							<p>
+								<i class="icon-phone2"></i>
+								{{university.contactInformation.phoneNumber}}
+							</p>
+							<p>
+								<i class="icon-link2"></i> <a href="{{university.url}}">
+									{{university.url}}</a>
+							</p>
+						</td>
 						<td>
 							<div class="btn-group">
 								<button type="button"

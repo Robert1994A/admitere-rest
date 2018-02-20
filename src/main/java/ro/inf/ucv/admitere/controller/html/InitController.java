@@ -127,7 +127,7 @@ public class InitController extends BaseController {
 		long diff = endTime - beginTime + 1;
 
 		for (int i = 0; i < numberOfUsers; i++) {
-			String username = securityUtils.getUsernameString();
+			String username = securityUtils.getUsernameCNPString();
 			User userAdmin = new User();
 			userAdmin.setEnabled(true);
 			userAdmin.setEmail("admin" + i + "@gmail.com");
@@ -141,7 +141,7 @@ public class InitController extends BaseController {
 		}
 
 		for (int i = 0; i < numberOfUsers; i++) {
-			String username = securityUtils.getUsernameString();
+			String username = securityUtils.getUsernameCNPString();
 			User userFaculty = new User();
 			userFaculty.setEnabled(true);
 			userFaculty.setEmail("faculty" + i + "@gmail.com");
@@ -156,7 +156,7 @@ public class InitController extends BaseController {
 		}
 
 		for (int i = 0; i < numberOfUsers; i++) {
-			String username = securityUtils.getUsernameString();
+			String username = securityUtils.getUsernameCNPString();
 			User userUniversity = new User();
 			userUniversity.setEnabled(true);
 			userUniversity.setEmail("university" + i + "@gmail.com");
@@ -171,7 +171,7 @@ public class InitController extends BaseController {
 		}
 
 		for (int i = 0; i < numberOfUsers; i++) {
-			String username = securityUtils.getUsernameString();
+			String username = securityUtils.getUsernameCNPString();
 			User user = new User();
 			user.setEnabled(new Random().nextBoolean());
 			user.setEmail("user" + i + "@gmail.com");
@@ -191,13 +191,13 @@ public class InitController extends BaseController {
 
 		profile.setCreationDate(getDate());
 		profile.setBirthDate(getBirthDate(beginTime, diff));
-		profile.setStreet(securityUtils.getUsernameString());
-		profile.setFirstName(securityUtils.getUsernameString());
-		profile.setLastName(securityUtils.getUsernameString());
-		profile.setFatherFirstName(securityUtils.getUsernameString());
-		profile.setFatherLastName(securityUtils.getUsernameString());
-		profile.setMotherFirstName(securityUtils.getUsernameString());
-		profile.setMotherLastName(securityUtils.getUsernameString());
+		profile.setStreet(securityUtils.getSmallRandomString());
+		profile.setFirstName(securityUtils.getSmallRandomString());
+		profile.setLastName(securityUtils.getSmallRandomString());
+		profile.setFatherFirstName(securityUtils.getSmallRandomString());
+		profile.setFatherLastName(securityUtils.getSmallRandomString());
+		profile.setMotherFirstName(securityUtils.getSmallRandomString());
+		profile.setMotherLastName(securityUtils.getSmallRandomString());
 		profile.setInitialsName(RandomStringUtils.randomAlphabetic(1).toUpperCase());
 		profile.setCity(cities.get(getRandom(cities.size())));
 		profile.setCountry(countries.get(getRandom(countries.size())));
@@ -227,6 +227,7 @@ public class InitController extends BaseController {
 		List<MaritalStatus> maritalStatus = profileWrapper.getMaritalStatus();
 		profile.setMaritalStatus(maritalStatus.get(getRandom(maritalStatus.size())));
 
+		profile.setUser(user);
 		user.setProfile(profile);
 		userService.save(user, true);
 	}

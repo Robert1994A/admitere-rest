@@ -21,9 +21,24 @@ public class FacultyController extends BaseController {
 		return "template/add_faculty";
 	}
 
+	@GetMapping("/pages/add_specialization.html")
+	public String getAddSpecializationPage() {
+		return "template/add_specialization";
+	}
+
 	@GetMapping("/pages/domains.html")
 	public String getDomainsPage() {
 		return "template/domains";
+	}
+
+	@GetMapping("/pages/add_domain.html")
+	public String getAddDomainPage() {
+		return "template/add_domain";
+	}
+
+	@GetMapping("/pages/specializations.html")
+	public String getSpecializationsPage() {
+		return "template/specializations";
 	}
 
 	@GetMapping("/pages/sessions.html")

@@ -9,6 +9,8 @@
 			<p>{{faculty.name}}</p>
 			<p>{{faculty.url}}</p>
 			<p>{{faculty.description}}</p>
+			<p>{{faculty.contactInformation.email}}</p>
+			<p>{{faculty.contactInformation.phoneNumber}}</p>
 			<button type="button" ui-sref=".domains()"
 				class="btn btn-primary btn-xlg">
 				<i class="icon-comment-discussion position-left"></i> View domains
@@ -16,6 +18,11 @@
 			<button type="button" ui-sref=".sessions()"
 				class="btn btn-primary btn-xlg">
 				<i class="icon-comment-discussion position-left"></i> View sessions
+			</button>
+			<button type="button" ui-sref=".specializations()"
+				class="btn btn-primary btn-xlg">
+				<i class="icon-comment-discussion position-left"></i> View
+				specializations
 			</button>
 		</div>
 	</div>

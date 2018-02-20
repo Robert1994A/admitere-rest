@@ -79,6 +79,7 @@ admitereApp.controller('profileController', function($scope, $rootScope,
 	$scope.getProfile = function() {
 		$rootScope.showLoader($scope.cotainerId);
 		var successCallback = function(response) {
+			$scope.profile = response.data.content;
 			$scope.profileCreated = true;
 			$rootScope.hideLoader($scope.cotainerId);
 		};

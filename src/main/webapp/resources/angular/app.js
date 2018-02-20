@@ -3,11 +3,16 @@ var admitereApp = angular.module(
 		'admitereApp',
 		[ 'ngRoute', 'ui.router', 'ngAnimate', 'ngSanitize', 'ui.bootstrap',
 				'ngMessages', 'ncy-angular-breadcrumb' ]).config(
-		function($httpProvider, $breadcrumbProvider) {
+		function($httpProvider, $breadcrumbProvider, $locationProvider) {
 			$breadcrumbProvider.setOptions({
 				prefixStateName : 'home',
 				template : 'bootstrap3'
 			});
+
+			// $locationProvider.html5Mode({
+			// enabled : true,
+			// requireBase : false
+			// });
 			// $httpProvider.interceptors.push(loaderInterceptor);
 		});
 
@@ -57,7 +62,7 @@ admitereApp
 				pagination.totalElements = data.totalElements;
 				pagination.last = data.last;
 				pagination.size = data.size;
-				pagination.number = data.number;
+				pagination.number = data.number + 1;
 				pagination.sort = data.sort;
 				pagination.first = data.first;
 				pagination.numberOfElements = data.numberOfElements;
@@ -79,19 +84,28 @@ admitereApp
 			};
 
 			$rootScope.showLoader = function(containerId) {
-				if (angular.element('#' + containerId).length > 0) {
-					document.getElementById("container-loader").style.display = "block";
-					document.getElementById(containerId).style.display = "none";
+				try {
+					if (document.getElementById(containerId) != null) {
+						document.getElementById("container-loader").style.display = "block";
+						document.getElementById(containerId).style.display = "none";
+					}
+				} catch (err) {
+					// Stay silent.
 				}
 			};
 
 			$rootScope.hideLoader = function(containerId) {
-				if (angular.element('#' + containerId).length > 0) {
-					setTimeout(
-							function() {
-								document.getElementById("container-loader").style.display = "none";
-								document.getElementById(containerId).style.display = "block";
-							}, 700)
+				try {
+					if (document.getElementById(containerId) != null) {
+						setTimeout(
+								function() {
+									document.getElementById("container-loader").style.display = "none";
+									console.log("Container id", containerId);
+									document.getElementById(containerId).style.display = "block";
+								}, 500)
+					}
+				} catch (err) {
+					// Stay silent.
 				}
 			};
 
@@ -119,9 +133,9 @@ admitereApp
 					url = url + "&direction=";
 				}
 
-				if (pageNumber != null && pageSize != undefined) {
+				if (pageNumber != null && pageNumber != undefined) {
 					url = url + "&pageNumber="
-							+ window.encodeURIComponent(pageNumber)
+							+ window.encodeURIComponent(pageNumber - 1)
 				} else {
 					url = url + "&pageNumber=0";
 				}
@@ -157,6 +171,19 @@ admitereApp.config(function($stateProvider, $urlRouterProvider) {
 		controller : 'usersController',
 		ncyBreadcrumb : {
 			label : 'Users'
+		}
+	}).state('users.add', {
+		url : '/add',
+		cache : false,
+		views : {
+			"@" : {
+				templateUrl : 'pages/add_user.html',
+				controller : 'addUserController'
+			}
+		},
+		ncyBreadcrumb : {
+			label : 'Add',
+			parent : "users"
 		}
 	})
 
@@ -248,6 +275,18 @@ admitereApp.config(function($stateProvider, $urlRouterProvider) {
 			label : 'Domains',
 			parent : "universities.detail.faculties.detail"
 		}
+	}).state('universities.detail.faculties.detail.domains.add', {
+		url : '/add',
+		views : {
+			"@" : {
+				templateUrl : 'pages/add_domain.html',
+				controller : 'facultyAddDomainController'
+			}
+		},
+		ncyBreadcrumb : {
+			label : 'Add',
+			parent : "universities.detail.faculties.detail.domains"
+		}
 	}).state('universities.detail.faculties.detail.sessions', {
 		url : '/sessions',
 		views : {
@@ -272,6 +311,30 @@ admitereApp.config(function($stateProvider, $urlRouterProvider) {
 			label : 'Add',
 			parent : "universities.detail.faculties.detail.sessions"
 		}
+	}).state('universities.detail.faculties.detail.specializations', {
+		url : '/specializations',
+		views : {
+			"@" : {
+				templateUrl : 'pages/specializations.html',
+				controller : 'facultySpecializationsController'
+			}
+		},
+		ncyBreadcrumb : {
+			label : 'Specializations',
+			parent : "universities.detail.faculties.detail"
+		}
+	}).state('universities.detail.faculties.detail.specializations.add', {
+		url : '/add',
+		views : {
+			"@" : {
+				templateUrl : 'pages/add_specialization.html',
+				controller : 'facultyAddSpecializationController'
+			}
+		},
+		ncyBreadcrumb : {
+			label : 'Add',
+			parent : "universities.detail.faculties.detail.specializations"
+		}
 	})
 
 	// route for the users page.
@@ -293,6 +356,17 @@ admitereApp.config(function($stateProvider, $urlRouterProvider) {
 		controller : 'aboutController',
 		ncyBreadcrumb : {
 			label : 'About'
+		}
+	})
+
+	// route for the account page
+	.state('account', {
+		url : '/account',
+		cache : false,
+		templateUrl : 'pages/account.html',
+		controller : 'accountController',
+		ncyBreadcrumb : {
+			label : 'My account'
 		}
 	})
 
