@@ -1,5 +1,7 @@
 package ro.inf.ucv.admitere.entity;
 
+import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -11,16 +13,20 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import ro.inf.ucv.admitere.service.utils.ConfigurationUtils;
 
 @Entity
-@Table(name = "enrolled_user")
-public class EnrolledUser {
+@Table(name = "applied_session")
+public class AppliedSession implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@GeneratedValue(generator = "uuid")
 	@GenericGenerator(name = "uuid", strategy = "uuid2")
@@ -28,9 +34,9 @@ public class EnrolledUser {
 	@Id
 	private String id;
 
-	@NotNull
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private User user;
+	@Column(name = "creation_date")
+	@DateTimeFormat(pattern = ConfigurationUtils.DATE_FORMAT)
+	private Date creationDate = new Date();
 
 	@NotNull
 	@NotEmpty
@@ -39,8 +45,11 @@ public class EnrolledUser {
 
 	@NotNull
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "addmission_specialization")
-	private AddmisionSpecialization addmisionSpecialization;
+	@JoinColumn(name = "admission_specialization")
+	private AdmissionSpecialization admissionSpecialization;
+
+	public AppliedSession() {
+	}
 
 	public String getId() {
 		return id;
@@ -50,12 +59,12 @@ public class EnrolledUser {
 		this.id = id;
 	}
 
-	public User getUser() {
-		return user;
+	public Date getCreationDate() {
+		return creationDate;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
 	}
 
 	public List<SampleResult> getSampleResults() {
@@ -66,12 +75,12 @@ public class EnrolledUser {
 		this.sampleResults = sampleResults;
 	}
 
-	public AddmisionSpecialization getAddmisionSpecialization() {
-		return addmisionSpecialization;
+	public AdmissionSpecialization getAdmissionSpecialization() {
+		return admissionSpecialization;
 	}
 
-	public void setAddmisionSpecialization(AddmisionSpecialization addmisionSpecialization) {
-		this.addmisionSpecialization = addmisionSpecialization;
+	public void setAdmissionSpecialization(AdmissionSpecialization admissionSpecialization) {
+		this.admissionSpecialization = admissionSpecialization;
 	}
 
 }

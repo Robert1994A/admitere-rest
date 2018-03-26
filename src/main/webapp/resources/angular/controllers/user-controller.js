@@ -7,7 +7,7 @@ admitereApp.controller('usersController', function($scope, $rootScope,
 
 	// Search initialization.
 	$scope.pagination = {};
-	$scope.searchText = "";
+	// $scope.searchText = "";
 	$scope.sortDirection = config.sortDirection;
 	$scope.sortBy = config.sortBy;
 	$scope.perPage = config.perPage;
@@ -48,11 +48,14 @@ admitereApp.controller('usersController', function($scope, $rootScope,
 	};
 
 	$scope.search = function() {
+		if ($scope.searchText != "") {
+			$scope.pageNumber = 1;
+		}
 		$scope.paginate();
 	};
 
 	// Find all users.
-	$scope.search();
+	$scope.paginate();
 
 	// Get user details.
 	$scope.userDetails = function(userID) {

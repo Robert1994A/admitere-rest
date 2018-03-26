@@ -97,6 +97,8 @@ public class UniversityService {
 			for (University university : universitiesList) {
 				this.save(university, flush);
 			}
+		} else {
+			logger.error("No universities provided for save.");
 		}
 	}
 

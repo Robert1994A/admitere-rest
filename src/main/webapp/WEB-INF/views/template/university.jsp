@@ -6,9 +6,12 @@
 	</div>
 	<div class="panel-body">
 		<div class="row">
-			{{university.id}} {{university.name}} {{university.description}}
-			{{university.url}} {{university.contactInformation.email}}
-			{{university.contactInformation.phoneNumber}}
+			<p>{{university.id}}</p>
+			<p>{{university.name}}</p>
+			<p>{{university.description}}</p>
+			<p>{{university.url}}</p>
+			<p>{{university.contactInformation.email}}</p>
+			<p>{{university.contactInformation.phoneNumber}}</p>
 			<button type="button" ui-sref=".faculties()"
 				class="btn btn-primary btn-xlg">
 				<i class="icon-comment-discussion position-left"></i> View faculties

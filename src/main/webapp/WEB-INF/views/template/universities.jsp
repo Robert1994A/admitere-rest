@@ -6,8 +6,8 @@
 			<form class="heading-form" action="#">
 				<div class="form-group has-feedback">
 					<input type="search" class="form-control"
-						ng-init="searchUniversity.name=''" ng-model="searchUniversity.name"
-						placeholder="Search...">
+						ng-init="searchUniversity.name=''"
+						ng-model="searchUniversity.name" placeholder="Search...">
 					<div class="form-control-feedback">
 						<i class="icon-search4 text-size-base text-muted"></i>
 					</div>
@@ -27,6 +27,7 @@
 			<table class="table table-responsive table-hover">
 				<thead>
 					<tr>
+						<th>ID</th>
 						<th>Name</th>
 						<th>Contact</th>
 						<th>Actions</th>
@@ -35,6 +36,7 @@
 				<tbody>
 					<tr
 						ng-repeat="university in universities | filter:searchUniversity">
+						<td>{{university.id}}</td>
 						<td>{{university.name}}</td>
 						<td>
 							<p>

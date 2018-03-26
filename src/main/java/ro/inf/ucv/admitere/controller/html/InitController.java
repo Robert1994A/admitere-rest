@@ -9,9 +9,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -26,6 +28,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+import ro.inf.ucv.admitere.entity.AdmissionSpecialization;
+import ro.inf.ucv.admitere.entity.AdmissionSession;
 import ro.inf.ucv.admitere.entity.Citizenship;
 import ro.inf.ucv.admitere.entity.City;
 import ro.inf.ucv.admitere.entity.ContactInformation;
@@ -43,11 +47,13 @@ import ro.inf.ucv.admitere.entity.Religion;
 import ro.inf.ucv.admitere.entity.Role;
 import ro.inf.ucv.admitere.entity.SampleNomenclature;
 import ro.inf.ucv.admitere.entity.SocialSituation;
+import ro.inf.ucv.admitere.entity.SpecializationSample;
 import ro.inf.ucv.admitere.entity.State;
 import ro.inf.ucv.admitere.entity.University;
 import ro.inf.ucv.admitere.entity.User;
 import ro.inf.ucv.admitere.enumerations.NomenclatureType;
 import ro.inf.ucv.admitere.enumerations.Roles;
+import ro.inf.ucv.admitere.enumerations.SpecializationType;
 import ro.inf.ucv.admitere.service.utils.StringUtils;
 import ro.inf.ucv.admitere.wrapper.ProfileWrapper;
 
@@ -69,10 +75,10 @@ public class InitController extends BaseController {
 	public void home(Model model) throws Exception {
 		if (userService.count() == 0) {
 			boolean flush = false;
+			initNomenclator(flush);
 			initProfileData(flush);
 			initSampleNomenclature(flush);
-			initNomenclator(flush);
-			initDatabaseUsers(50, flush);
+			initDatabaseUsers(20, flush);
 		}
 	}
 
@@ -135,37 +141,50 @@ public class InitController extends BaseController {
 			userAdmin.setUsername(username);
 			userAdmin.setPassword(securityUtils.encode(username));
 			userAdmin.setRoles(rolesAdmin);
+			userAdmin.setPhoneNumber(securityUtils.getPhoneNumberString());
 			userAdmin.setRecoverPaswordToken(securityUtils.getEncodedRandomString());
 			userAdmin = userService.save(userAdmin, flush);
 			initProfile(userAdmin, profileWrapper, countries, cities, states, beginTime, diff);
 		}
 
 		for (int i = 0; i < numberOfUsers; i++) {
+			Faculty faculty = null;
+			if (faculties != null && !faculties.isEmpty()) {
+				faculty = faculties.get(getRandom(faculties.size()));
+			}
+
 			String username = securityUtils.getUsernameCNPString();
 			User userFaculty = new User();
 			userFaculty.setEnabled(true);
+			userFaculty.setPhoneNumber(securityUtils.getPhoneNumberString());
 			userFaculty.setEmail("faculty" + i + "@gmail.com");
 			userFaculty.setRegisterToken(securityUtils.getEncodedRandomString());
 			userFaculty.setUsername(username);
 			userFaculty.setPassword(securityUtils.encode(username));
 			userFaculty.setRoles(rolesFaculty);
 			userFaculty.setRecoverPaswordToken(securityUtils.getEncodedRandomString());
-			userFaculty.setFaculty(faculties.get(getRandom(faculties.size())));
+			userFaculty.setFaculty(faculty);
 			userFaculty = userService.save(userFaculty, flush);
 			initProfile(userFaculty, profileWrapper, countries, cities, states, beginTime, diff);
 		}
 
 		for (int i = 0; i < numberOfUsers; i++) {
+			University university = null;
+			if (universities != null && !universities.isEmpty()) {
+				university = universities.get(getRandom(universities.size()));
+			}
+
 			String username = securityUtils.getUsernameCNPString();
 			User userUniversity = new User();
 			userUniversity.setEnabled(true);
 			userUniversity.setEmail("university" + i + "@gmail.com");
 			userUniversity.setRegisterToken(securityUtils.getEncodedRandomString());
+			userUniversity.setPhoneNumber(securityUtils.getPhoneNumberString());
 			userUniversity.setUsername(username);
 			userUniversity.setPassword(securityUtils.encode(username));
 			userUniversity.setRoles(rolesUniversity);
 			userUniversity.setRecoverPaswordToken(securityUtils.getEncodedRandomString());
-			userUniversity.setUniversity(universities.get(getRandom(universities.size())));
+			userUniversity.setUniversity(university);
 			userUniversity = userService.save(userUniversity, flush);
 			initProfile(userUniversity, profileWrapper, countries, cities, states, beginTime, diff);
 		}
@@ -175,6 +194,7 @@ public class InitController extends BaseController {
 			User user = new User();
 			user.setEnabled(new Random().nextBoolean());
 			user.setEmail("user" + i + "@gmail.com");
+			user.setPhoneNumber(securityUtils.getPhoneNumberString());
 			user.setRegisterToken(securityUtils.getEncodedRandomString());
 			user.setUsername(username);
 			user.setPassword(securityUtils.encode(username));
@@ -183,12 +203,61 @@ public class InitController extends BaseController {
 			user = userService.save(user, flush);
 			initProfile(user, profileWrapper, countries, cities, states, beginTime, diff);
 		}
+
+		List<SampleNomenclature> sampleNomenclatures = sampleNomenclatureService.findAll();
+		List<SpecializationSample> specializationSamples = new ArrayList<>();
+		for (int i = 0; i < 100; i++) {
+			SpecializationSample specializationSample = new SpecializationSample();
+			specializationSample.setPercent(new Random().nextInt((100 - 10) + 1) + 10);
+			specializationSample.setSampleNomenclature(sampleNomenclatures.get(getRandom(sampleNomenclatures.size())));
+			specializationSamples.add(specializationSampleService.save(specializationSample, flush));
+		}
+
+		Set<Faculty> tmp = new HashSet<>();
+		for (int a = 0; a < 50; a++) {
+			Faculty faculty = faculties.get(getRandom(faculties.size()));
+			if (!tmp.add(faculty)) {
+				continue;
+			}
+			List<FacultyDomainNomenclature> facultyDomainNomenclatures = faculty.getFacultyDomainNomenclatures();
+			List<FacultySpecializationNomenclature> facultySpecializationNomenclatures = new ArrayList<FacultySpecializationNomenclature>();
+			for (FacultyDomainNomenclature facultyDomainNomenclature : facultyDomainNomenclatures) {
+				facultySpecializationNomenclatures
+						.addAll(facultyDomainNomenclature.getFacultySpecializationNomenclatures());
+			}
+
+			List<AdmissionSession> admissionSessions = new ArrayList<AdmissionSession>();
+			for (int i = 0; i < 15; i++) {
+				AdmissionSession admissionSession = new AdmissionSession();
+				admissionSession.setEnabled(ThreadLocalRandom.current().nextBoolean());
+				admissionSession.setName("Admission session for " + faculty.getName() + " " + i);
+				admissionSession.setExpirationDate(getDate());
+
+				List<AdmissionSpecialization> admissionSpecializations = new ArrayList<AdmissionSpecialization>();
+				for (int j = 0; j < 15; j++) {
+					AdmissionSpecialization admissionSpecialization = new AdmissionSpecialization();
+					FacultySpecializationNomenclature facultySpecializationNomenclature = facultySpecializationNomenclatures
+							.get(getRandom(facultySpecializationNomenclatures.size()));
+					SpecializationSample specializationSample = specializationSamples
+							.get(getRandom(specializationSamples.size()));
+					admissionSpecialization.setNumberOfPlaces(new Random().nextInt(100 - 30) + 30);
+					admissionSpecialization.setFacultySpecializationNomenclature(facultySpecializationNomenclature);
+					admissionSpecialization.setSpecializationType(SpecializationType.getRandomSpecializationType());
+					admissionSpecialization.setSpecializationSample(specializationSample);
+					admissionSpecializations.add(admissionSpecializationService.save(admissionSpecialization, flush));
+				}
+				admissionSession.setAdmissionSpecializations(admissionSpecializations);
+				admissionSessions.add(admisionSessionService.save(admissionSession, flush));
+			}
+			faculty.setAdmissionSessions(admissionSessions);
+			facultyService.save(faculty, flush);
+		}
+
 	}
 
 	private void initProfile(User user, ProfileWrapper profileWrapper, List<Country> countries, List<City> cities,
 			List<State> states, long beginTime, long diff) {
 		Profile profile = new Profile();
-
 		profile.setCreationDate(getDate());
 		profile.setBirthDate(getBirthDate(beginTime, diff));
 		profile.setStreet(securityUtils.getSmallRandomString());
@@ -234,11 +303,10 @@ public class InitController extends BaseController {
 
 	int getRandom(int max) {
 		if (max == 0) {
-			return max;
+			return 0;
 		}
-		max = max - 1;
-		int min = 0;
-		return new Random().nextInt(max - min + 1) + min;
+
+		return new Random().nextInt(max);
 	}
 
 	Date getBirthDate(long beginTime, long diff) {
@@ -459,14 +527,15 @@ public class InitController extends BaseController {
 
 	private FacultyDomainNomenclature createFacultyDomainNomenclature(String domainName) {
 		domainName = StringUtils.removeNewLineTabsAndEnter(domainName);
-		return new FacultyDomainNomenclature(domainName, DESCRIPTION, URL);
+		return new FacultyDomainNomenclature(domainName, domainName + " " + DESCRIPTION, URL);
 	}
 
 	private void addFaculty(University university, String facultyName,
 			FacultyDomainNomenclature facultyDomainNomenclature,
 			FacultySpecializationNomenclature facultySpecializationNomenclature) {
 		facultyName = StringUtils.removeNewLineTabsAndEnter(facultyName);
-		Faculty faculty = new Faculty(facultyName, DESCRIPTION, URL, new ContactInformation(EMAIL, NUMBER));
+		Faculty faculty = new Faculty(facultyName, facultyName + " " + DESCRIPTION, URL,
+				new ContactInformation(EMAIL, NUMBER));
 
 		List<FacultySpecializationNomenclature> facultySpecializationNomenclatures = new ArrayList<>();
 		facultySpecializationNomenclatures.add(facultySpecializationNomenclature);
@@ -485,14 +554,16 @@ public class InitController extends BaseController {
 		int places = Integer.valueOf(numberOfPlaces);
 		int credits = Integer.valueOf(numberOfCredits);
 		FacultySpecializationNomenclature facultySpecializationNomenclature = new FacultySpecializationNomenclature(
-				null, specializationName, DESCRIPTION, URL, places, formOfLearning, accreditation, credits);
+				null, specializationName, specializationName + " " + DESCRIPTION, URL, places, formOfLearning,
+				accreditation, credits);
 		facultySpecializationNomenclature.setContactInformation(new ContactInformation(EMAIL, NUMBER));
 		return facultySpecializationNomenclature;
 	}
 
 	private University createUniversity(String universityName) {
 		universityName = StringUtils.removeNewLineTabsAndEnter(universityName);
-		University university = new University(universityName, DESCRIPTION, URL, new ContactInformation(EMAIL, NUMBER));
+		University university = new University(universityName, universityName + " " + DESCRIPTION, URL,
+				new ContactInformation(EMAIL, NUMBER));
 		university.setFaculties(new ArrayList<>());
 		return university;
 	}

@@ -23,6 +23,10 @@ public class SecurityUtils {
 		return RandomStringUtils.random(13, false, true);
 	}
 
+	public String getPhoneNumberString() {
+		return RandomStringUtils.random(10, false, true);
+	}
+
 	public String getSmallRandomString() {
 		return RandomStringUtils.random(10, true, false);
 	}

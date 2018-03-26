@@ -13,10 +13,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.LazyCollection;
@@ -50,7 +50,7 @@ public class User implements Serializable {
 	@Column(unique = true)
 	private String email;
 
-	@NotEmpty
+	@NotBlank
 	@Column(unique = true)
 	private String phoneNumber;
 
@@ -60,12 +60,10 @@ public class User implements Serializable {
 
 	@JsonIgnore
 	@Column(name = "register_token", unique = true)
-	@NotBlank
 	private String registerToken;
 
 	@JsonIgnore
 	@Column(name = "recover_password_token", unique = true)
-	@NotBlank
 	private String recoverPaswordToken;
 
 	@Column(name = "creation_date")
@@ -89,6 +87,10 @@ public class User implements Serializable {
 	@JsonIgnore
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private University university;
+
+	@JsonIgnore
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<AppliedSession> appliedSessions = null;
 
 	public String getId() {
 		return id;

@@ -29,7 +29,7 @@ public class SpecializationSample implements Serializable {
 	@Min(1)
 	private int percent;
 
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private SampleNomenclature sampleNomenclature;
 
 	public SpecializationSample() {
@@ -45,6 +45,22 @@ public class SpecializationSample implements Serializable {
 
 	public Date getCreationDate() {
 		return creationDate;
+	}
+
+	public int getPercent() {
+		return percent;
+	}
+
+	public void setPercent(int percent) {
+		this.percent = percent;
+	}
+
+	public SampleNomenclature getSampleNomenclature() {
+		return sampleNomenclature;
+	}
+
+	public void setSampleNomenclature(SampleNomenclature sampleNomenclature) {
+		this.sampleNomenclature = sampleNomenclature;
 	}
 
 	public void setCreationDate(Date creationDate) {

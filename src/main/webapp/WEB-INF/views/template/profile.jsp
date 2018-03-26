@@ -47,13 +47,14 @@
 								<div class="col-md-12">
 									<label class="upper">Birth date</label>
 									<p class="input-group">
-										<input type="text" class="form-control" disabled="disabled"
+										<input type="text" class="form-control"
 											uib-datepicker-popup="{{dateFormat}}"
-											ng-model="profile.birthDate" datepicker-options="dateOptions"
-											is-open="datePopupOpened" ng-required="true"
-											close-text="Close" /> <span class="input-group-btn">
+											ng-disabled="profileCreated" ng-model="profile.birthDate"
+											datepicker-options="dateOptions" is-open="datePopupOpened"
+											ng-required="true" close-text="Close" /> <span
+											class="input-group-btn">
 											<button type="button" class="btn btn-default"
-												ng-click="openDatePopup()">
+												ng-disabled="profileCreated" ng-click="openDatePopup()">
 												<i class="glyphicon glyphicon-calendar"></i>
 											</button>
 										</span>
@@ -144,22 +145,26 @@
 								<div class="col-md-4">
 									<div class="form-group">
 										<label class="upper"> Sexuality</label> <select
-											ng-disabled="profileCreated" required="required"
+											ng-if="!profileCreated" required="required"
 											class="form-control" name="genderId"
 											ng-model="profile.gender.id">
 											<option ng-repeat="gender in profileData.genders"
 												value="{{gender.id}}">{{gender.name}}</option>
-										</select>
+										</select> <input ng-if="profileCreated" type="text" disabled="disabled"
+											ng-model="profile.gender.name" class="form-control" />
+
 									</div>
 								</div>
 								<div class="col-md-4">
 									<div class="form-group">
 										<label class="upper"> Religion</label> <select
-											required="required" class="form-control" name="religionId"
-											ng-disabled="profileCreated" ng-model="profile.religion.id">
+											ng-if="!profileCreated" required="required"
+											class="form-control" name="religionId"
+											ng-model="profile.religion.id">
 											<option ng-repeat="religion in profileData.religions"
 												value="{{religion.id}}">{{religion.name}}</option>
-										</select>
+										</select> <input ng-if="profileCreated" type="text" disabled="disabled"
+											ng-model="profile.religion.name" class="form-control" />
 									</div>
 								</div>
 							</div>
@@ -168,33 +173,36 @@
 									<div class="form-group">
 										<label class="upper"> Citizenship</label> <select
 											required="required" class="form-control"
-											ng-disabled="profileCreated" name="citizenshipId"
+											ng-if="!profileCreated" name="citizenshipId"
 											ng-model="profile.citizenship.id">
 											<option ng-repeat="citizenship in profileData.citizenships"
 												value="{{citizenship.id}}">{{citizenship.name}}</option>
-										</select>
+										</select> <input ng-if="profileCreated" type="text" disabled="disabled"
+											ng-model="profile.citizenship.name" class="form-control" />
 									</div>
 								</div>
 								<div class="col-md-4">
 									<div class="form-group">
 										<label class="upper"> Ethnicity</label> <select
 											required="required" class="form-control" name="ethnicityId"
-											ng-disabled="profileCreated" ng-model="profile.ethnicity.id">
+											ng-if="!profileCreated" ng-model="profile.ethnicity.id">
 											<option ng-repeat="ethnicity in profileData.ethnicities"
 												value="{{ethnicity.id}}">{{ethnicity.name}}</option>
-										</select>
+										</select><input ng-if="profileCreated" type="text" disabled="disabled"
+											ng-model="profile.ethnicity.name" class="form-control" />
 									</div>
 								</div>
 								<div class="col-md-4">
 									<div class="form-group">
 										<label class="upper"> Social situation</label> <select
 											required="required" class="form-control"
-											name="socialSituationId" ng-disabled="profileCreated"
+											name="socialSituationId" ng-if="!profileCreated"
 											ng-model="profile.socialSituation.id">
 											<option
 												ng-repeat="socialSituation in profileData.socialSituations"
 												value="{{socialSituation.id}}">{{socialSituation.name}}</option>
-										</select>
+										</select> <input ng-if="profileCreated" type="text" disabled="disabled"
+											ng-model="profile.socialSituation.name" class="form-control" />
 									</div>
 								</div>
 							</div>
@@ -203,36 +211,39 @@
 									<div class="form-group">
 										<label class="upper"> Family situation</label> <select
 											required="required" class="form-control"
-											ng-disabled="profileCreated" name="familySituationId"
+											ng-if="!profileCreated" name="familySituationId"
 											ng-model="profile.familySituation.id">
 											<option
 												ng-repeat="familySituation in profileData.familySituations"
 												value="{{familySituation.id}}">{{familySituation.name}}</option>
-										</select>
+										</select> <input ng-if="profileCreated" type="text" disabled="disabled"
+											ng-model="profile.familySituation.name" class="form-control" />
 									</div>
 								</div>
 								<div class="col-md-4">
 									<div class="form-group">
 										<label class="upper"> Marital status</label> <select
 											required="required" class="form-control"
-											ng-disabled="profileCreated" name="maritalStatusId"
+											ng-if="!profileCreated" name="maritalStatusId"
 											ng-model="profile.maritalStatus.id">
 											<option
 												ng-repeat="maritalStatus in profileData.maritalStatus"
 												value="{{maritalStatus.id}}">{{maritalStatus.name}}</option>
-										</select>
+										</select> <input ng-if="profileCreated" type="text" disabled="disabled"
+											ng-model="profile.maritalStatus.name" class="form-control" />
 									</div>
 								</div>
 								<div class="col-md-4">
 									<div class="form-group">
 										<label class="upper"> Special medical condition</label> <select
 											required="required" class="form-control"
-											name="medicalConditionId" ng-disabled="profileCreated"
+											name="medicalConditionId" ng-if="!profileCreated"
 											ng-model="profile.medicalCondition.id">
 											<option
 												ng-repeat="medicalCondition in profileData.medicalConditions"
 												value="{{medicalCondition.id}}">{{medicalCondition.name}}</option>
-										</select>
+										</select> <input ng-if="profileCreated" type="text" disabled="disabled"
+											ng-model="profile.medicalCondition.name" class="form-control" />
 									</div>
 								</div>
 							</div>
@@ -246,25 +257,27 @@
 											<div class="col-md-4">
 												<div class="form-group">
 													<label class="upper">Country</label> <select
-														ng-disabled="profileCreated" required="required"
+														ng-if="!profileCreated" required="required"
 														class="form-control" name="countryId"
-														ng-init="profile.country.id = countries[0].id"
 														ng-model="profile.country.id">
 														<option ng-repeat="country in countries"
 															value="{{country.id}}">{{country.name}}</option>
-													</select>
+													</select> <input ng-if="profileCreated" type="text"
+														disabled="disabled" ng-model="profile.country.name"
+														class="form-control" />
 												</div>
 											</div>
 											<div class="col-md-4">
 												<div class="form-group">
 													<label class="upper">State</label> <span
 														ng-show="states.length > 0"> <select
-														ng-disabled="profileCreated" name="stateId"
-														required="required" class="form-control"
-														ng-init="profile.state.id = states[0].id"
+														ng-if="!profileCreated" ng-disabled="profileCreated"
+														name="stateId" required="required" class="form-control"
 														ng-model="profile.state.id">
 															<option ng-repeat="state in states" value="{{state.id}}">{{state.name}}</option>
-													</select>
+													</select> <input ng-if="profileCreated" type="text"
+														disabled="disabled" ng-model="profile.state.name"
+														class="form-control" />
 													</span> <span ng-if="states.length == 0"
 														class="form-control text-danger"> * Select country
 														first </span>
@@ -274,11 +287,13 @@
 												<div class="form-group">
 													<label class="upper">City</label> <span
 														ng-show="cities.length > 0"> <select name="cityId"
-														ng-disabled="profileCreated" required="required"
+														ng-if="!profileCreated" required="required"
 														class="form-control" ng-model="profile.city.id">
 															<option ng-repeat="city in cities" value="{{city.id}}">{{city.name}}</option>
 													</select>
-													</span> <span ng-if="cities.length == 0"
+													</span><input ng-if="profileCreated" type="text"
+														disabled="disabled" ng-model="profile.city.name"
+														class="form-control" /> <span ng-if="cities.length == 0"
 														class="form-control text-danger"> * Select state
 														first </span>
 												</div>

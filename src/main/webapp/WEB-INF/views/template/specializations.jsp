@@ -22,7 +22,7 @@
 	</div>
 	<div class="panel-body">
 		<div class="row" ng-if="specializationsFound">
-			<table class="table table-responsive">
+			<table class="table table-responsive table-hover">
 				<thead>
 					<tr>
 						<th>Name</th>

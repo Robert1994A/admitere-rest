@@ -36,10 +36,35 @@ var loaderInterceptor = function($q) {
 }
 
 admitereApp
-		.run(function($rootScope, $templateCache, config) {
+		.run(function($rootScope, $templateCache, $uibModal, config) {
 			$rootScope.$on('$viewContentLoaded', function() {
 				// $templateCache.removeAll();
 			});
+
+			// Open error modal
+			$rootScope.errorModal = function(message) {
+				$uibModal.open({
+					animation : true,
+					templateUrl : 'modals/error-modal.html',
+					controller : "errorModalController"
+				});
+
+				$rootScope.message = message;
+			};
+
+			// Open success modal
+			$rootScope.successModal = function(message) {
+				$uibModal.open({
+					animation : true,
+					templateUrl : 'modals/success-modal.html',
+					controller : "successModalController"
+				});
+
+				$rootScope.message = message;
+			};
+
+			$rootScope.mainContainerId = "container-loader";
+
 			$rootScope.isAuthenticated = false;
 
 			$rootScope.authenticatedUser = {};
@@ -58,14 +83,20 @@ admitereApp
 			};
 
 			$rootScope.extractPagination = function(pagination, data) {
-				pagination.totalPages = data.totalPages;
+				pagination.number = data.number + 1;
 				pagination.totalElements = data.totalElements;
+				if (data.last == true) {
+					pagination.totalPages = pagination.number;
+					pagination.numberOfElements = data.size;
+				} else {
+					pagination.totalPages = data.totalPages;
+					pagination.numberOfElements = data.numberOfElements;
+				}
 				pagination.last = data.last;
 				pagination.size = data.size;
-				pagination.number = data.number + 1;
 				pagination.sort = data.sort;
 				pagination.first = data.first;
-				pagination.numberOfElements = data.numberOfElements;
+
 			}
 
 			$rootScope.getAuthenticatedUserDetails = function() {
@@ -86,7 +117,7 @@ admitereApp
 			$rootScope.showLoader = function(containerId) {
 				try {
 					if (document.getElementById(containerId) != null) {
-						document.getElementById("container-loader").style.display = "block";
+						document.getElementById($rootScope.mainContainerId).style.display = "block";
 						document.getElementById(containerId).style.display = "none";
 					}
 				} catch (err) {
@@ -99,8 +130,8 @@ admitereApp
 					if (document.getElementById(containerId) != null) {
 						setTimeout(
 								function() {
-									document.getElementById("container-loader").style.display = "none";
-									console.log("Container id", containerId);
+									document
+											.getElementById($rootScope.mainContainerId).style.display = "none";
 									document.getElementById(containerId).style.display = "block";
 								}, 500)
 					}
@@ -288,15 +319,15 @@ admitereApp.config(function($stateProvider, $urlRouterProvider) {
 			parent : "universities.detail.faculties.detail.domains"
 		}
 	}).state('universities.detail.faculties.detail.sessions', {
-		url : '/sessions',
+		url : '/admission_sessions',
 		views : {
 			"@" : {
-				templateUrl : 'pages/sessions.html',
-				controller : 'facultySessionsController'
+				templateUrl : 'pages/admission_sessions.html',
+				controller : 'admissionSessionsController'
 			}
 		},
 		ncyBreadcrumb : {
-			label : 'Sessions',
+			label : 'Admission sessions',
 			parent : "universities.detail.faculties.detail"
 		}
 	}).state('universities.detail.faculties.detail.sessions.add', {
@@ -311,7 +342,20 @@ admitereApp.config(function($stateProvider, $urlRouterProvider) {
 			label : 'Add',
 			parent : "universities.detail.faculties.detail.sessions"
 		}
-	}).state('universities.detail.faculties.detail.specializations', {
+	}).state('universities.detail.faculties.detail.sessions.admission_session',
+			{
+				url : '/admission_session',
+				views : {
+					"@" : {
+						templateUrl : 'pages/admission_session.html',
+						controller : 'admissionSessionController'
+					}
+				},
+				ncyBreadcrumb : {
+					label : 'Admission Session',
+					parent : "universities.detail.faculties.detail.sessions"
+				}
+			}).state('universities.detail.faculties.detail.specializations', {
 		url : '/specializations',
 		views : {
 			"@" : {
@@ -455,7 +499,9 @@ admitereApp.constant('config', {
 	appName : 'Admitere application',
 	appVersion : 1.0,
 	url : 'http://localhost/',
-	perPage : "25",
+	perPage : "10",
 	sortBy : "id",
-	sortDirection : "ASC"
+	sortDirection : "ASC",
+	notifyDuration : 5000,
+	notifyPosition : "center"
 });

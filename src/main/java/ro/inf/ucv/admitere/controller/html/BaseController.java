@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 
 import ro.inf.ucv.admitere.captcha.AttemptsService;
 import ro.inf.ucv.admitere.captcha.CaptchaService;
+import ro.inf.ucv.admitere.service.AdmisionSessionService;
+import ro.inf.ucv.admitere.service.AdmissionSpecializationService;
 import ro.inf.ucv.admitere.service.CitizenshipService;
 import ro.inf.ucv.admitere.service.CityService;
 import ro.inf.ucv.admitere.service.CountryService;
@@ -25,6 +27,7 @@ import ro.inf.ucv.admitere.service.ReligionService;
 import ro.inf.ucv.admitere.service.RoleService;
 import ro.inf.ucv.admitere.service.SampleNomenclatureService;
 import ro.inf.ucv.admitere.service.SocialSituationService;
+import ro.inf.ucv.admitere.service.SpecializationSampleService;
 import ro.inf.ucv.admitere.service.UserService;
 import ro.inf.ucv.admitere.service.utils.ConfigurationUtils;
 import ro.inf.ucv.admitere.service.utils.Mailer;
@@ -79,6 +82,15 @@ public class BaseController {
 
 	@Autowired
 	protected UniversityService universityService;
+
+	@Autowired
+	protected SpecializationSampleService specializationSampleService;
+
+	@Autowired
+	protected AdmissionSpecializationService admissionSpecializationService;
+
+	@Autowired
+	protected AdmisionSessionService admisionSessionService;
 
 	@Autowired
 	protected FacultyService facultyService;

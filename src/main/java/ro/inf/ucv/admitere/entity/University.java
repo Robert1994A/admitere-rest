@@ -32,6 +32,7 @@ public class University implements Serializable {
 	private String name;
 
 	@NotBlank
+	@Column(columnDefinition = "TEXT")
 	private String description;
 
 	@NotBlank

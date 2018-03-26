@@ -35,6 +35,7 @@ public class AdmissionSession implements Serializable {
 	private String id;
 
 	@NotBlank
+	@Column(columnDefinition = "TEXT")
 	private String name;
 
 	private boolean enabled = false;
@@ -48,16 +49,10 @@ public class AdmissionSession implements Serializable {
 	@DateTimeFormat(pattern = ConfigurationUtils.DATE_FORMAT)
 	private Date expirationDate;
 
+	@NotNull
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@Fetch(value = FetchMode.SUBSELECT)
-	private List<AddmisionSpecialization> addmisionSpecialization;
-
-	public AdmissionSession() {
-	}
-
-	public AdmissionSession(String name) {
-		this.name = name;
-	}
+	@Fetch(FetchMode.SUBSELECT)
+	private List<AdmissionSpecialization> admissionSpecializations;
 
 	public String getId() {
 		return id;
@@ -99,11 +94,12 @@ public class AdmissionSession implements Serializable {
 		this.expirationDate = expirationDate;
 	}
 
-	public List<AddmisionSpecialization> getAddmisionSpecialization() {
-		return addmisionSpecialization;
+	public List<AdmissionSpecialization> getAdmissionSpecializations() {
+		return admissionSpecializations;
 	}
 
-	public void setAddmisionSpecialization(List<AddmisionSpecialization> addmisionSpecialization) {
-		this.addmisionSpecialization = addmisionSpecialization;
+	public void setAdmissionSpecializations(List<AdmissionSpecialization> admissionSpecializations) {
+		this.admissionSpecializations = admissionSpecializations;
 	}
+
 }

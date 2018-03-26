@@ -5,8 +5,9 @@
 		<div class="heading-elements">
 			<form class="heading-form" action="#">
 				<div class="form-group has-feedback">
-					<input type="search" class="form-control" ng-init="searchDomain.name=''"
-						ng-model="searchDomain.name" placeholder="Search...">
+					<input type="search" class="form-control"
+						ng-init="searchDomain.name=''" ng-model="searchDomain.name"
+						placeholder="Search...">
 					<div class="form-control-feedback">
 						<i class="icon-search4 text-size-base text-muted"></i>
 					</div>
@@ -20,7 +21,7 @@
 	</div>
 	<div class="panel-body">
 		<div class="row" ng-if="domainsFound">
-			<table class="table table-responsive">
+			<table class="table table-responsive table-hover">
 				<thead>
 					<tr>
 						<th>Name</th>

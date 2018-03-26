@@ -41,8 +41,8 @@ public class FacultyController extends BaseController {
 		return "template/specializations";
 	}
 
-	@GetMapping("/pages/sessions.html")
+	@GetMapping("/pages/admission_sessions.html")
 	public String getSessionsPage() {
-		return "template/sessions";
+		return "template/admission_sessions";
 	}
 }

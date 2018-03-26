@@ -54,7 +54,11 @@
 
 	<!-- Configure bean to convert JSON to POJO and vice versa -->
 	<beans:bean id="jsonMessageConverter"
-		class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />
+		class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+		<beans:property name="objectMapper" ref="jacksonObjectMapper" />
+	</beans:bean>
+
+	<beans:bean id="jacksonObjectMapper" class="ro.inf.ucv.admitere.config.JsonMapper" />
 
 	<beans:bean id="xmlMessageConverter"
 		class="org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter" />

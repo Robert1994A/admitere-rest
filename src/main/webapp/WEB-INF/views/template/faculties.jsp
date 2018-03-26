@@ -1,5 +1,4 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
 <div class="panel panel-default border-grey" id="faculties-container">
 	<div class="panel-heading">
 		<h4 class="panel-title">Faculties</h4>
@@ -25,6 +24,7 @@
 			<table class="table table-responsive table-hover">
 				<thead>
 					<tr>
+						<th>ID</th>
 						<th>Name</th>
 						<td>Contact</td>
 						<th>Actions</th>
@@ -32,6 +32,7 @@
 				</thead>
 				<tbody>
 					<tr ng-repeat="faculty in faculties | filter:searchFaculty">
+						<td>{{faculty.id}}</td>
 						<td>{{faculty.name}}</td>
 						<td>
 							<p>

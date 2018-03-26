@@ -23,12 +23,25 @@ admitereApp.controller('recoverController', function($scope) {
 admitereApp.controller('notFoundController', function($scope) {
 });
 
-// Register controller.
-admitereApp.controller('registerController', function($scope) {
+// Account controller.
+admitereApp.controller('accountController', function($scope) {
 
 });
 
-// Register controller.
-admitereApp.controller('accountController', function($scope) {
+admitereApp.controller('errorModalController', function($scope, $rootScope,
+		$uibModalInstance) {
 
+	// Close the modal.
+	$scope.cancel = function() {
+		$uibModalInstance.close();
+	};
+});
+
+admitereApp.controller('successModalController', function($scope, $rootScope,
+		$uibModalInstance) {
+
+	// Close the modal.
+	$scope.cancel = function() {
+		$uibModalInstance.close();
+	};
 });

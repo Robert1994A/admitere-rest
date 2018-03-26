@@ -34,9 +34,11 @@ public class Faculty implements Serializable {
 	private Integer id;
 
 	@NotBlank
+	@Column(columnDefinition = "TEXT")
 	private String name;
 
 	@NotBlank
+	@Column(columnDefinition = "TEXT")
 	private String description;
 
 	@NotBlank
@@ -138,6 +140,73 @@ public class Faculty implements Serializable {
 	@Override
 	public String toString() {
 		return "Faculty [name=" + name + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((admissionSessions == null) ? 0 : admissionSessions.hashCode());
+		result = prime * result + ((contactInformation == null) ? 0 : contactInformation.hashCode());
+		result = prime * result + ((creationDate == null) ? 0 : creationDate.hashCode());
+		result = prime * result + ((description == null) ? 0 : description.hashCode());
+		result = prime * result + ((facultyDomainNomenclatures == null) ? 0 : facultyDomainNomenclatures.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((url == null) ? 0 : url.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Faculty other = (Faculty) obj;
+		if (admissionSessions == null) {
+			if (other.admissionSessions != null)
+				return false;
+		} else if (!admissionSessions.equals(other.admissionSessions))
+			return false;
+		if (contactInformation == null) {
+			if (other.contactInformation != null)
+				return false;
+		} else if (!contactInformation.equals(other.contactInformation))
+			return false;
+		if (creationDate == null) {
+			if (other.creationDate != null)
+				return false;
+		} else if (!creationDate.equals(other.creationDate))
+			return false;
+		if (description == null) {
+			if (other.description != null)
+				return false;
+		} else if (!description.equals(other.description))
+			return false;
+		if (facultyDomainNomenclatures == null) {
+			if (other.facultyDomainNomenclatures != null)
+				return false;
+		} else if (!facultyDomainNomenclatures.equals(other.facultyDomainNomenclatures))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (url == null) {
+			if (other.url != null)
+				return false;
+		} else if (!url.equals(other.url))
+			return false;
+		return true;
 	}
 
 }

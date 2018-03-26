@@ -2,7 +2,6 @@ package ro.inf.ucv.admitere.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,30 +10,34 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.GenericGenerator;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import ro.inf.ucv.admitere.enumerations.SpecializationType;
 
 @Entity
-@Table(name = "addmision_specialization")
-public class AddmisionSpecialization implements Serializable {
+@Table(name = "admission_specialization")
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class AdmissionSpecialization implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	@GeneratedValue(generator = "uuid")
+	@GenericGenerator(name = "uuid", strategy = "uuid2")
+	@Column
 	@Id
-	@GeneratedValue
-	private Long id;
+	private String id;
 
 	@Min(1)
 	private int numberOfPlaces;
 
+	@NotNull
 	@Column(name = "creation_date")
 	private Date creationDate = new Date();
 
@@ -51,15 +54,11 @@ public class AddmisionSpecialization implements Serializable {
 	@JoinColumn(name = "specialization_sample")
 	private SpecializationSample specializationSample;
 
-	@OneToMany(mappedBy = "addmisionSpecialization", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@Fetch(value = FetchMode.SUBSELECT)
-	private List<EnrolledUser> enrolledUsers;
-
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -102,14 +101,6 @@ public class AddmisionSpecialization implements Serializable {
 
 	public void setSpecializationSample(SpecializationSample specializationSample) {
 		this.specializationSample = specializationSample;
-	}
-
-	public List<EnrolledUser> getEnrolledUsers() {
-		return enrolledUsers;
-	}
-
-	public void setEnrolledUsers(List<EnrolledUser> enrolledUsers) {
-		this.enrolledUsers = enrolledUsers;
 	}
 
 }

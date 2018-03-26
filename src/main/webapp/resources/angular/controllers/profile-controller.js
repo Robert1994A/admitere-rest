@@ -8,21 +8,40 @@ admitereApp.controller('profileController', function($scope, $rootScope,
 	$scope.cities = [];
 	$scope.profileData = {};
 	$scope.profile.birthDate = $rootScope.maxDate;
+	$scope.profileCreated = false;
 
-	function initInterfaceData() {
-		var successCallback = function(response) {
-			$scope.countries = response.data.content;
+	$scope.clear = function() {
+		$scope.profile.birthDate = null;
+	};
+
+	$scope.datePopupOpened = false;
+
+	$scope.setDate = function(year, month, day) {
+		$scope.profile.birthDate = new Date(year, month, day);
+	};
+
+	$scope.altInputFormats = [ 'M!/d!/yyyy' ];
+
+	$scope.openDatePopup = function() {
+		$scope.datePopupOpened = true;
+	};
+
+	$scope.initInterfaceData = function() {
+		if ($scope.profileCreated && $scope.profileCreated == false) {
+			var successCallback = function(response) {
+				$scope.countries = response.data.content;
+			}
+
+			comunicationFactory.makeRequest("countries", "GET", null,
+					successCallback, null, null);
+
+			var successCallback = function(response) {
+				$scope.profileData = response.data;
+			}
+
+			comunicationFactory.makeRequest("profile/data", "GET", null,
+					successCallback, null, null);
 		}
-
-		comunicationFactory.makeRequest("countries", "GET", null,
-				successCallback, null, null);
-
-		var successCallback = function(response) {
-			$scope.profileData = response.data;
-		}
-
-		comunicationFactory.makeRequest("profile/data", "GET", null,
-				successCallback, null, null);
 	}
 
 	$scope.$watch("profile.country.id", function(newValue, oldValue) {
@@ -64,11 +83,9 @@ admitereApp.controller('profileController', function($scope, $rootScope,
 	$scope.saveProfile = function() {
 		var successCallback = function(response) {
 			$scope.profileCreated = true;
-			console.log("profile response success", response);
 		};
 
 		var errorCallback = function(response) {
-			console.log("profile response error", response);
 		};
 
 		comunicationFactory.makeRequest("profile", "POST", $scope.profile,
@@ -85,7 +102,6 @@ admitereApp.controller('profileController', function($scope, $rootScope,
 		};
 
 		var errorCallback = function(response) {
-			initInterfaceData();
 			$rootScope.hideLoader($scope.cotainerId);
 		};
 
@@ -96,21 +112,5 @@ admitereApp.controller('profileController', function($scope, $rootScope,
 
 	$scope.getProfile();
 
-	
-	
-	$scope.clear = function() {
-		$scope.profile.birthDate = null;
-	};
-
-	$scope.datePopupOpened = false;
-
-	$scope.setDate = function(year, month, day) {
-		$scope.profile.birthDate = new Date(year, month, day);
-	};
-
-	$scope.altInputFormats = [ 'M!/d!/yyyy' ];
-
-	$scope.openDatePopup = function() {
-		$scope.datePopupOpened = true;
-	};
+	$scope.initInterfaceData();
 });

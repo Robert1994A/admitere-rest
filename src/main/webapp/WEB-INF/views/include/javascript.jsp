@@ -76,6 +76,12 @@
 	src="<c:url value="/resources/angular/controllers/faculties-controller.js"/>"></script>
 
 <script type="text/javascript"
+	src="<c:url value="/resources/angular/controllers/register-controller.js"/>"></script>
+
+<script type="text/javascript"
+	src="<c:url value="/resources/angular/controllers/admission-session-controller.js"/>"></script>
+
+<script type="text/javascript"
 	src="<c:url value="/resources/angular/controllers/profile-controller.js"/>"></script>
 
 <script type="text/javascript"
