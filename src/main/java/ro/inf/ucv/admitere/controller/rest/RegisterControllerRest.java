@@ -58,12 +58,17 @@ public class RegisterControllerRest extends BaseController {
 				user.setRecoverPaswordToken(recoverPasswordToken);
 				user.setRegisterToken(registerToken);
 				user.setRoles(roles);
-				userService.save(user, true);
+
 				HashMap<String, String> velocityContext = new HashMap<>();
 				velocityContext.put("linkToValidate",
 						URLUtils.getBaseUrl(request) + "/validateAccount?registerToken=" + registerToken);
-				mailer.sendMail(Arrays.asList(user.getEmail()), null, "Validate account", "mailValidateAccount.vm",
-						velocityContext);
+				boolean emailSend = mailer.sendMail(Arrays.asList(user.getEmail()), null, "Validate account",
+						"mailValidateAccount.vm", velocityContext);
+				if (emailSend) {
+					userService.save(user, true);
+				} else {
+					return new ResponseEntity<Response>(HttpStatus.INTERNAL_SERVER_ERROR);
+				}
 			} catch (Exception e) {
 				throw e;
 			}

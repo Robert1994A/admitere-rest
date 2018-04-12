@@ -11,6 +11,7 @@ import ro.inf.ucv.admitere.captcha.AttemptsService;
 import ro.inf.ucv.admitere.captcha.CaptchaService;
 import ro.inf.ucv.admitere.service.AdmisionSessionService;
 import ro.inf.ucv.admitere.service.AdmissionSpecializationService;
+import ro.inf.ucv.admitere.service.AppliedSessionService;
 import ro.inf.ucv.admitere.service.CitizenshipService;
 import ro.inf.ucv.admitere.service.CityService;
 import ro.inf.ucv.admitere.service.CountryService;
@@ -91,6 +92,9 @@ public class BaseController {
 
 	@Autowired
 	protected AdmisionSessionService admisionSessionService;
+
+	@Autowired
+	protected AppliedSessionService appliedSessionService;
 
 	@Autowired
 	protected FacultyService facultyService;

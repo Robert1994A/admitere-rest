@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<beans:beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<beans:beans
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:security="http://www.springframework.org/schema/security"
 	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.2.xsd
@@ -10,14 +11,15 @@
 		jsr250-annotations="enabled" />
 
 	<security:http auto-config="true" use-expressions="true">
-		<security:logout delete-cookies="JSESSIONID,REMEMBER_ME"
-			invalidate-session="true" logout-url="/logout" logout-success-url="/#!?logout=true" />
+		<security:logout
+			delete-cookies="JSESSIONID,REMEMBER_ME" invalidate-session="true"
+			logout-url="/logout" logout-success-url="/#!login?logout=true" />
 		<security:form-login login-page="/login"
-			always-use-default-target="true" authentication-failure-url="/#!login?error=true"
+			always-use-default-target="true"
+			authentication-failure-url="/#!login?error=true"
 			password-parameter="password" username-parameter="username"
-			default-target-url="/#!?login=true" login-processing-url="/login_security" />
-		<security:logout logout-url="/logout"
-			logout-success-url="/login?logout=true" />
+			default-target-url="/#!?login=true"
+			login-processing-url="/login_security" />
 
 		<security:intercept-url pattern="/login"
 			access="permitAll()" />
@@ -29,12 +31,12 @@
 			access="isAuthenticated()" />
 		<security:intercept-url pattern="/account"
 			access="isAuthenticated()" />
-		<security:intercept-url pattern="/pages/profile**"
-			access="isAuthenticated()" />
-		<security:intercept-url pattern="/pages/users**"
-			access="isAuthenticated()" />
-		<security:intercept-url pattern="/pages/universities**"
-			access="isAuthenticated()" />
+		<security:intercept-url
+			pattern="/pages/profile**" access="isAuthenticated()" />
+		<security:intercept-url
+			pattern="/pages/users**" access="isAuthenticated()" />
+		<security:intercept-url
+			pattern="/pages/universities**" access="isAuthenticated()" />
 
 		<security:csrf disabled="false" />
 

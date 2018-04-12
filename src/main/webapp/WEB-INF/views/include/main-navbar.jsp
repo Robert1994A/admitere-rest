@@ -41,7 +41,7 @@
 								My profile</a></li>
 						<li><a ui-sref="account()"><i class="icon-cog5"></i> My
 								account</a></li>
-						<li><a id="logout-button"><i class="icon-switch2"></i>
+						<li><a id="logout-button" href="<c:url value="/logout"/>"><i class="icon-switch2"></i>
 								Logout</a></li>
 					</ul></li>
 			</security:authorize>

@@ -10,12 +10,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import ro.inf.ucv.admitere.controller.html.BaseController;
+import ro.inf.ucv.admitere.exceptions.AlreadyAppliedException;
 import ro.inf.ucv.admitere.exceptions.FieldValidationException;
+import ro.inf.ucv.admitere.exceptions.NotAuthenticatedException;
 import ro.inf.ucv.admitere.exceptions.UserNotFoundException;
 import ro.inf.ucv.admitere.wrapper.Response;
 
 @ControllerAdvice
-class AppplicationExceptionHandler extends BaseController {
+public class AppplicationExceptionHandler extends BaseController {
 
 	private static final Logger logger = Logger.getLogger(AppplicationExceptionHandler.class);
 
@@ -38,6 +40,16 @@ class AppplicationExceptionHandler extends BaseController {
 	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
 	public ResponseEntity<Response> customExceptions(Exception ex, HttpServletRequest request) {
 		logger.error("Exception: ", ex);
+		return new ResponseEntity<Response>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	public static ResponseEntity<Response> catchExceptions(Exception e) {
+		if (e instanceof AlreadyAppliedException) {
+			return new ResponseEntity<Response>(HttpStatus.UNAUTHORIZED);
+		} else if (e instanceof NotAuthenticatedException) {
+			return new ResponseEntity<Response>(HttpStatus.NOT_ACCEPTABLE);
+		}
+
 		return new ResponseEntity<Response>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }

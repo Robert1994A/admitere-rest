@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
@@ -17,11 +18,14 @@ public class SampleResult {
 	@GeneratedValue
 	private int id;
 
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private SampleNomenclature sampleNomenclature;
 
 	@NotBlank
 	private String value;
+
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private AppliedSession appliedSession;
 
 	public int getId() {
 		return id;
@@ -47,9 +51,12 @@ public class SampleResult {
 		this.value = value;
 	}
 
-	@Override
-	public String toString() {
-		return "SampleResult [id=" + id + ", sampleNomenclature=" + sampleNomenclature + ", value=" + value + "]";
+	public AppliedSession getAppliedSession() {
+		return appliedSession;
+	}
+
+	public void setAppliedSession(AppliedSession appliedSession) {
+		this.appliedSession = appliedSession;
 	}
 
 }

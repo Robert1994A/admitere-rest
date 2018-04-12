@@ -1,6 +1,8 @@
 // Admission session controller.
 admitereApp.controller('admissionSessionController', function($scope,
-		comunicationFactory) {
+		comunicationFactory, $state) {
+
+	alert($state.params.admissionSessionId)
 
 });
 
@@ -34,7 +36,20 @@ admitereApp.controller('admissionSessionsController', function($scope,
 
 	$scope.getFacultySessions();
 
-	$scope.apply = function(facultySpecializationNomenclatureId) {
-		alert(facultySpecializationNomenclatureId);
+	$scope.apply = function(admissionSpecializationId) {
+		$rootScope.showLoader($scope.containerId);
+		var successCallback = function(response) {
+			$rootScope.successModal(response.message);
+			$rootScope.hideLoader($scope.containerId);
+		};
+
+		var errorCallback = function(response) {
+			$rootScope.errorModal(response.message);
+			$rootScope.hideLoader($scope.containerId);
+		};
+
+		comunicationFactory.makeRequest("/admission_session/apply/"
+				+ admissionSpecializationId, "POST", null, successCallback,
+				errorCallback, "");
 	}
 });

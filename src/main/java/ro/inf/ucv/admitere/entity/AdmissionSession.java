@@ -10,15 +10,17 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import ro.inf.ucv.admitere.service.utils.ConfigurationUtils;
 
@@ -50,9 +52,13 @@ public class AdmissionSession implements Serializable {
 	private Date expirationDate;
 
 	@NotNull
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@Fetch(FetchMode.SUBSELECT)
+	@JsonManagedReference
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "admissionSession")
 	private List<AdmissionSpecialization> admissionSpecializations;
+
+	@JsonBackReference
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Faculty faculty;
 
 	public String getId() {
 		return id;
@@ -100,6 +106,14 @@ public class AdmissionSession implements Serializable {
 
 	public void setAdmissionSpecializations(List<AdmissionSpecialization> admissionSpecializations) {
 		this.admissionSpecializations = admissionSpecializations;
+	}
+
+	public Faculty getFaculty() {
+		return faculty;
+	}
+
+	public void setFaculty(Faculty faculty) {
+		this.faculty = faculty;
 	}
 
 }

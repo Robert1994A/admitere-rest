@@ -9,5 +9,5 @@
 	</div>
 </div>
 <div class="modal-footer">
-	<button type="button" class="btn btn-b" ng-click="cancel()">Close</button>
+	<button type="button" class="btn btn-primary" ng-click="cancel()">Close</button>
 </div>

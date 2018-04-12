@@ -16,7 +16,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "university")
@@ -38,6 +38,9 @@ public class University implements Serializable {
 	@NotBlank
 	private String url;
 
+	@NotBlank
+	private String logo;
+
 	@NotNull
 	@Column(name = "creation_date")
 	private Date creationDate = new Date();
@@ -46,8 +49,8 @@ public class University implements Serializable {
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private ContactInformation contactInformation;
 
-	@JsonIgnore
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JsonBackReference
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "university")
 	private List<Faculty> faculties;
 
 	public University() {
@@ -55,12 +58,13 @@ public class University implements Serializable {
 	}
 
 	public University(@NotBlank String name, @NotBlank String description, @NotBlank String url,
-			@NotNull ContactInformation contactInformation) {
+			@NotNull ContactInformation contactInformation, @NotBlank String logo) {
 		super();
 		this.name = name;
 		this.description = description;
 		this.url = url;
 		this.contactInformation = contactInformation;
+		this.logo = logo;
 	}
 
 	public Integer getId() {
@@ -119,9 +123,12 @@ public class University implements Serializable {
 		this.creationDate = creationDate;
 	}
 
-	@Override
-	public String toString() {
-		return "University [name=" + name + "]";
+	public String getLogo() {
+		return logo;
+	}
+
+	public void setLogo(String logo) {
+		this.logo = logo;
 	}
 
 }

@@ -49,9 +49,17 @@ admitereApp.controller('universitiesController', function($scope, $rootScope,
 
 	$scope.paginate();
 
-	$scope.search = function() {
+	$scope.search = function(searchText, sortBy, perPage, sortDirection) {
+		$scope.searchText = searchText;
+		$scope.sortBy = sortBy;
+		$scope.perPage = perPage;
+		$scope.sortDirection = sortDirection;
+		if ($scope.searchText && $scope.searchText != "") {
+			$scope.pageNumber = 1;
+		}
 		$scope.paginate();
 	};
+
 });
 
 admitereApp.controller('universityController', function($scope, $rootScope,

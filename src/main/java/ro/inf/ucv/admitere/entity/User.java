@@ -18,10 +18,13 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import ro.inf.ucv.admitere.annotation.UniqueCnp;
@@ -71,25 +74,26 @@ public class User implements Serializable {
 
 	private boolean enabled;
 
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@LazyCollection(LazyCollectionOption.TRUE)
 	@JoinTable
 	private List<Role> roles;
 
 	@JsonIgnore
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
 	private Profile profile;
 
 	@JsonIgnore
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Faculty faculty;
 
 	@JsonIgnore
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private University university;
 
-	@JsonIgnore
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JsonBackReference
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
+	@Fetch(FetchMode.SUBSELECT)
 	private List<AppliedSession> appliedSessions = null;
 
 	public String getId() {
@@ -196,12 +200,12 @@ public class User implements Serializable {
 		this.phoneNumber = phoneNumber;
 	}
 
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", username=" + username + ", email=" + email + ", password=" + password
-				+ ", registerToken=" + registerToken + ", recoverPaswordToken=" + recoverPaswordToken
-				+ ", creationDate=" + creationDate + ", enabled=" + enabled + ", roles=" + roles + ", profile="
-				+ profile + ", faculty=" + faculty + ", university=" + university + "]";
+	public List<AppliedSession> getAppliedSessions() {
+		return appliedSessions;
+	}
+
+	public void setAppliedSessions(List<AppliedSession> appliedSessions) {
+		this.appliedSessions = appliedSessions;
 	}
 
 }

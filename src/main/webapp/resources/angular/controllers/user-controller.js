@@ -12,6 +12,7 @@ admitereApp.controller('usersController', function($scope, $rootScope,
 	$scope.sortBy = config.sortBy;
 	$scope.perPage = config.perPage;
 	$scope.pageNumber = 1;
+	$scope.searchText = "";
 	// End search initialization.
 
 	$scope.paginate = function() {
@@ -47,8 +48,12 @@ admitereApp.controller('usersController', function($scope, $rootScope,
 				successCallback, errorCallback, null);
 	};
 
-	$scope.search = function() {
-		if ($scope.searchText != "") {
+	$scope.search = function(searchText, sortBy, perPage, sortDirection) {
+		$scope.searchText = searchText;
+		$scope.sortBy = sortBy;
+		$scope.perPage = perPage;
+		$scope.sortDirection = sortDirection;
+		if ($scope.searchText && $scope.searchText != "") {
 			$scope.pageNumber = 1;
 		}
 		$scope.paginate();

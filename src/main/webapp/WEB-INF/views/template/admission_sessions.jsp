@@ -76,8 +76,9 @@
 													<div class="btn-group">
 														<button type="button" class="btn btn-primary"
 															ng-click="apply(admissionSpecialization.id)">Apply</button>
-														<button type="button" class="btn btn-primary" ui-sref=".admission_session()">Go to session</button>
-														<button type="button" class="btn btn-primary">Statistics</button>
+														<button type="button" class="btn btn-primary"
+															ui-sref=".detail({admissionSessionId: session.id})">Go
+															to session page</button>
 													</div>
 												</div>
 											</div>

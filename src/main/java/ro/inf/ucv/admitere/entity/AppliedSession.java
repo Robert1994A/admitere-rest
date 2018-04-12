@@ -10,15 +10,19 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import ro.inf.ucv.admitere.service.utils.ConfigurationUtils;
 
@@ -38,15 +42,21 @@ public class AppliedSession implements Serializable {
 	@DateTimeFormat(pattern = ConfigurationUtils.DATE_FORMAT)
 	private Date creationDate = new Date();
 
-	@NotNull
-	@NotEmpty
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	// @NotNull
+	// @NotEmpty
+	@JsonIgnore
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "appliedSession")
+	@Fetch(FetchMode.SUBSELECT)
 	private List<SampleResult> sampleResults;
 
 	@NotNull
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "admission_specialization")
+	@JsonManagedReference
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private AdmissionSpecialization admissionSpecialization;
+
+	@JsonBackReference
+	@ManyToOne
+	private User user;
 
 	public AppliedSession() {
 	}
@@ -81,6 +91,14 @@ public class AppliedSession implements Serializable {
 
 	public void setAdmissionSpecialization(AdmissionSpecialization admissionSpecialization) {
 		this.admissionSpecialization = admissionSpecialization;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 }

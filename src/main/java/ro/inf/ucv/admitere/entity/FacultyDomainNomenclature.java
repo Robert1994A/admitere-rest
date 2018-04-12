@@ -9,12 +9,16 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "faculty_domain_nomenclature")
@@ -34,22 +38,32 @@ public class FacultyDomainNomenclature {
 	@NotBlank
 	private String url;
 
+	@NotBlank
+	private String logo;
+
 	@Column(name = "creation_date")
 	private Date creationDate = new Date();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JsonBackReference
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "facultyDomainNomenclature")
 	@Fetch(value = FetchMode.SUBSELECT)
 	private List<FacultySpecializationNomenclature> facultySpecializationNomenclatures;
+
+	@JsonManagedReference
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Faculty faculty;
 
 	public FacultyDomainNomenclature() {
 		super();
 	}
 
-	public FacultyDomainNomenclature(@NotBlank String name, @NotBlank String description, @NotBlank String url) {
+	public FacultyDomainNomenclature(@NotBlank String name, @NotBlank String description, @NotBlank String url,
+			@NotBlank String logo) {
 		super();
 		this.name = name;
 		this.description = description;
 		this.url = url;
+		this.logo = logo;
 	}
 
 	public int getId() {
@@ -101,9 +115,20 @@ public class FacultyDomainNomenclature {
 		this.facultySpecializationNomenclatures = facultySpecializationNomenclatures;
 	}
 
-	@Override
-	public String toString() {
-		return "FacultyDomainNomenclature [name=" + name + "]";
+	public Faculty getFaculty() {
+		return faculty;
+	}
+
+	public void setFaculty(Faculty faculty) {
+		this.faculty = faculty;
+	}
+
+	public String getLogo() {
+		return logo;
+	}
+
+	public void setLogo(String logo) {
+		this.logo = logo;
 	}
 
 }

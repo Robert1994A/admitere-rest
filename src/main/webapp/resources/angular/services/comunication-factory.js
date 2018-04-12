@@ -18,7 +18,7 @@ admitereApp.factory('comunicationFactory', function($http, config) {
 					errorCallback(data);
 				}
 			}).finally(function(data) {
-				if (finallyCalback == null) {
+				if (finallyCalback === null || finallyCalback === "") {
 					// Stay silent.
 					// console.log(data);
 				} else {

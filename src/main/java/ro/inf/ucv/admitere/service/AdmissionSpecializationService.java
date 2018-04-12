@@ -3,6 +3,7 @@ package ro.inf.ucv.admitere.service;
 import java.util.List;
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,5 +45,17 @@ public class AdmissionSpecializationService {
 			logger.error("Save addmision specialization sample: " + admissionSpecialization, e);
 		}
 		return savedAdmissionSpecialization;
+	}
+
+	public AdmissionSpecialization findById(String admissionSpecializationId) {
+		AdmissionSpecialization admissionSpecialization = null;
+		try {
+			if (StringUtils.isNotBlank(admissionSpecializationId)) {
+				admissionSpecialization = admissionSpecializationRepository.findById(admissionSpecializationId).get();
+			}
+		} catch (Exception e) {
+			logger.error("Find admission specialization by id: " + admissionSpecializationId, e);
+		}
+		return admissionSpecialization;
 	}
 }

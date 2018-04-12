@@ -10,11 +10,15 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "faculty_specialization_nomenclature")
@@ -37,6 +41,9 @@ public class FacultySpecializationNomenclature implements Serializable {
 	@NotBlank
 	private String url;
 
+	@NotBlank
+	private String logo;
+
 	@Column(name = "maximum_number_of_places")
 	private int maxNumberOfPlaces;
 
@@ -57,12 +64,17 @@ public class FacultySpecializationNomenclature implements Serializable {
 	@JoinColumn(name = "contact_information")
 	private ContactInformation contactInformation;
 
+	@JsonManagedReference
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private FacultyDomainNomenclature facultyDomainNomenclature;
+
 	public FacultySpecializationNomenclature() {
 	}
 
 	public FacultySpecializationNomenclature(Long id, @NotBlank String name, @NotBlank String description,
 			@NotBlank String url, @Min(1) @Max(2000) int maxNumberOfPlaces, @NotBlank String formOfLearning,
-			@NotBlank String accreditation, @Min(1) int numberOfCredits) {
+			@NotBlank String accreditation, @Min(1) int numberOfCredits, @NotNull ContactInformation contactInformation,
+			@NotBlank String logo) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -72,6 +84,8 @@ public class FacultySpecializationNomenclature implements Serializable {
 		this.formOfLearning = formOfLearning;
 		this.accreditation = accreditation;
 		this.numberOfCredits = numberOfCredits;
+		this.contactInformation = contactInformation;
+		this.logo = logo;
 	}
 
 	public Long getId() {
@@ -154,8 +168,20 @@ public class FacultySpecializationNomenclature implements Serializable {
 		this.contactInformation = contactInformation;
 	}
 
-	@Override
-	public String toString() {
-		return "FacultySpecializationNomenclature [name=" + name + "]";
+	public FacultyDomainNomenclature getFacultyDomainNomenclature() {
+		return facultyDomainNomenclature;
 	}
+
+	public void setFacultyDomainNomenclature(FacultyDomainNomenclature facultyDomainNomenclature) {
+		this.facultyDomainNomenclature = facultyDomainNomenclature;
+	}
+
+	public String getLogo() {
+		return logo;
+	}
+
+	public void setLogo(String logo) {
+		this.logo = logo;
+	}
+
 }

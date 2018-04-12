@@ -21,10 +21,11 @@
 	</div>
 	<div class="panel panel-default">
 		<div class="panel-body">
-			<div class="row" ng-if="usersFound">
-				<!-- Include search form -->
-				<span ng-include src="'include/search.html'"></span>
 
+			<!-- Include search form -->
+			<span ng-include src="'include/search.html'"></span>
+
+			<div class="row" ng-if="usersFound">
 				<table class="table table-hover table-responsive">
 					<thead>
 						<tr>

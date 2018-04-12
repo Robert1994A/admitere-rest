@@ -89,7 +89,8 @@ public class UniversityService {
 	}
 
 	public Page<University> pagination(String search, Pageable pageable) {
-		return universityRepository.findByNameOrUrlOrDescriptionAllIgnoreCaseContaining(search, search, pageable);
+		return universityRepository.findByNameOrUrlOrDescriptionAllIgnoreCaseContaining(search, search, search,
+				pageable);
 	}
 
 	public void saveUniversities(List<University> universitiesList, boolean flush) {

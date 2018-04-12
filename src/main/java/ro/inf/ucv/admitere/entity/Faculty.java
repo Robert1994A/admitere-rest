@@ -11,6 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -20,7 +21,9 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "faculty")
@@ -44,6 +47,9 @@ public class Faculty implements Serializable {
 	@NotBlank
 	private String url;
 
+	@NotBlank
+	private String logo;
+
 	@Column(name = "creation_date")
 	private Date creationDate = new Date();
 
@@ -52,25 +58,32 @@ public class Faculty implements Serializable {
 	@JoinColumn(name = "contact_information")
 	private ContactInformation contactInformation;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JsonBackReference
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "faculty")
 	@Fetch(value = FetchMode.SUBSELECT)
 	private List<FacultyDomainNomenclature> facultyDomainNomenclatures;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JsonBackReference
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "faculty")
 	@Fetch(value = FetchMode.SUBSELECT)
 	private List<AdmissionSession> admissionSessions;
+
+	@JsonManagedReference
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private University university;
 
 	public Faculty() {
 		super();
 	}
 
 	public Faculty(@NotBlank String name, @NotBlank String description, @NotBlank String url,
-			@NotNull ContactInformation contactInformation) {
+			@NotNull ContactInformation contactInformation, @NotBlank String logo) {
 		super();
 		this.name = name;
 		this.description = description;
 		this.url = url;
 		this.contactInformation = contactInformation;
+		this.logo = logo;
 	}
 
 	public Integer getId() {
@@ -137,9 +150,20 @@ public class Faculty implements Serializable {
 		this.facultyDomainNomenclatures = facultyDomainNomenclatures;
 	}
 
-	@Override
-	public String toString() {
-		return "Faculty [name=" + name + "]";
+	public University getUniversity() {
+		return university;
+	}
+
+	public void setUniversity(University university) {
+		this.university = university;
+	}
+
+	public String getLogo() {
+		return logo;
+	}
+
+	public void setLogo(String logo) {
+		this.logo = logo;
 	}
 
 	@Override

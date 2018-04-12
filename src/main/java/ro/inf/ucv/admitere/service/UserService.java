@@ -13,8 +13,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import ro.inf.ucv.admitere.entity.AppliedSession;
 import ro.inf.ucv.admitere.entity.Profile;
 import ro.inf.ucv.admitere.entity.User;
+import ro.inf.ucv.admitere.exceptions.NotAuthenticatedException;
 import ro.inf.ucv.admitere.repository.UserRepository;
 import ro.inf.ucv.admitere.service.utils.PaginationUtils;
 import ro.inf.ucv.admitere.utils.ListUtils;
@@ -199,4 +201,17 @@ public class UserService {
 	public List<User> searchAdvanced(Specification<User> specification) {
 		return userRepository.findAll(specification);
 	}
+
+	public List<AppliedSession> getAppliedSessions(String name) throws NotAuthenticatedException {
+		List<AppliedSession> appliedSessions = null;
+		User user = this.findByUsername(name);
+		if (user != null) {
+			appliedSessions = user.getAppliedSessions();
+		} else {
+			throw new NotAuthenticatedException();
+		}
+
+		return appliedSessions;
+	}
+
 }

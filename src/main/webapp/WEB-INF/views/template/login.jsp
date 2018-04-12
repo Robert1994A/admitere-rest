@@ -7,7 +7,6 @@
 
 	<div class="panel-body">
 		<div class="row">
-
 			<c:if test="${SPRING_SECURITY_LAST_EXCEPTION != null}">
 				<div class="alert bg-warning alert-styled-right">
 					<button type="button" class="close" data-dismiss="alert">
@@ -18,6 +17,16 @@
 					.
 				</div>
 			</c:if>
+			<c:if test="${not empty param.logout && param.logout == 'true'}">
+				<div class="alert bg-success alert-styled-right">
+					<button type="button" class="close" data-dismiss="alert">
+						<span>×</span><span class="sr-only">Close</span>
+					</button>
+					<span class="text-semibold">Success!</span> Successfully logout
+					from application.
+				</div>
+			</c:if>
+
 			<form name="loginForm" action="<c:url value="/login_security"/>"
 				method="post">
 				<input type="hidden" name="${_csrf.parameterName}"

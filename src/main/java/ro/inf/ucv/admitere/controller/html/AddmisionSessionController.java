@@ -17,4 +17,10 @@ public class AddmisionSessionController extends BaseController {
 		return "template/admission_session";
 	}
 
+	// HTML VERSION
+	@GetMapping("/pages/admission_session_statistics.html")
+	public String getAdmissionSessionStatisticsPage() {
+		return "template/admission_session_statistics";
+	}
+
 }

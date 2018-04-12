@@ -218,7 +218,7 @@ admitereApp.config(function($stateProvider, $urlRouterProvider) {
 		}
 	})
 
-	// route for the university page.
+	// route for the universities page.
 	.state('universities', {
 		url : '/universities',
 		cache : false,
@@ -227,7 +227,10 @@ admitereApp.config(function($stateProvider, $urlRouterProvider) {
 		ncyBreadcrumb : {
 			label : 'Universities'
 		}
-	}).state('universities.detail', {
+	})
+
+	// Get university page.
+	.state('universities.detail', {
 		url : '/:universityId',
 		cache : false,
 		resolve : {
@@ -245,7 +248,10 @@ admitereApp.config(function($stateProvider, $urlRouterProvider) {
 			label : 'University',
 			parent : "universities"
 		}
-	}).state('universities.add', {
+	})
+
+	// Add new university
+	.state('universities.add', {
 		url : '/add',
 		cache : false,
 		views : {
@@ -258,7 +264,10 @@ admitereApp.config(function($stateProvider, $urlRouterProvider) {
 			label : 'Add',
 			parent : "universities"
 		}
-	}).state('universities.detail.faculties', {
+	})
+
+	// Get all faculties for university.
+	.state('universities.detail.faculties', {
 		url : '/faculties',
 		views : {
 			"@" : {
@@ -270,19 +279,10 @@ admitereApp.config(function($stateProvider, $urlRouterProvider) {
 			label : 'Faculties',
 			parent : "universities.detail"
 		}
-	}).state('universities.detail.faculties.add', {
-		url : '/add',
-		views : {
-			"@" : {
-				templateUrl : 'pages/add_faculty.html',
-				controller : 'addFacultyController'
-			}
-		},
-		ncyBreadcrumb : {
-			label : 'Add',
-			parent : "universities.detail.faculties"
-		}
-	}).state('universities.detail.faculties.detail', {
+	})
+
+	// Get faculty details.
+	.state('universities.detail.faculties.detail', {
 		url : '/:facultyId',
 		views : {
 			"@" : {
@@ -294,7 +294,25 @@ admitereApp.config(function($stateProvider, $urlRouterProvider) {
 			label : 'Faculty',
 			parent : "universities.detail.faculties"
 		}
-	}).state('universities.detail.faculties.detail.domains', {
+	})
+
+	// Add new faculty.
+	.state('universities.detail.faculties.add', {
+		url : '/add',
+		views : {
+			"@" : {
+				templateUrl : 'pages/add_faculty.html',
+				controller : 'addFacultyController'
+			}
+		},
+		ncyBreadcrumb : {
+			label : 'Add',
+			parent : "universities.detail.faculties"
+		}
+	})
+
+	// List domains for faculty.
+	.state('universities.detail.faculties.detail.domains', {
 		url : '/domains',
 		views : {
 			"@" : {
@@ -306,7 +324,10 @@ admitereApp.config(function($stateProvider, $urlRouterProvider) {
 			label : 'Domains',
 			parent : "universities.detail.faculties.detail"
 		}
-	}).state('universities.detail.faculties.detail.domains.add', {
+	})
+
+	// Add new domain for faculty.
+	.state('universities.detail.faculties.detail.domains.add', {
 		url : '/add',
 		views : {
 			"@" : {
@@ -318,7 +339,10 @@ admitereApp.config(function($stateProvider, $urlRouterProvider) {
 			label : 'Add',
 			parent : "universities.detail.faculties.detail.domains"
 		}
-	}).state('universities.detail.faculties.detail.sessions', {
+	})
+
+	// List admission sessions
+	.state('universities.detail.faculties.detail.sessions', {
 		url : '/admission_sessions',
 		views : {
 			"@" : {
@@ -330,7 +354,10 @@ admitereApp.config(function($stateProvider, $urlRouterProvider) {
 			label : 'Admission sessions',
 			parent : "universities.detail.faculties.detail"
 		}
-	}).state('universities.detail.faculties.detail.sessions.add', {
+	})
+
+	// Add new admission session page.
+	.state('universities.detail.faculties.detail.sessions.add', {
 		url : '/add',
 		views : {
 			"@" : {
@@ -342,20 +369,40 @@ admitereApp.config(function($stateProvider, $urlRouterProvider) {
 			label : 'Add',
 			parent : "universities.detail.faculties.detail.sessions"
 		}
-	}).state('universities.detail.faculties.detail.sessions.admission_session',
-			{
-				url : '/admission_session',
-				views : {
-					"@" : {
-						templateUrl : 'pages/admission_session.html',
-						controller : 'admissionSessionController'
-					}
-				},
-				ncyBreadcrumb : {
-					label : 'Admission Session',
-					parent : "universities.detail.faculties.detail.sessions"
-				}
-			}).state('universities.detail.faculties.detail.specializations', {
+	})
+
+	// Get admission session page
+	.state('universities.detail.faculties.detail.sessions.detail', {
+		url : '/:admissionSessionId',
+		views : {
+			"@" : {
+				templateUrl : 'pages/admission_session.html',
+				controller : 'admissionSessionController'
+			}
+		},
+		ncyBreadcrumb : {
+			label : 'Admission Session',
+			parent : "universities.detail.faculties.detail.sessions"
+		}
+	})
+
+	// Get admission session statistics page
+	.state('universities.detail.faculties.detail.sessions.detail.statistics', {
+		url : '/statistics',
+		views : {
+			"@" : {
+				templateUrl : 'pages/admission_session_statistics.html',
+				controller : 'admissionSessionStatisticsController'
+			}
+		},
+		ncyBreadcrumb : {
+			label : 'Admission Session Statistics',
+			parent : "universities.detail.faculties.detail.sessions.detail"
+		}
+	})
+
+	// List all specializations
+	.state('universities.detail.faculties.detail.specializations', {
 		url : '/specializations',
 		views : {
 			"@" : {
@@ -367,7 +414,9 @@ admitereApp.config(function($stateProvider, $urlRouterProvider) {
 			label : 'Specializations',
 			parent : "universities.detail.faculties.detail"
 		}
-	}).state('universities.detail.faculties.detail.specializations.add', {
+	})
+	// Add specialization page.
+	.state('universities.detail.faculties.detail.specializations.add', {
 		url : '/add',
 		views : {
 			"@" : {
@@ -389,6 +438,17 @@ admitereApp.config(function($stateProvider, $urlRouterProvider) {
 		controller : 'profileController',
 		ncyBreadcrumb : {
 			label : 'Profile'
+		}
+	})
+
+	// route for the applied sessions page page.
+	.state('appliedSessions', {
+		url : '/applied_sessions',
+		cache : false,
+		templateUrl : 'pages/applied_sessions.html',
+		controller : 'appliedSessionsController',
+		ncyBreadcrumb : {
+			label : 'Applied sessions'
 		}
 	})
 
@@ -467,7 +527,7 @@ admitereApp.config(function($stateProvider, $urlRouterProvider) {
 		}
 	})
 
-	$urlRouterProvider.otherwise('/404');
+	$urlRouterProvider.otherwise('/');
 });
 
 // Read CSRF value.

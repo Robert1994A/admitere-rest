@@ -30,16 +30,8 @@
 				</thead>
 				<tbody>
 					<tr ng-repeat="domain in domains | filter:searchDomain">
+						<td>{{domain.id}}</td>
 						<td>{{domain.name}}</td>
-						<td>
-							<div class="btn-group">
-								<button type="button"
-									ui-sref=".specializations({domainId: domain.id})"
-									class="btn btn-primary btn-icon">
-									<i class="icon-info3"></i>
-								</button>
-							</div>
-						</td>
 					</tr>
 				</tbody>
 			</table>

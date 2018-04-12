@@ -20,10 +20,10 @@
 		</div>
 	</div>
 	<div class="panel-body">
+		<!-- Include search form -->
+		<span ng-include src="'include/search.html'"></span>
+		
 		<div class="row" ng-if="universitiesFound">
-			<!-- Include search form -->
-			<span ng-include src="'include/search.html'"></span>
-
 			<table class="table table-responsive table-hover">
 				<thead>
 					<tr>

@@ -38,8 +38,9 @@ public class Mailer {
 		this.configuration = configuration;
 	}
 
-	public void sendMail(List<String> mailTo, String[] mailCC, String mailSubject, String mailTemplate,
+	public boolean sendMail(List<String> mailTo, String[] mailCC, String mailSubject, String mailTemplate,
 			HashMap<String, String> velocityContextMap, List<File> files) {
+		boolean success = false;
 		try {
 			Template template = configuration.getTemplate(mailTemplate);
 			String html = FreeMarkerTemplateUtils.processTemplateIntoString(template, velocityContextMap);
@@ -78,13 +79,16 @@ public class Mailer {
 				helper.setText(html, true);
 			}
 			mailSender.send(message);
+			success = true;
 		} catch (Exception e) {
 			logger.error("Send email error: ", e);
 		}
+
+		return success;
 	}
 
-	public void sendMail(List<String> mailTo, String[] mailCC, String mailSubject, String mailTemplate,
+	public boolean sendMail(List<String> mailTo, String[] mailCC, String mailSubject, String mailTemplate,
 			HashMap<String, String> velocityContextMap) {
-		sendMail(mailTo, mailCC, mailSubject, mailTemplate, velocityContextMap, null);
+		return sendMail(mailTo, mailCC, mailSubject, mailTemplate, velocityContextMap, null);
 	}
 }

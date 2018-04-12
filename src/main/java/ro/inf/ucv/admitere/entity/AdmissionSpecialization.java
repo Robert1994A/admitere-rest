@@ -2,6 +2,7 @@ package ro.inf.ucv.admitere.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -10,6 +11,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
@@ -17,6 +20,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import ro.inf.ucv.admitere.enumerations.SpecializationType;
@@ -53,6 +57,14 @@ public class AdmissionSpecialization implements Serializable {
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "specialization_sample")
 	private SpecializationSample specializationSample;
+
+	@JsonBackReference
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "admissionSpecialization")
+	private List<AppliedSession> appliedSessions;
+
+	@JsonBackReference
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private AdmissionSession admissionSession;
 
 	public String getId() {
 		return id;
@@ -101,6 +113,22 @@ public class AdmissionSpecialization implements Serializable {
 
 	public void setSpecializationSample(SpecializationSample specializationSample) {
 		this.specializationSample = specializationSample;
+	}
+
+	public List<AppliedSession> getAppliedSessions() {
+		return appliedSessions;
+	}
+
+	public void setAppliedSessions(List<AppliedSession> appliedSessions) {
+		this.appliedSessions = appliedSessions;
+	}
+
+	public AdmissionSession getAdmissionSession() {
+		return admissionSession;
+	}
+
+	public void setAdmissionSession(AdmissionSession admissionSession) {
+		this.admissionSession = admissionSession;
 	}
 
 }
