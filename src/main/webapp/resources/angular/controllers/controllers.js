@@ -45,32 +45,3 @@ admitereApp.controller('successModalController', function($scope, $rootScope,
 		$uibModalInstance.close();
 	};
 });
-
-admitereApp.controller('appliedSessionsController', function($scope,
-		$rootScope, $state, $log, comunicationFactory, config) {
-	$scope.appliedSessionsFound = false;
-	$scope.containerId = "applied-sessions-container";
-	
-	$scope.getUserAppliedSessions = function() {
-		$rootScope.showLoader($scope.containerId);
-		var successCallback = function(response) {
-			if (response.data.content == undefined) {
-				return;
-			}
-			$scope.appliedSessions = response.data.content;
-			if ($scope.appliedSessions.length > 0) {
-				$scope.appliedSessionsFound = true;
-			}
-			$rootScope.hideLoader($scope.containerId);
-		};
-
-		var errorCallback = function(response) {
-			$rootScope.hideLoader($scope.containerId);
-		};
-
-		comunicationFactory.makeRequest("applied_sessions", "GET", null,
-				successCallback, errorCallback, "");
-	};
-
-	$scope.getUserAppliedSessions();
-});

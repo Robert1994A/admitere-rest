@@ -20,7 +20,7 @@ public class AppliedSessionControllerRest extends BaseController {
 	@GetMapping("/applied_sessions")
 	private ResponseEntity<Response> getUserAppliedSessions(Principal principal) {
 		try {
-			List<AppliedSession> appliedSessions = userService.getAppliedSessions(principal.getName());
+			List<AppliedSession> appliedSessions = appliedSessionService.findAppliedSessionsByUserOrderByDateDESC(principal.getName());
 			if (!ListUtils.isEmpty(appliedSessions)) {
 				return new ResponseEntity<Response>(new Response(appliedSessions), HttpStatus.OK);
 			}

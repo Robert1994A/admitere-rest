@@ -74,7 +74,7 @@ public class InitController extends BaseController {
 	@GetMapping("/init")
 	public void home(Model model) throws Exception {
 		if (userService.count() == 0) {
-			boolean flush = false;
+			boolean flush = true;
 			initNomenclator(flush);
 			initProfileData(flush);
 			initSampleNomenclature(flush);
@@ -209,7 +209,8 @@ public class InitController extends BaseController {
 		for (int i = 0; i < 100; i++) {
 			SpecializationSample specializationSample = new SpecializationSample();
 			specializationSample.setPercent(new Random().nextInt((100 - 10) + 1) + 10);
-			specializationSample.setSampleNomenclature(sampleNomenclatures.get(getRandomNumber(sampleNomenclatures.size())));
+			specializationSample
+					.setSampleNomenclature(sampleNomenclatures.get(getRandomNumber(sampleNomenclatures.size())));
 			specializationSamples.add(specializationSampleService.save(specializationSample, flush));
 		}
 
@@ -489,6 +490,14 @@ public class InitController extends BaseController {
 			}
 		} catch (Exception e1) {
 			e1.printStackTrace();
+		} finally {
+			if (inputStream != null) {
+				try {
+					inputStream.close();
+				} catch (Exception e) {
+					// Stay silent.
+				}
+			}
 		}
 	}
 

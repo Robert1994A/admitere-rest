@@ -57,7 +57,7 @@
 								<dt>Street</dt>
 								<dd>{{profile.street}}</dd>
 								<dt>Birth date</dt>
-								<dd>{{profile.birthDate}}</dd>
+								<dd>{{profile.birthDate | date:'dd/MM/yyyy'}}</dd>
 							</dl>
 						</div>
 					</div>

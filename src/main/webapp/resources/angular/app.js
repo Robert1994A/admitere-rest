@@ -1,20 +1,23 @@
 // create the module and name it admitereApp
-var admitereApp = angular.module(
-		'admitereApp',
-		[ 'ngRoute', 'ui.router', 'ngAnimate', 'ngSanitize', 'ui.bootstrap',
-				'ngMessages', 'ncy-angular-breadcrumb' ]).config(
-		function($httpProvider, $breadcrumbProvider, $locationProvider) {
-			$breadcrumbProvider.setOptions({
-				prefixStateName : 'home',
-				template : 'bootstrap3'
-			});
+var admitereApp = angular
+		.module(
+				'admitereApp',
+				[ 'ngRoute', 'ui.router', 'chart.js', 'ngAnimate',
+						'ngSanitize', 'ui.bootstrap', 'ngMessages',
+						'ncy-angular-breadcrumb' ])
+		.config(
+				function($httpProvider, $breadcrumbProvider, $locationProvider) {
+					$breadcrumbProvider.setOptions({
+						prefixStateName : 'home',
+						template : 'bootstrap3'
+					});
 
-			// $locationProvider.html5Mode({
-			// enabled : true,
-			// requireBase : false
-			// });
-			// $httpProvider.interceptors.push(loaderInterceptor);
-		});
+					// $locationProvider.html5Mode({
+					// enabled : true,
+					// requireBase : false
+					// });
+					// $httpProvider.interceptors.push(loaderInterceptor);
+				});
 
 // Interceptor to show loader when a request is made.
 var loaderInterceptor = function($q) {
@@ -396,8 +399,23 @@ admitereApp.config(function($stateProvider, $urlRouterProvider) {
 			}
 		},
 		ncyBreadcrumb : {
-			label : 'Admission Session Statistics',
+			label : 'Statistics',
 			parent : "universities.detail.faculties.detail.sessions.detail"
+		}
+	})
+	
+	// Get admission session statistics page
+	.state('universities.detail.faculties.detail.sessions.specialization_statistics', {
+		url : '/admission_specialization/:admissionSpecializationId/statistics',
+		views : {
+			"@" : {
+				templateUrl : 'pages/admission_specialization_statistics.html',
+				controller : 'admissionSpecializationStatisticsController'
+			}
+		},
+		ncyBreadcrumb : {
+			label : 'Statistics',
+			parent : "universities.detail.faculties.detail.sessions"
 		}
 	})
 

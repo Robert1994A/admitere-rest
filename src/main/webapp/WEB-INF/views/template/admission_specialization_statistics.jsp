@@ -1,9 +1,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <head></head>
 <div class="panel panel-default border-grey"
-	id="admission-session-statistics-container">
+	id="admission-specialization-statistics-container">
 	<div class="panel-heading">
-		<h4 class="panel-title">Statistics</h4>
+		<h4 class="panel-title">Admission specializations statistics</h4>
 	</div>
 	<div class="panel-body">
 		<div class="row">

@@ -14,12 +14,12 @@
 			<security:authorize access="isAuthenticated()">
 				<li><a ui-sref="universities()"><i
 						class="icon-graduation position-left"></i> Universities</a></li>
+				<li><a ui-sref="appliedSessions()"><i
+						class="icon-list position-left"></i> Applied sessions </a></li>
 				<li><a ui-sref="profile()"><i
 						class="icon-profile position-left"></i> Profile</a></li>
 				<li><a ui-sref="users()"><i
 						class="icon-users4 position-left"></i> Users </a></li>
-				<li><a ui-sref="appliedSessions()"><i
-						class="icon-users4 position-left"></i> Applied sessions </a></li>
 			</security:authorize>
 			<li><a ui-sref="about()"><i class="icon-info3 position-left"></i>
 					About </a></li>

@@ -103,7 +103,7 @@ admitereApp.controller('facultySpecializationsController', function($scope,
 	$scope.specializations = {};
 	$scope.specializationsFound = false;
 	$scope.containerId = "specializations-container";
-	$scope.getFacultySessions = function() {
+	$scope.getFacultySpecializations = function() {
 		$rootScope.showLoader($scope.containerId);
 		var successCallback = function(response) {
 			if (response.data.content == undefined) {
@@ -126,7 +126,7 @@ admitereApp.controller('facultySpecializationsController', function($scope,
 				successCallback, errorCallback, "");
 	};
 
-	$scope.getFacultySessions();
+	$scope.getFacultySpecializations();
 });
 
 admitereApp.controller('facultyAddSessionController', function($scope,

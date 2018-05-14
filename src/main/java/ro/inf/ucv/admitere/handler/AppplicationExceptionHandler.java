@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import ro.inf.ucv.admitere.controller.html.BaseController;
 import ro.inf.ucv.admitere.exceptions.AlreadyAppliedException;
 import ro.inf.ucv.admitere.exceptions.FieldValidationException;
+import ro.inf.ucv.admitere.exceptions.ProfileNotFoundException;
 import ro.inf.ucv.admitere.exceptions.NotAuthenticatedException;
 import ro.inf.ucv.admitere.exceptions.UserNotFoundException;
 import ro.inf.ucv.admitere.wrapper.Response;
@@ -44,10 +45,13 @@ public class AppplicationExceptionHandler extends BaseController {
 	}
 
 	public static ResponseEntity<Response> catchExceptions(Exception e) {
+		logger.error(e);
 		if (e instanceof AlreadyAppliedException) {
 			return new ResponseEntity<Response>(HttpStatus.UNAUTHORIZED);
 		} else if (e instanceof NotAuthenticatedException) {
 			return new ResponseEntity<Response>(HttpStatus.NOT_ACCEPTABLE);
+		} else if (e instanceof ProfileNotFoundException) {
+			return new ResponseEntity<Response>(HttpStatus.EXPECTATION_FAILED);
 		}
 
 		return new ResponseEntity<Response>(HttpStatus.INTERNAL_SERVER_ERROR);

@@ -22,20 +22,6 @@
 			<ul class="nav navbar-nav">
 				<li><a href="#">Help center</a></li>
 				<li><a href="#">Policy</a></li>
-				<li><a href="#" class="text-semibold">Upgrade your account</a></li>
-				<li class="dropdown"><a href="#" class="dropdown-toggle"
-					data-toggle="dropdown"> <i class="icon-cog3"></i> <span
-						class="visible-xs-inline-block position-right">Settings</span> <span
-						class="caret"></span>
-				</a>
-
-					<ul class="dropdown-menu dropdown-menu-right">
-						<li><a href="#"><i class="icon-dribbble3"></i> Dribbble</a></li>
-						<li><a href="#"><i class="icon-pinterest2"></i> Pinterest</a></li>
-						<li><a href="#"><i class="icon-github"></i> Github</a></li>
-						<li><a href="#"><i class="icon-stackoverflow"></i> Stack
-								Overflow</a></li>
-					</ul></li>
 			</ul>
 		</div>
 	</div>

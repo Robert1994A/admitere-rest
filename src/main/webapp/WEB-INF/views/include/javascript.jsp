@@ -45,15 +45,18 @@
 	src="<c:url value="/resources/angular/angular-sanitize.js"/>"></script>
 <!-- End angular -->
 
-<!-- Directives -->
-<!-- End Directives -->
-
 <!-- Modules -->
 <script type="text/javascript"
 	src="<c:url value="/resources/angular/modules/angular-breadcrumb.js"/>"></script>
 
 <script type="text/javascript"
 	src="<c:url value="/resources/angular/modules/angular-ui-router.js"/>"></script>
+
+<script type="text/javascript"
+	src="<c:url value="/resources/angular/modules/Chart.min.js"/>"></script>
+
+<script type="text/javascript"
+	src="<c:url value="/resources/angular/modules/angular-chart.min.js"/>"></script>
 
 <script type="text/javascript"
 	src="<c:url value="/resources/angular/modules/ui-bootstrap-tpls-2.5.0.js"/>"></script>
@@ -80,6 +83,9 @@
 
 <script type="text/javascript"
 	src="<c:url value="/resources/angular/controllers/admission-session-controller.js"/>"></script>
+
+<script type="text/javascript"
+	src="<c:url value="/resources/angular/controllers/applied-session-controller.js"/>"></script>
 
 <script type="text/javascript"
 	src="<c:url value="/resources/angular/controllers/profile-controller.js"/>"></script>

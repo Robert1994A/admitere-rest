@@ -5,6 +5,7 @@ import java.security.Principal;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -26,4 +27,25 @@ public class AdmissionSessionControllerRest extends BaseController {
 		}
 	}
 
+	@GetMapping("/admission_session/{id}/statistics")
+	private ResponseEntity<Response> getAdmisisonSessionStatistics(
+			@PathVariable(value = "id", required = true) String admissionSpecializationId, Principal principal) {
+		try {
+			// TODO
+			return new ResponseEntity<Response>(HttpStatus.OK);
+		} catch (Exception e) {
+			return AppplicationExceptionHandler.catchExceptions(e);
+		}
+	}
+
+	@GetMapping("/admission_specialziation/{id}/statistics")
+	private ResponseEntity<Response> getAdmisisonSpecializationStatistics(
+			@PathVariable(value = "id", required = true) String admissionSpecializationId, Principal principal) {
+		try {
+			// TODO
+			return new ResponseEntity<Response>(HttpStatus.OK);
+		} catch (Exception e) {
+			return AppplicationExceptionHandler.catchExceptions(e);
+		}
+	}
 }

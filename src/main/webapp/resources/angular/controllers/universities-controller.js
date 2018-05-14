@@ -1,4 +1,4 @@
-// Universities controller.
+// Get all universities controller.
 admitereApp.controller('universitiesController', function($scope, $rootScope,
 		$log, comunicationFactory, config) {
 	$scope.containerId = "universities-container";
@@ -62,6 +62,7 @@ admitereApp.controller('universitiesController', function($scope, $rootScope,
 
 });
 
+// Get university.
 admitereApp.controller('universityController', function($scope, $rootScope,
 		$state, $log, comunicationFactory, config) {
 	$scope.university = {};
@@ -90,6 +91,7 @@ admitereApp.controller('universityController', function($scope, $rootScope,
 
 });
 
+// Get faculties for a university
 admitereApp.controller('universityFacultiesController', function($scope,
 		$rootScope, $state, $log, comunicationFactory, config) {
 	$scope.faculties = {};

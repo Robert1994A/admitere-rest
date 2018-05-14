@@ -42,9 +42,9 @@ public class Mailer {
 			HashMap<String, String> velocityContextMap, List<File> files) {
 		boolean success = false;
 		try {
-			Template template = configuration.getTemplate(mailTemplate);
+			Template template = this.configuration.getTemplate(mailTemplate);
 			String html = FreeMarkerTemplateUtils.processTemplateIntoString(template, velocityContextMap);
-			MimeMessage message = mailSender.createMimeMessage();
+			MimeMessage message = this.mailSender.createMimeMessage();
 			MimeMessageHelper helper = new MimeMessageHelper(message, false);
 			if (!ArrayUtils.isEmpty(mailCC)) {
 				for (String cc : mailCC) {
@@ -53,6 +53,7 @@ public class Mailer {
 					}
 				}
 			}
+
 			if (!ListUtils.isEmpty(files)) {
 				for (File file : files) {
 					if (file != null && file.exists() && !file.isDirectory()) {
@@ -60,6 +61,7 @@ public class Mailer {
 					}
 				}
 			}
+
 			boolean found = false;
 			if (!ListUtils.isEmpty(mailTo)) {
 				for (String to : mailTo) {
@@ -69,16 +71,20 @@ public class Mailer {
 					}
 				}
 			}
+
 			if (!found) {
 				throw new Exception("Must set at least one recipient to send email.");
 			}
+
 			if (StringUtils.isNotBlank(mailSubject)) {
 				helper.setSubject(mailSubject);
 			}
+
 			if (StringUtils.isNotBlank(html)) {
 				helper.setText(html, true);
 			}
-			mailSender.send(message);
+
+			this.mailSender.send(message);
 			success = true;
 		} catch (Exception e) {
 			logger.error("Send email error: ", e);
