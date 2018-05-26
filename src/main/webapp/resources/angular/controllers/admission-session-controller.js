@@ -49,7 +49,7 @@ admitereApp.controller('admissionSessionsController', function($scope,
 			$rootScope.hideLoader($scope.containerId);
 		};
 
-		comunicationFactory.makeRequest("/admission_session/apply/"
+		comunicationFactory.makeRequest("admission_session/apply/"
 				+ admissionSpecializationId, "POST", null, successCallback,
 				errorCallback, "");
 	}

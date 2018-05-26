@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!-- Footer 
 <div class="footer text-muted">
-	&copy; 2018. <a href="#">Admitere </a> by <a href="#" target="_blank">Robert
+	&copy; 2018. <a href="#">Admission </a> by <a href="#" target="_blank">Robert
 		Gherlan</a>
 </div>
 <!-- /footer -->
@@ -14,7 +14,7 @@
 
 	<div class="navbar-collapse collapse" id="navbar-second">
 		<div class="navbar-text">
-			© 2018. <a href="#">Admitere</a> by <a href="#" target="_blank">Robert
+			© 2018. <a href="#">Admission</a> by <a href="#" target="_blank">Robert
 				Gherlan</a>
 		</div>
 

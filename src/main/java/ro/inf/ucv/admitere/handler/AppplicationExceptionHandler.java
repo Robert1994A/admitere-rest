@@ -26,7 +26,7 @@ public class AppplicationExceptionHandler extends BaseController {
 	@ResponseStatus(value = HttpStatus.NOT_FOUND)
 	public ResponseEntity<Response> userNotFoundException(UserNotFoundException ex) {
 		logger.error("User not found: ", ex);
-		return new ResponseEntity<Response>(HttpStatus.NOT_FOUND);
+		return new ResponseEntity<Response>(new Response(ex.getMessage()), HttpStatus.NOT_FOUND);
 	}
 
 	@ExceptionHandler(value = { FieldValidationException.class })
@@ -41,19 +41,20 @@ public class AppplicationExceptionHandler extends BaseController {
 	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
 	public ResponseEntity<Response> customExceptions(Exception ex, HttpServletRequest request) {
 		logger.error("Exception: ", ex);
-		return new ResponseEntity<Response>(HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<Response>(new Response(ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 	public static ResponseEntity<Response> catchExceptions(Exception e) {
 		logger.error(e);
+		Response response = new Response(e.getMessage());
 		if (e instanceof AlreadyAppliedException) {
-			return new ResponseEntity<Response>(HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<Response>(response, HttpStatus.UNAUTHORIZED);
 		} else if (e instanceof NotAuthenticatedException) {
-			return new ResponseEntity<Response>(HttpStatus.NOT_ACCEPTABLE);
+			return new ResponseEntity<Response>(response, HttpStatus.NOT_ACCEPTABLE);
 		} else if (e instanceof ProfileNotFoundException) {
-			return new ResponseEntity<Response>(HttpStatus.EXPECTATION_FAILED);
+			return new ResponseEntity<Response>(response, HttpStatus.EXPECTATION_FAILED);
 		}
 
-		return new ResponseEntity<Response>(HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<Response>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }

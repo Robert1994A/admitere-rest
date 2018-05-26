@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans:beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:beans="http://www.springframework.org/schema/beans"
+<beans:beans
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:beans="http://www.springframework.org/schema/beans"
 	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
@@ -15,23 +18,29 @@
 	<tx:annotation-driven />
 
 	<context:component-scan
-		base-package="ro.inf.ucv.admitere.controller.html, ro.inf.ucv.admitere.controller.rest, ro.inf.ucv.admitere.validator, ro.inf.ucv.admitere.service,  ro.inf.ucv.admitere.captcha, ro.inf.ucv.admitere.handler, ro.inf.ucv.admitere.service.utils, ro.inf.ucv.admitere.config" />
+		base-package="ro.inf.ucv.admitere.controller.html, ro.inf.ucv.admitere.controller.rest, ro.inf.ucv.admitere.validator, ro.inf.ucv.admitere.service,  ro.inf.ucv.admitere.captcha, ro.inf.ucv.admitere.handler, ro.inf.ucv.admitere.service.utils" />
 
 
 	<beans:bean id="validator"
 		class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
 
 	<mvc:annotation-driven validator="validator" />
-	<!-- <mvc:interceptors> <beans:bean id="loggerInterceptor" class="ro.inf.ucv.admitere.interceptors.LoggerInterceptor" 
-		/> </mvc:interceptors> -->
+	
+	<mvc:interceptors>
+		<beans:bean id="loggerInterceptor"
+			class="ro.inf.ucv.admitere.interceptors.RequestLoggerInterceptor" />
+	</mvc:interceptors>
 
-	<context:property-placeholder location="classpath:application.properties" />
+	<context:property-placeholder
+		location="classpath:application.properties" />
 
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving 
 		up static resources in the ${webappRoot}/resources directory -->
-	<mvc:resources mapping="/resources/**" location="/resources/" />
+	<mvc:resources mapping="/resources/**"
+		location="/resources/" />
 
-	<mvc:resources mapping="/favicon.ico" location="/resources/images/favicon.ico" />
+	<mvc:resources mapping="/favicon.ico"
+		location="/resources/images/favicon.ico" />
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources 
 		in the /WEB-INF/views directory -->
@@ -40,28 +49,6 @@
 		<beans:property name="prefix" value="/WEB-INF/views/" />
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
-
-	<!-- Configure to plugin JSON as request and response in method handler -->
-	<beans:bean
-		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
-		<beans:property name="messageConverters">
-			<beans:list>
-				<beans:ref bean="jsonMessageConverter" />
-				<beans:ref bean="xmlMessageConverter" />
-			</beans:list>
-		</beans:property>
-	</beans:bean>
-
-	<!-- Configure bean to convert JSON to POJO and vice versa -->
-	<beans:bean id="jsonMessageConverter"
-		class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
-		<beans:property name="objectMapper" ref="jacksonObjectMapper" />
-	</beans:bean>
-
-	<beans:bean id="jacksonObjectMapper" class="ro.inf.ucv.admitere.config.JsonMapper" />
-
-	<beans:bean id="xmlMessageConverter"
-		class="org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter" />
 
 	<mvc:annotation-driven>
 		<mvc:message-converters>
@@ -77,8 +64,10 @@
 		class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<beans:property name="host" value="${email.host}" />
 		<beans:property name="port" value="${email.port}" />
-		<beans:property name="username" value="${email.username}" />
-		<beans:property name="password" value="${email.password}" />
+		<beans:property name="username"
+			value="${email.username}" />
+		<beans:property name="password"
+			value="${email.password}" />
 		<beans:property name="javaMailProperties">
 			<beans:props>
 				<beans:prop key="mail.debug">true</beans:prop>
@@ -90,14 +79,17 @@
 		</beans:property>
 	</beans:bean>
 
-	<beans:bean id="mailer" class="ro.inf.ucv.admitere.service.utils.Mailer">
+	<beans:bean id="mailer"
+		class="ro.inf.ucv.admitere.service.utils.Mailer">
 		<beans:property name="mailSender" ref="mailSender" />
-		<beans:property name="configuration" ref="freemarkerEngine" />
+		<beans:property name="configuration"
+			ref="freemarkerEngine" />
 	</beans:bean>
 
 	<beans:bean id="freemarkerEngine"
 		class="org.springframework.ui.freemarker.FreeMarkerConfigurationFactoryBean">
-		<beans:property name="templateLoaderPath" value="classpath:emailTemplates/" />
+		<beans:property name="templateLoaderPath"
+			value="classpath:emailTemplates/" />
 	</beans:bean>
 
 	<beans:bean id="messageSource"
@@ -128,6 +120,7 @@
 	<beans:bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<!-- setting maximum upload size -->
-		<beans:property name="maxUploadSize" value="${file.maxUploadSize}" />
+		<beans:property name="maxUploadSize"
+			value="${file.maxUploadSize}" />
 	</beans:bean>
 </beans:beans>

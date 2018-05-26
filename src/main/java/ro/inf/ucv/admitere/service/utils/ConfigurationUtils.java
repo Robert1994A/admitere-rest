@@ -17,15 +17,6 @@ public class ConfigurationUtils {
 	@Value("${file.maxUploadSize}")
 	private Long maxUploadSize;
 
-	@Value("${users.perPage:25}")
-	private Integer usersPerPage = 25;
-
-	@Value("${attempts.maxAttempts}")
-	private Integer maxAttempts;
-
-	@Value("${attempts.interval}")
-	private Integer attemptsInterval;
-
 	@Value("${pagination.perPage:25}")
 	private Integer paginationPerPage = 25;
 
@@ -39,18 +30,6 @@ public class ConfigurationUtils {
 
 	public Long getMaxUploadSize() {
 		return maxUploadSize;
-	}
-
-	public Integer getUsersPerPage() {
-		return usersPerPage;
-	}
-
-	public Integer getMaxAttempts() {
-		return maxAttempts;
-	}
-
-	public Integer getAttemptsInterval() {
-		return attemptsInterval;
 	}
 
 	public Integer getPaginationPerPage() {

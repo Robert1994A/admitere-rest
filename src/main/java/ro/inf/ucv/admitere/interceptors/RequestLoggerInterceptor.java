@@ -1,18 +1,19 @@
 package ro.inf.ucv.admitere.interceptors;
 
-import com.google.common.base.Strings;
+import java.util.Enumeration;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.Enumeration;
+import com.google.common.base.Strings;
 
-public class LoggerInterceptor extends HandlerInterceptorAdapter {
+public class RequestLoggerInterceptor extends HandlerInterceptorAdapter {
 
-	private static final Logger logger = Logger.getLogger(LoggerInterceptor.class);
+	private static final Logger logger = Logger.getLogger(RequestLoggerInterceptor.class);
 
 	/**
 	 * Executed before actual handler is executed
@@ -57,7 +58,7 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter {
 				posted.append("&");
 			final String curr = (String) e.nextElement();
 			posted.append(curr).append("=");
-			if (curr.contains("password") || curr.contains("answer") || curr.contains("pwd")) {
+			if (curr.contains("password") || curr.contains("pwd")) {
 				posted.append("*****");
 			} else {
 				posted.append(request.getParameter(curr));
@@ -68,6 +69,7 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter {
 		final String ipAddr = (ip == null) ? getRemoteAddr(request) : ip;
 		if (!Strings.isNullOrEmpty(ipAddr))
 			posted.append("&_psip=" + ipAddr);
+
 		return posted.toString();
 	}
 
@@ -77,6 +79,7 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter {
 			logger.debug("IP from proxy - X-FORWARDED-FOR : " + ipFromHeader);
 			return ipFromHeader;
 		}
+
 		return request.getRemoteAddr();
 	}
 }

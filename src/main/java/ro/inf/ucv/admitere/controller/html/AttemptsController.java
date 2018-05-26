@@ -21,6 +21,6 @@ public class AttemptsController extends BaseController {
 		}else{
 			model.addAttribute("exist", false);
 		}
-		return "/templates/attempts";
+		return "templates/attempts";
 	}
 }
