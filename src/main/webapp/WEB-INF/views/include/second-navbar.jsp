@@ -10,7 +10,7 @@
 	<div class="navbar-collapse collapse" id="navbar-second-toggle">
 		<ul class="nav navbar-nav">
 			<li><a ui-sref="home()"><i class="icon-home5 position-left"></i>
-					Dashboard</a></li>
+					Home</a></li>
 			<security:authorize access="isAuthenticated()">
 				<li><a ui-sref="universities()"><i
 						class="icon-graduation position-left"></i> Universities</a></li>

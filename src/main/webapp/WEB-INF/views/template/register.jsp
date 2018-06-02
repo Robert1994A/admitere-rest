@@ -47,7 +47,7 @@
 				<div class="row">
 					<div class="col-md-6 form-group"
 						ng-class="{ 'has-error': registerForm.password.$touched && registerForm.password.$invalid }">
-						<label class="upper">Password</label> <input type="text"
+						<label class="upper">Password</label> <input type="password"
 							class="form-control" ng-model="user.password" name="password"
 							required="required" ng-minlength="8" ng-maxlength="50"
 							placeholder="Enter your password" />
