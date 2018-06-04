@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import ro.inf.ucv.admitere.entity.AdmissionSession;
 import ro.inf.ucv.admitere.repository.AdmissionSessionRepository;
+import ro.inf.ucv.admitere.wrapper.Statistics;
 
 @Service
 @Transactional
@@ -43,5 +44,11 @@ public class AdmisionSessionService {
 			logger.error("Save addmision session: " + admissionSession, e);
 		}
 		return savedAdmissionSession;
+	}
+
+	public List<Statistics> getStatistics(String admissionSessionId) {
+		List<Statistics> stats = null;
+		// TODO: Implement this.
+		return stats;
 	}
 }

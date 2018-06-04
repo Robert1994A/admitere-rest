@@ -104,4 +104,18 @@ public class AppliedSessionService {
 
 		return appliedSessions;
 	}
+
+	public List<AppliedSession> findAppliedSessionsByAdmissionSpecialization(
+			AdmissionSpecialization admissionSpecialization) {
+		List<AppliedSession> appliedSessions = null;
+		try {
+			if (admissionSpecialization != null) {
+				appliedSessions = this.appliedSessionRepository.findByAdmissionSpecialization(admissionSpecialization);
+			}
+		} catch (Exception e) {
+			logger.error("Find applied sesison by admission specialization: " + admissionSpecialization, e);
+		}
+
+		return appliedSessions;
+	}
 }

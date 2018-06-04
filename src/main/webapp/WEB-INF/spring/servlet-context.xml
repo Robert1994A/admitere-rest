@@ -25,11 +25,9 @@
 		class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
 
 	<mvc:annotation-driven validator="validator" />
-	
-	<mvc:interceptors>
-		<beans:bean id="loggerInterceptor"
-			class="ro.inf.ucv.admitere.interceptors.RequestLoggerInterceptor" />
-	</mvc:interceptors>
+
+	<!-- <mvc:interceptors> <beans:bean id="loggerInterceptor" class="ro.inf.ucv.admitere.interceptors.RequestLoggerInterceptor" 
+		/> </mvc:interceptors> -->
 
 	<context:property-placeholder
 		location="classpath:application.properties" />

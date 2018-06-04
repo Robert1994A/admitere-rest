@@ -6,42 +6,24 @@
 		<h4 class="panel-title">Admission specializations statistics</h4>
 	</div>
 	<div class="panel-body">
-		<div class="row">
-			<div class="col-md-4">
-				<div class="panel panel-white">
-					<div class="panel-heading">
-						<h6 class="panel-title">Test</h6>
+		<div class="row" ng-if="statisticsFound">
+			<span>
+				<div class="col-md-4" ng-repeat="stats in statistics">
+					<div class="panel panel-white">
+						<div class="panel-heading">
+							<h6 class="panel-title">{{stats.name}}</h6>
+						</div>
+						<div class="panel-body">
+							<canvas class="chart chart-bar" chart-data="stats.values"
+								chart-labels="stats.labels" chart-options="chartOptions"></canvas>
+						</div>
 					</div>
-					<div class="panel-body">
-						<canvas id="bar" class="chart chart-bar" chart-data="data"
-							chart-labels="labels" chart-series="series"></canvas>
-					</div>
-				</div>
-			</div>
 
-			<div class="col-md-4">
-				<div class="panel panel-white">
-					<div class="panel-heading">
-						<h6 class="panel-title">Test</h6>
-					</div>
-					<div class="panel-body">
-						<canvas id="bar" class="chart chart-bar" chart-data="data"
-							chart-labels="labels" chart-series="series"></canvas>
-					</div>
 				</div>
-			</div>
-
-			<div class="col-md-4">
-				<div class="panel panel-white">
-					<div class="panel-heading">
-						<h6 class="panel-title">Test</h6>
-					</div>
-					<div class="panel-body">
-						<canvas id="bar" class="chart chart-bar" chart-data="data"
-							chart-labels="labels" chart-series="series"></canvas>
-					</div>
-				</div>
-			</div>
+			</span>
+		</div>
+		<div class="row" ng-if="!statisticsFound">
+			<span ng-include src="'no-data-found.html'"></span>
 		</div>
 	</div>
 </div>

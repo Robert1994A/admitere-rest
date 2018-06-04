@@ -17,4 +17,6 @@ public interface AppliedSessionRepository extends JpaRepository<AppliedSession, 
 
 	List<AppliedSession> findByUser(User user, Sort sort);
 
+	List<AppliedSession> findByAdmissionSpecialization(AdmissionSpecialization admissionSpecialization);
+
 }

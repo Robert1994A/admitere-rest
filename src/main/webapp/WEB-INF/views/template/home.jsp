@@ -1,6 +1,6 @@
 <div class="panel panel-default border-grey">
 	<div class="panel-heading">
-		<h4 class="panel-title">Home page</h4>
+		<h4 class="panel-title">Home</h4>
 	</div>
 
 	<div class="panel-body">
