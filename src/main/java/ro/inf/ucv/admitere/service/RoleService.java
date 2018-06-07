@@ -2,6 +2,7 @@ package ro.inf.ucv.admitere.service;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -39,6 +40,8 @@ public class RoleService {
 		Role savedRole = null;
 		try {
 			if (role != null) {
+				role.setId(null);
+				role.setCreationDate(new Date());
 				if (flush) {
 					savedRole = roleRepository.saveAndFlush(role);
 				} else {
@@ -126,5 +129,24 @@ public class RoleService {
 		}
 
 		return roles;
+	}
+
+	public List<String> deleteByIds(List<Integer> roleIds) {
+		List<String> warningMessages = new ArrayList<String>();
+		for (Integer roleId : roleIds) {
+			if (roleId != null && roleId.intValue() > 0) {
+				try {
+					this.deleteById(roleId);
+				} catch (Exception e) {
+					logger.error("Cannot delete role with id: " + roleId);
+					warningMessages.add("Cannot delete role with id: " + roleId);
+				}
+			} else {
+				logger.error("Cannot delete role with id: " + roleId);
+				warningMessages.add("Cannot role gender with id: " + roleId);
+			}
+		}
+
+		return warningMessages;
 	}
 }

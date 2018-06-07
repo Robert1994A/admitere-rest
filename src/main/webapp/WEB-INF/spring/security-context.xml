@@ -20,7 +20,6 @@
 			password-parameter="password" username-parameter="username"
 			default-target-url="/#!?login=true"
 			login-processing-url="/login_security" />
-
 		<security:intercept-url pattern="/login"
 			access="permitAll()" />
 		<security:intercept-url pattern="/register"
@@ -31,13 +30,20 @@
 			access="isAuthenticated()" />
 		<security:intercept-url pattern="/account"
 			access="isAuthenticated()" />
+		<security:intercept-url pattern="/genders**"
+			access="isAuthenticated()" />
+		<security:intercept-url pattern="/email**"
+			access="isAuthenticated()" />
+		<security:intercept-url pattern="/faculties**"
+			access="isAuthenticated()" />
+		<security:intercept-url
+			pattern="/universities**" access="isAuthenticated()" />
 		<security:intercept-url
 			pattern="/pages/profile**" access="isAuthenticated()" />
 		<security:intercept-url
 			pattern="/pages/users**" access="isAuthenticated()" />
 		<security:intercept-url
 			pattern="/pages/universities**" access="isAuthenticated()" />
-
 		<security:csrf disabled="true" />
 
 		<security:remember-me use-secure-cookie="false"

@@ -36,7 +36,7 @@ public class RecoverPasswordControllerRest extends BaseController {
 			HashMap<String, String> velocityContext = new HashMap<>();
 			velocityContext.put("linkToRecover",
 					URLUtils.getBaseUrl(request) + "/recoverPassword?recoverToken=" + recoverToken);
-			mailer.sendMail(Arrays.asList(user.getEmail()), null, "Recover Password", "mailRecoverPassword.vm",
+			mailer.sendMail(Arrays.asList(user.getEmail()), null, "Recover Password","mailRecoverPassword.vm",
 					velocityContext);
 			return new ResponseEntity<Response>(HttpStatus.OK);
 		} catch (Exception e) {

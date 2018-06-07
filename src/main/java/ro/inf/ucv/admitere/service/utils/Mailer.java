@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.mail.internet.MimeMessage;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,15 +37,21 @@ public class Mailer {
 		this.configuration = configuration;
 	}
 
-	public boolean sendMail(List<String> mailTo, String[] mailCC, String mailSubject, String mailTemplate,
-			HashMap<String, String> velocityContextMap, List<File> files) {
+	public boolean sendMail(String mailFrom, List<String> mailTo, List<String> mailCC, String mailSubject, String text,
+			String mailTemplate, HashMap<String, String> velocityContextMap, List<File> files) {
 		boolean success = false;
 		try {
-			Template template = this.configuration.getTemplate(mailTemplate);
-			String html = FreeMarkerTemplateUtils.processTemplateIntoString(template, velocityContextMap);
+			String html = null;
+			if (StringUtils.isNotBlank(text)) {
+				html = text;
+			} else if (StringUtils.isNotBlank(mailTemplate)) {
+				Template template = this.configuration.getTemplate(mailTemplate);
+				html = FreeMarkerTemplateUtils.processTemplateIntoString(template, velocityContextMap);
+			}
+
 			MimeMessage message = this.mailSender.createMimeMessage();
 			MimeMessageHelper helper = new MimeMessageHelper(message, false);
-			if (!ArrayUtils.isEmpty(mailCC)) {
+			if (mailCC != null && !mailCC.isEmpty()) {
 				for (String cc : mailCC) {
 					if (StringUtils.isNotBlank(cc)) {
 						helper.setCc(cc);
@@ -80,6 +85,10 @@ public class Mailer {
 				helper.setSubject(mailSubject);
 			}
 
+			if (StringUtils.isNotBlank(mailFrom)) {
+				helper.setFrom(mailFrom);
+			}
+
 			if (StringUtils.isNotBlank(html)) {
 				helper.setText(html, true);
 			}
@@ -93,8 +102,17 @@ public class Mailer {
 		return success;
 	}
 
-	public boolean sendMail(List<String> mailTo, String[] mailCC, String mailSubject, String mailTemplate,
-			HashMap<String, String> velocityContextMap) {
-		return sendMail(mailTo, mailCC, mailSubject, mailTemplate, velocityContextMap, null);
+	public boolean sendMail(List<String> mailTo, List<String> mailCC, String mailSubject, String text,
+			String mailTemplate, HashMap<String, String> velocityContextMap) {
+		return sendMail(null, mailTo, mailCC, mailSubject, text, mailTemplate, velocityContextMap, null);
+	}
+
+	public boolean sendMail(List<String> mailTo, List<String> mailCC, String mailSubject, String mailTemplate,
+			HashMap<String, String> velocityContext) {
+		return sendMail(null, mailTo, mailCC, mailSubject, null, mailTemplate, velocityContext, null);
+	}
+
+	public boolean sendMail(String mailFrom, List<String> to, List<String> cc, String subject, String content) {
+		return sendMail(mailFrom, to, cc, subject, content, null, null, null);
 	}
 }

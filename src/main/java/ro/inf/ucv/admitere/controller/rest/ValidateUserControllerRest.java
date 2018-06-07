@@ -21,7 +21,7 @@ public class ValidateUserControllerRest extends BaseController {
 	private static final Logger logger = Logger.getLogger(ValidateUserControllerRest.class);
 
 	@GetMapping("/validateAccount")
-	public ResponseEntity<Response> validateStudentAccount(@RequestParam("registerToken") String registerToken)
+	public ResponseEntity<Response> validateAccount(@RequestParam("registerToken") String registerToken)
 			throws UserNotFoundException {
 		try {
 			User user = userService.findByRegisterToken(registerToken);

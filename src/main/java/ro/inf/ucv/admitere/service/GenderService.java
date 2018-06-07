@@ -58,6 +58,7 @@ public class GenderService {
 		try {
 			if (gender != null) {
 				gender.setCreationDate(new Date());
+				gender.setId(null);
 				if (flush) {
 					savedGender = this.genderRepository.saveAndFlush(gender);
 				} else {
@@ -117,7 +118,7 @@ public class GenderService {
 	}
 
 	public void deleteOne(Integer genderId) {
-		if (genderId != null) {
+		if (PrimitiveUtils.isValid(genderId)) {
 			this.genderRepository.deleteById(genderId);
 		}
 	}

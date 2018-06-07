@@ -19,40 +19,40 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import ro.inf.ucv.admitere.controller.html.BaseController;
-import ro.inf.ucv.admitere.entity.Gender;
+import ro.inf.ucv.admitere.entity.Faculty;
 import ro.inf.ucv.admitere.exceptions.FieldValidationException;
 import ro.inf.ucv.admitere.wrapper.Response;
 import ro.inf.ucv.admitere.wrapper.SearchModel;
 
 @RestController
-@RequestMapping("/genders")
-public class GenderControllerRest extends BaseController {
+@RequestMapping("/faculties")
+public class FacultyControllerRest extends BaseController {
 
 	@GetMapping
-	public ResponseEntity<Response> getGenders(@ModelAttribute("searchModel") SearchModel searchModel)
+	public ResponseEntity<Response> getFaculties(@ModelAttribute("searchModel") SearchModel searchModel)
 			throws Exception {
-		Page<Gender> genders = this.genderService.inteligentPagination(searchModel);
-		if (genders != null && genders.hasContent()) {
-			return new ResponseEntity<Response>(new Response(genders), HttpStatus.OK);
+		Page<Faculty> faculties = this.facultyService.inteligentPagination(searchModel);
+		if (faculties != null && faculties.hasContent()) {
+			return new ResponseEntity<Response>(new Response(faculties), HttpStatus.OK);
 		}
 
 		return new ResponseEntity<Response>(HttpStatus.NOT_FOUND);
 	}
 
 	@PostMapping
-	public ResponseEntity<Response> saveGender(@Valid @RequestBody Gender gender, BindingResult bindingResult)
+	public ResponseEntity<Response> saveFaculty(@Valid @RequestBody Faculty faculty, BindingResult bindingResult)
 			throws Exception {
 		if (bindingResult.hasErrors()) {
 			throw new FieldValidationException(bindingResult.getFieldErrors());
 		}
 
-		Gender foundedGender = this.genderService.findOne(gender.getId());
-		if (foundedGender != null) {
+		Faculty foundedFaculty = this.facultyService.findOne(faculty.getId());
+		if (foundedFaculty != null) {
 			return new ResponseEntity<Response>(HttpStatus.BAD_REQUEST);
 		}
 
-		Gender savedGender = this.genderService.save(gender, true);
-		if (savedGender != null) {
+		Faculty savedFaculty = this.facultyService.save(faculty, true);
+		if (savedFaculty != null) {
 			return new ResponseEntity<Response>(HttpStatus.OK);
 		}
 
@@ -60,18 +60,18 @@ public class GenderControllerRest extends BaseController {
 	}
 
 	@PutMapping
-	public ResponseEntity<Response> updateGender(@Valid @RequestBody Gender gender, BindingResult bindingResult)
+	public ResponseEntity<Response> updateFaculty(@Valid @RequestBody Faculty faculty, BindingResult bindingResult)
 			throws Exception {
 		if (bindingResult.hasErrors()) {
 			throw new FieldValidationException(bindingResult.getFieldErrors());
 		}
 
-		int genderId = gender.getId();
-		Gender foundedGender = this.genderService.findOne(genderId);
-		if (foundedGender != null) {
-			gender.setCreationDate(foundedGender.getCreationDate());
-			Gender savedGender = this.genderService.save(gender, true);
-			if (savedGender != null) {
+		int facultyId = faculty.getId();
+		Faculty foundedFaculty = this.facultyService.findOne(facultyId);
+		if (foundedFaculty != null) {
+			faculty.setCreationDate(foundedFaculty.getCreationDate());
+			Faculty savedFacullty = this.facultyService.save(faculty, true);
+			if (savedFacullty != null) {
 				return new ResponseEntity<Response>(HttpStatus.OK);
 			}
 		} else {
@@ -81,21 +81,21 @@ public class GenderControllerRest extends BaseController {
 		return new ResponseEntity<Response>(HttpStatus.BAD_REQUEST);
 	}
 
-	@GetMapping("/{genderId}")
-	public ResponseEntity<Response> getGenderById(@PathVariable("genderId") Integer genderId) throws Exception {
-		Gender gender = this.genderService.findOne(genderId);
-		if (gender != null) {
-			return new ResponseEntity<Response>(new Response(gender), HttpStatus.OK);
+	@GetMapping("/{facultyId}")
+	public ResponseEntity<Response> getFacultyById(@PathVariable("facultyId") Integer facultyId) throws Exception {
+		Faculty faculty = this.facultyService.findOne(facultyId);
+		if (faculty != null) {
+			return new ResponseEntity<Response>(new Response(faculty), HttpStatus.OK);
 		}
 
 		return new ResponseEntity<Response>(HttpStatus.NOT_FOUND);
 	}
 
 	@DeleteMapping
-	public ResponseEntity<Response> deleteGenderByIds(@RequestBody List<Integer> genderIds) throws Exception {
-		if (genderIds != null && !genderIds.isEmpty()) {
+	public ResponseEntity<Response> deleteFacultyByIds(@RequestBody List<Integer> facultyIds) throws Exception {
+		if (facultyIds != null && !facultyIds.isEmpty()) {
 			Response response = new Response(null);
-			response.setWarnings(this.genderService.deleteByIds(genderIds));
+			response.setWarnings(this.facultyService.deleteByIds(facultyIds));
 			return new ResponseEntity<Response>(response, HttpStatus.OK);
 		}
 

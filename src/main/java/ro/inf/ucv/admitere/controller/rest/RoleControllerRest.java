@@ -1,6 +1,6 @@
 package ro.inf.ucv.admitere.controller.rest;
 
-import java.util.Date;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -40,17 +40,15 @@ public class RoleControllerRest extends BaseController {
 		return new ResponseEntity<Response>(HttpStatus.NOT_FOUND);
 	}
 
-	@DeleteMapping("/{id}")
-	private ResponseEntity<Response> deleteRole(@PathVariable("id") Integer id) {
-		try {
-			roleService.deleteById(id);
-		} catch (Exception e) {
-			logger.error("Cannot delete role with id: " + id + " : " + e.getMessage());
-			return new ResponseEntity<Response>(new Response("Error was thrown when we try to delete the role."),
-					HttpStatus.BAD_REQUEST);
+	@DeleteMapping
+	public ResponseEntity<Response> deleteGenderByIds(@RequestBody List<Integer> roleIds) throws Exception {
+		if (roleIds != null && !roleIds.isEmpty()) {
+			Response response = new Response(null);
+			response.setWarnings(this.roleService.deleteByIds(roleIds));
+			return new ResponseEntity<Response>(response, HttpStatus.OK);
 		}
 
-		return new ResponseEntity<Response>(new Response("Role was deleted successfully."), HttpStatus.OK);
+		return new ResponseEntity<Response>(HttpStatus.BAD_REQUEST);
 	}
 
 	@GetMapping("/{id}")
@@ -73,8 +71,6 @@ public class RoleControllerRest extends BaseController {
 			if (bindingResult.hasErrors()) {
 				return new ResponseEntity<Response>(new Response(bindingResult.getAllErrors()), HttpStatus.BAD_REQUEST);
 			}
-			role.setId(null);
-			role.setCreationDate(new Date());
 			roleService.save(role, true);
 			return new ResponseEntity<Response>(HttpStatus.OK);
 		} catch (Exception e) {

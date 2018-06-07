@@ -18,7 +18,7 @@ public class Gender implements Serializable {
 
 	@Id
 	@GeneratedValue
-	private int id;
+	private Integer id;
 
 	@NotBlank
 	@Column(unique = true)
@@ -43,11 +43,11 @@ public class Gender implements Serializable {
 		this.creationDate = creationDate;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
