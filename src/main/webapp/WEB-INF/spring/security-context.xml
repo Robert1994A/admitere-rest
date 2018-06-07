@@ -38,7 +38,7 @@
 		<security:intercept-url
 			pattern="/pages/universities**" access="isAuthenticated()" />
 
-		<security:csrf disabled="false" />
+		<security:csrf disabled="true" />
 
 		<security:remember-me use-secure-cookie="false"
 			remember-me-parameter="REMEMBER_ME"

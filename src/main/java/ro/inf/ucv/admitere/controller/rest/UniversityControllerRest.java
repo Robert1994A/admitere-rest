@@ -23,7 +23,7 @@ public class UniversityControllerRest extends BaseController {
 	@GetMapping("/universities")
 	public ResponseEntity<Response> getUniversities(@ModelAttribute("searchModel") SearchModel searchModel)
 			throws Exception {
-		Page<University> universities = universityService.inteligentPagination(searchModel);
+		Page<University> universities = this.universityService.inteligentPagination(searchModel);
 		if (universities != null && universities.hasContent()) {
 			return new ResponseEntity<Response>(new Response(universities), HttpStatus.OK);
 		}
@@ -34,7 +34,7 @@ public class UniversityControllerRest extends BaseController {
 	@GetMapping("/universities/{universityId}")
 	public ResponseEntity<Response> getUniversityById(@PathVariable("universityId") Integer universityId)
 			throws Exception {
-		University university = universityService.findById(universityId);
+		University university = this.universityService.findById(universityId);
 		if (university != null) {
 			return new ResponseEntity<Response>(new Response(university), HttpStatus.OK);
 		}
@@ -44,7 +44,7 @@ public class UniversityControllerRest extends BaseController {
 
 	@GetMapping("/universities/{id}/faculties")
 	public ResponseEntity<Response> getFaculties(@PathVariable("id") Integer universityId) throws Exception {
-		List<Faculty> faculties = universityService.getFaculties(universityId);
+		List<Faculty> faculties = this.universityService.getFaculties(universityId);
 		if (faculties != null && !faculties.isEmpty()) {
 			return new ResponseEntity<Response>(new Response(faculties), HttpStatus.OK);
 		}
@@ -55,7 +55,7 @@ public class UniversityControllerRest extends BaseController {
 	@GetMapping("/universities/{universityId}/faculties/{facultyId}")
 	public ResponseEntity<Response> getFacultyById(@PathVariable("universityId") Integer universityId,
 			@PathVariable("facultyId") Integer facultyId) throws Exception {
-		Faculty faculty = universityService.getFacultyByUniversityAndFacultyId(universityId, facultyId);
+		Faculty faculty = this.universityService.getFacultyByUniversityAndFacultyId(universityId, facultyId);
 		if (faculty != null) {
 			return new ResponseEntity<Response>(new Response(faculty), HttpStatus.OK);
 		}
@@ -66,7 +66,7 @@ public class UniversityControllerRest extends BaseController {
 	@GetMapping("/universities/{universityId}/faculties/{facultyId}/domains")
 	public ResponseEntity<Response> getDomainsByFaculty(@PathVariable("universityId") Integer universityId,
 			@PathVariable("facultyId") Integer facultyId) throws Exception {
-		List<FacultyDomainNomenclature> facultyDomainNomenclatures = universityService.getFacultyDomains(universityId,
+		List<FacultyDomainNomenclature> facultyDomainNomenclatures = this.universityService.getFacultyDomains(universityId,
 				facultyId);
 		if (facultyDomainNomenclatures != null && !facultyDomainNomenclatures.isEmpty()) {
 			return new ResponseEntity<Response>(new Response(facultyDomainNomenclatures), HttpStatus.OK);
@@ -78,7 +78,7 @@ public class UniversityControllerRest extends BaseController {
 	@GetMapping("/universities/{universityId}/faculties/{facultyId}/specializations")
 	public ResponseEntity<Response> getSpecializationsByFaculty(@PathVariable("universityId") Integer universityId,
 			@PathVariable("facultyId") Integer facultyId) throws Exception {
-		List<FacultySpecializationNomenclature> facultySpecializationNomenclatures = universityService
+		List<FacultySpecializationNomenclature> facultySpecializationNomenclatures = this.universityService
 				.getFacultySpecializations(universityId, facultyId);
 		if (facultySpecializationNomenclatures != null && !facultySpecializationNomenclatures.isEmpty()) {
 			return new ResponseEntity<Response>(new Response(facultySpecializationNomenclatures), HttpStatus.OK);
@@ -90,7 +90,7 @@ public class UniversityControllerRest extends BaseController {
 	@GetMapping("/universities/{universityId}/faculties/{facultyId}/sessions")
 	public ResponseEntity<Response> getSessionsByFaculty(@PathVariable("universityId") Integer universityId,
 			@PathVariable("facultyId") Integer facultyId) throws Exception {
-		List<AdmissionSession> admissionSessions = universityService.getFacultySessions(universityId, facultyId);
+		List<AdmissionSession> admissionSessions = this.universityService.getFacultySessions(universityId, facultyId);
 		if (admissionSessions != null && !admissionSessions.isEmpty()) {
 			return new ResponseEntity<Response>(new Response(admissionSessions), HttpStatus.OK);
 		}

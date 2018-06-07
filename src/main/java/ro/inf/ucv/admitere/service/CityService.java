@@ -47,6 +47,7 @@ public class CityService {
 			}
 		} catch (Exception e) {
 			logger.error("Save city: " + city, e);
+			throw e;
 		}
 		return savedCity;
 	}

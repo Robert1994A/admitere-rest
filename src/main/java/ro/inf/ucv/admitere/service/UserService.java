@@ -44,6 +44,7 @@ public class UserService {
 			}
 		} catch (Exception e) {
 			logger.error("Save user: " + user, e);
+			throw e;
 		}
 
 		return savedUser;
@@ -134,6 +135,7 @@ public class UserService {
 		} catch (Exception e) {
 			logger.error("Paginate users: ", e);
 		}
+
 		return users;
 	}
 

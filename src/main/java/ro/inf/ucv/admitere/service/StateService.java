@@ -47,6 +47,7 @@ public class StateService {
 			}
 		} catch (Exception e) {
 			logger.error("Save state: " + state, e);
+			throw e;
 		}
 		return savedState;
 	}

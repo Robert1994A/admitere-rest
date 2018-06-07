@@ -39,6 +39,7 @@ public class CountryService {
 			}
 		} catch (Exception e) {
 			logger.error("Find country by id: " + countryId, e);
+			throw e;
 		}
 
 		return country;

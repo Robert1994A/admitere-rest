@@ -42,6 +42,7 @@ public class AdmisionSessionService {
 			}
 		} catch (Exception e) {
 			logger.error("Save addmision session: " + admissionSession, e);
+			throw e;
 		}
 		return savedAdmissionSession;
 	}

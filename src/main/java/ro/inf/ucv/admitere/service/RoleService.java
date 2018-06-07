@@ -47,6 +47,7 @@ public class RoleService {
 			}
 		} catch (Exception e) {
 			logger.error("Save role: " + role, e);
+			throw e;
 		}
 
 		return savedRole;

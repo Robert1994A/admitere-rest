@@ -53,6 +53,7 @@ public class AdmissionSpecializationService {
 			}
 		} catch (Exception e) {
 			logger.error("Save addmision specialization sample: " + admissionSpecialization, e);
+			throw e;
 		}
 		return savedAdmissionSpecialization;
 	}

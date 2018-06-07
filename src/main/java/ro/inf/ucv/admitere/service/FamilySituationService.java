@@ -41,6 +41,7 @@ public class FamilySituationService {
 			}
 		} catch (Exception e) {
 			logger.error("Save family situation: " + familySituation, e);
+			throw e;
 		}
 
 		return savedFamilySituation;

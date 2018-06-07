@@ -28,7 +28,7 @@ public class ProfileService {
 	public List<Profile> findAll() {
 		List<Profile> profiles = null;
 		try {
-			profiles = profileRepository.findAll();
+			profiles = this.profileRepository.findAll();
 		} catch (Exception e) {
 			logger.error("Find all profiles: ", e);
 		}
@@ -46,17 +46,18 @@ public class ProfileService {
 		Profile savedProfile = null;
 		try {
 			if (profile != null && principal != null) {
-				User authenticatedUser = userService.findByUsername(principal.getName());
+				User authenticatedUser = this.userService.findByUsername(principal.getName());
 				if (authenticatedUser != null) {
 					if (authenticatedUser.getProfile() == null) {
-						savedProfile = profileRepository.save(profile);
+						savedProfile = this.profileRepository.save(profile);
 						authenticatedUser.setProfile(savedProfile);
-						userService.save(authenticatedUser, false);
+						this.userService.save(authenticatedUser, false);
 					}
 				}
 			}
 		} catch (Exception e) {
 			logger.error("Save profile: ", e);
+			throw e;
 		}
 
 		return savedProfile;

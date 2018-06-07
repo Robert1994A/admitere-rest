@@ -40,6 +40,7 @@ public class SampleNomenclatureService {
 			}
 		} catch (Exception e) {
 			logger.error("Save sample nomenclature: " + sampleNomenclature, e);
+			throw e;
 		}
 		return savedSampleNomenclature;
 	}

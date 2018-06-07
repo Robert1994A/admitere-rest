@@ -57,6 +57,7 @@ public class AppliedSessionService {
 			}
 		} catch (Exception e) {
 			logger.error("Save addmision session: " + appliedSession, e);
+			throw e;
 		}
 		return savedAppliedSession;
 	}

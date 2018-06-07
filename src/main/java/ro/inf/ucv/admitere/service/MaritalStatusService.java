@@ -41,6 +41,7 @@ public class MaritalStatusService {
 			}
 		} catch (Exception e) {
 			logger.error("Save marital status: " + maritalStatus, e);
+			throw e;
 		}
 		return savedMaritalStatus;
 	}

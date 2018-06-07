@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import ro.inf.ucv.admitere.controller.html.BaseController;
 import ro.inf.ucv.admitere.entity.Profile;
 import ro.inf.ucv.admitere.entity.User;
 import ro.inf.ucv.admitere.exceptions.UserNotFoundException;
+import ro.inf.ucv.admitere.service.UserService;
 import ro.inf.ucv.admitere.wrapper.Response;
 import ro.inf.ucv.admitere.wrapper.SearchModel;
 
@@ -26,6 +28,9 @@ public class UsersControllerRest extends BaseController {
 
 	private static final Logger logger = Logger.getLogger(UsersControllerRest.class);
 
+	@Autowired
+	protected UserService userService;
+	
 	@GetMapping("/users")
 	public ResponseEntity<Response> getUsers(@Valid @ModelAttribute("searchModel") SearchModel searchModel)
 			throws Exception {

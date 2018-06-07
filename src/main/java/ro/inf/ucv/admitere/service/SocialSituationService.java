@@ -43,6 +43,7 @@ public class SocialSituationService {
 			}
 		} catch (Exception e) {
 			logger.error("Save social situation: " + socialSituation, e);
+			throw e;
 		}
 		return savedSocialSituation;
 	}

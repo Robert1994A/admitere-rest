@@ -41,6 +41,7 @@ public class EthnicityService {
 			}
 		} catch (Exception e) {
 			logger.error("Save ethnicity: " + ethnicity, e);
+			throw e;
 		}
 		return savedEthnicity;
 	}

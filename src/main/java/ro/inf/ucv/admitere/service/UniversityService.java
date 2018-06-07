@@ -66,6 +66,7 @@ public class UniversityService {
 			}
 		} catch (Exception e) {
 			logger.error("Save university: " + university, e);
+			throw e;
 		}
 		return savedUniversity;
 	}

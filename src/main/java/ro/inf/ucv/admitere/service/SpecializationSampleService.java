@@ -40,6 +40,7 @@ public class SpecializationSampleService {
 			}
 		} catch (Exception e) {
 			logger.error("Save specialization sample: " + specializationSample, e);
+			throw e;
 		}
 		return savedSpecializationSample;
 	}

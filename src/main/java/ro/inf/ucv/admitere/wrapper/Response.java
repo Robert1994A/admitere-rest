@@ -1,5 +1,7 @@
 package ro.inf.ucv.admitere.wrapper;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -10,27 +12,29 @@ public class Response {
 
 	private String message;
 
-	private Object content;
+	private Object data;
 
 	private Object validation;
+
+	private List<String> warnings;
 
 	private HttpStatus status;
 
 	public Response(Object content) {
 		super();
-		this.content = content;
+		this.data = content;
 	}
 
 	public Response(String message, Object content) {
 		super();
 		this.message = message;
-		this.content = content;
+		this.data = content;
 	}
 
 	public Response(String message, Object content, Object validation) {
 		super();
 		this.message = message;
-		this.content = content;
+		this.data = content;
 		this.validation = validation;
 	}
 
@@ -47,12 +51,12 @@ public class Response {
 		this.message = message;
 	}
 
-	public Object getContent() {
-		return content;
+	public Object getData() {
+		return data;
 	}
 
-	public void setContent(Object content) {
-		this.content = content;
+	public void setData(Object data) {
+		this.data = data;
 	}
 
 	public Object getValidation() {
@@ -69,5 +73,13 @@ public class Response {
 
 	public void setStatus(HttpStatus status) {
 		this.status = status;
+	}
+
+	public List<String> getWarnings() {
+		return warnings;
+	}
+
+	public void setWarnings(List<String> warnings) {
+		this.warnings = warnings;
 	}
 }

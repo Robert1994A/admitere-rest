@@ -16,7 +16,7 @@ import ro.inf.ucv.admitere.wrapper.SearchModel;
 @Service
 @Transactional
 public class FacultyService {
-	
+
 	private static final Logger logger = Logger.getLogger(FacultyService.class);
 
 	@Autowired
@@ -57,6 +57,7 @@ public class FacultyService {
 			}
 		} catch (Exception e) {
 			logger.error("Save university: " + university, e);
+			throw e;
 		}
 		return faculties;
 	}

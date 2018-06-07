@@ -3,8 +3,11 @@ package ro.inf.ucv.admitere.handler;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.hibernate.TransactionException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -12,8 +15,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import ro.inf.ucv.admitere.controller.html.BaseController;
 import ro.inf.ucv.admitere.exceptions.AlreadyAppliedException;
 import ro.inf.ucv.admitere.exceptions.FieldValidationException;
-import ro.inf.ucv.admitere.exceptions.ProfileNotFoundException;
 import ro.inf.ucv.admitere.exceptions.NotAuthenticatedException;
+import ro.inf.ucv.admitere.exceptions.ProfileNotFoundException;
 import ro.inf.ucv.admitere.exceptions.UserNotFoundException;
 import ro.inf.ucv.admitere.wrapper.Response;
 
@@ -35,6 +38,28 @@ public class AppplicationExceptionHandler extends BaseController {
 		logger.error("Field validation exception: ", ex);
 		return new ResponseEntity<Response>(new Response(ex.getMessage(), null, ex.getFieldErrors()),
 				HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(value = { DataIntegrityViolationException.class })
+	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+	public ResponseEntity<Response> jpaExceptions(DataIntegrityViolationException ex, HttpServletRequest request) {
+		logger.error("DataIntegrityViolationException: ", ex);
+		return new ResponseEntity<Response>(new Response(ex.getRootCause().getMessage()),
+				HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	@ExceptionHandler(value = { TransactionException.class })
+	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+	public ResponseEntity<Response> jpaExceptions(TransactionException ex, HttpServletRequest request) {
+		logger.error("TransactionException: ", ex);
+		return new ResponseEntity<Response>(new Response(ex.getCause().getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	@ExceptionHandler(value = { JpaSystemException.class })
+	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+	public ResponseEntity<Response> jpaExceptions(JpaSystemException ex, HttpServletRequest request) {
+		logger.error("JpaSystemException: ", ex);
+		return new ResponseEntity<Response>(new Response(ex.getCause().getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 	@ExceptionHandler(value = { Exception.class })

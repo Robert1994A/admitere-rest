@@ -43,6 +43,7 @@ public class MedicalConditionService {
 			}
 		} catch (Exception e) {
 			logger.error("Save medical condition: " + medicalCondition, e);
+			throw e;
 		}
 		return savedMedicalCondition;
 	}

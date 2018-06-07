@@ -42,6 +42,7 @@ public class ReligionService {
 			}
 		} catch (Exception e) {
 			logger.error("Save religion: " + religion, e);
+			throw e;
 		}
 		return savedReligion;
 	}

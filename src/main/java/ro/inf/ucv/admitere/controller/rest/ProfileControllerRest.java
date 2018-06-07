@@ -4,6 +4,7 @@ import java.security.Principal;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,15 +19,18 @@ import org.springframework.web.bind.annotation.RestController;
 import ro.inf.ucv.admitere.controller.html.BaseController;
 import ro.inf.ucv.admitere.entity.Profile;
 import ro.inf.ucv.admitere.exceptions.FieldValidationException;
-
+import ro.inf.ucv.admitere.service.ProfileService;
 import ro.inf.ucv.admitere.wrapper.ProfileWrapper;
 import ro.inf.ucv.admitere.wrapper.Response;
 
 @RestController
 public class ProfileControllerRest extends BaseController {
 
+	@Autowired
+	protected ProfileService profileService;
+	
 	@GetMapping("/profile")
-	private ResponseEntity<Response> profile(Principal principal) throws Exception {
+	private ResponseEntity<Response> getProfile(Principal principal) throws Exception {
 		Profile profile = userService.getProfile(principal);
 		if (profile != null && profile.getId() != null) {
 			return new ResponseEntity<Response>(new Response(profile), HttpStatus.OK);

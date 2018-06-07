@@ -40,6 +40,7 @@ public class CitizenshipService {
 			}
 		} catch (Exception e) {
 			logger.error("Save citizenship: " + citizenship, e);
+			throw e;
 		}
 		return savedCitizenship;
 	}
