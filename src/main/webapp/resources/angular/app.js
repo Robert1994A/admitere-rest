@@ -394,7 +394,7 @@ admitereApp.config(function($stateProvider, $urlRouterProvider) {
 		url : '/statistics',
 		views : {
 			"@" : {
-				templateUrl : 'pages/admission_session_statistics.html',
+				templateUrl : 'pages/admission_specialization_statistics.html',
 				controller : 'admissionSessionStatisticsController'
 			}
 		},

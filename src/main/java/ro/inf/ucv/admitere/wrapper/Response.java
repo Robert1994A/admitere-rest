@@ -12,7 +12,7 @@ public class Response {
 
 	private String message;
 
-	private Object data;
+	private Object content;
 
 	private Object validation;
 
@@ -22,19 +22,19 @@ public class Response {
 
 	public Response(Object content) {
 		super();
-		this.data = content;
+		this.content = content;
 	}
 
 	public Response(String message, Object content) {
 		super();
 		this.message = message;
-		this.data = content;
+		this.content = content;
 	}
 
 	public Response(String message, Object content, Object validation) {
 		super();
 		this.message = message;
-		this.data = content;
+		this.content = content;
 		this.validation = validation;
 	}
 
@@ -51,12 +51,12 @@ public class Response {
 		this.message = message;
 	}
 
-	public Object getData() {
-		return data;
+	public Object getContent() {
+		return content;
 	}
 
-	public void setData(Object data) {
-		this.data = data;
+	public void setContent(Object content) {
+		this.content = content;
 	}
 
 	public Object getValidation() {

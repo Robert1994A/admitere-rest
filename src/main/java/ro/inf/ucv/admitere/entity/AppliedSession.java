@@ -42,8 +42,6 @@ public class AppliedSession implements Serializable {
 	@DateTimeFormat(pattern = ConfigurationUtils.DATE_FORMAT)
 	private Date creationDate = new Date();
 
-	// @NotNull
-	// @NotEmpty
 	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "appliedSession")
 	@Fetch(FetchMode.SUBSELECT)

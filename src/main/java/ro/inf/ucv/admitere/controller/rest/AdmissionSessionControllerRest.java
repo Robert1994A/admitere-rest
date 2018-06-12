@@ -47,7 +47,6 @@ public class AdmissionSessionControllerRest extends BaseController {
 	private ResponseEntity<Response> getAdmisisonSessionStatistics(
 			@PathVariable(value = "id", required = true) String admissionSessionId, Principal principal) {
 		try {
-			// TODO: Implement this.
 			List<Statistics> stats = this.admisionSessionService.getStatistics(admissionSessionId);
 			if (stats == null || stats.isEmpty()) {
 				return new ResponseEntity<Response>(HttpStatus.NOT_FOUND);

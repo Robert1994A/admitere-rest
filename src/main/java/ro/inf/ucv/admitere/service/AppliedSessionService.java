@@ -15,8 +15,8 @@ import ro.inf.ucv.admitere.entity.AdmissionSpecialization;
 import ro.inf.ucv.admitere.entity.AppliedSession;
 import ro.inf.ucv.admitere.entity.User;
 import ro.inf.ucv.admitere.exceptions.AlreadyAppliedException;
-import ro.inf.ucv.admitere.exceptions.ProfileNotFoundException;
 import ro.inf.ucv.admitere.exceptions.NotAuthenticatedException;
+import ro.inf.ucv.admitere.exceptions.ProfileNotFoundException;
 import ro.inf.ucv.admitere.repository.AppliedSessionRepository;
 import ro.inf.ucv.admitere.utils.ListUtils;
 
@@ -114,7 +114,28 @@ public class AppliedSessionService {
 				appliedSessions = this.appliedSessionRepository.findByAdmissionSpecialization(admissionSpecialization);
 			}
 		} catch (Exception e) {
-			logger.error("Find applied sesison by admission specialization: " + admissionSpecialization, e);
+			logger.error("Find applied session by admission specialization: " + admissionSpecialization, e);
+		}
+
+		return appliedSessions;
+	}
+
+	public List<AppliedSession> findAppliedSessionsByAdmissionSpecializations(
+			List<AdmissionSpecialization> admissionSpecializations) {
+		List<AppliedSession> appliedSessions = new ArrayList<>();
+		try {
+			if (admissionSpecializations != null && !admissionSpecializations.isEmpty()) {
+				for (AdmissionSpecialization admissionSpecialization : admissionSpecializations) {
+					// TODO: Use single query instead of multiple queries.
+					List<AppliedSession> tmp = this.appliedSessionRepository
+							.findByAdmissionSpecialization(admissionSpecialization);
+					if (tmp != null && !tmp.isEmpty()) {
+						appliedSessions.addAll(tmp);
+					}
+				}
+			}
+		} catch (Exception e) {
+			logger.error("Find applied sesison by admission specializations: " + admissionSpecializations, e);
 		}
 
 		return appliedSessions;

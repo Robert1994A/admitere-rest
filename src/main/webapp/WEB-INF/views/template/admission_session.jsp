@@ -6,8 +6,10 @@
 	</div>
 	<div class="panel-body">
 		<div class="row">
-			<h1>Admission session page.</h1>
-			<button type="button" class="btn btn-primary" ui-sref=".statistics()">Statistics</button>
+			<button type="button" class="btn btn-primary btn-icon"
+				ui-sref=".statistics()">
+				Statistics <i class="icon-stats-bars2"></i>
+			</button>
 		</div>
 	</div>
 </div>

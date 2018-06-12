@@ -1,6 +1,5 @@
 package ro.inf.ucv.admitere.service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +15,7 @@ import org.springframework.stereotype.Service;
 import ro.inf.ucv.admitere.entity.Gender;
 import ro.inf.ucv.admitere.repository.GenderRepository;
 import ro.inf.ucv.admitere.service.utils.PaginationUtils;
+import ro.inf.ucv.admitere.service.utils.RepositoryUtil;
 import ro.inf.ucv.admitere.utils.PrimitiveUtils;
 import ro.inf.ucv.admitere.wrapper.SearchModel;
 
@@ -30,6 +30,9 @@ public class GenderService {
 
 	@Autowired
 	private PaginationUtils paginationUtils;
+
+	@Autowired
+	private RepositoryUtil repositoryUtil;
 
 	public Page<Gender> findAll(Pageable pageable) {
 		Page<Gender> genders = null;
@@ -124,23 +127,6 @@ public class GenderService {
 	}
 
 	public List<String> deleteByIds(List<Integer> genderIds) {
-		List<String> warningMessages = new ArrayList<String>();
-		if (genderIds != null && !genderIds.isEmpty()) {
-			for (Integer genderId : genderIds) {
-				if (genderId != null && genderId.intValue() > 0) {
-					try {
-						this.deleteOne(genderId);
-					} catch (Exception e) {
-						logger.error("Cannot delete gender with id: " + genderId);
-						warningMessages.add("Cannot delete gender with id: " + genderId);
-					}
-				} else {
-					logger.error("Cannot delete gender with id: " + genderId);
-					warningMessages.add("Cannot delete gender with id: " + genderId);
-				}
-			}
-		}
-
-		return warningMessages;
+		return this.repositoryUtil.deleteByIds(genderIds, this.genderRepository);
 	}
 }

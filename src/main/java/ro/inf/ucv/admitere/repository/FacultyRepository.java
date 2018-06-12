@@ -9,7 +9,6 @@ import ro.inf.ucv.admitere.entity.Faculty;
 @Repository
 public interface FacultyRepository extends JpaRepository<Faculty, Integer> {
 
-	Page<Faculty> findByNameOrUrlOrDescriptionAllIgnoreCaseContaining(String search, String search2,
-			Pageable pageable);
+	Page<Faculty> findByNameOrUrlOrDescriptionAllIgnoreCaseContaining(String search, String search2, Pageable pageable);
 
 }

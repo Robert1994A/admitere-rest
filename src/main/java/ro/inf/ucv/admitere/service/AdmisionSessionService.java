@@ -1,14 +1,19 @@
 package ro.inf.ucv.admitere.service;
 
 import java.util.List;
+
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ro.inf.ucv.admitere.entity.AdmissionSession;
+import ro.inf.ucv.admitere.entity.AdmissionSpecialization;
+import ro.inf.ucv.admitere.entity.AppliedSession;
 import ro.inf.ucv.admitere.repository.AdmissionSessionRepository;
+import ro.inf.ucv.admitere.service.utils.StatisticsUtil;
 import ro.inf.ucv.admitere.wrapper.Statistics;
 
 @Service
@@ -19,6 +24,12 @@ public class AdmisionSessionService {
 
 	@Autowired
 	private AdmissionSessionRepository admissionSessionRepository;
+
+	@Autowired
+	private AppliedSessionService appliedSessionService;
+
+	@Autowired
+	private StatisticsUtil statisticsUtil;
 
 	public List<AdmissionSession> findAll() {
 		List<AdmissionSession> admissionSessions = null;
@@ -44,12 +55,44 @@ public class AdmisionSessionService {
 			logger.error("Save addmision session: " + admissionSession, e);
 			throw e;
 		}
+
 		return savedAdmissionSession;
 	}
 
+	public AdmissionSession findById(String admissionSessionId) {
+		AdmissionSession admissionSession = null;
+		try {
+			if (StringUtils.isNotBlank(admissionSessionId)) {
+				admissionSession = this.admissionSessionRepository.findById(admissionSessionId).get();
+			}
+		} catch (Exception e) {
+			logger.error("Find admission session by id: " + admissionSessionId, e);
+		}
+
+		return admissionSession;
+	}
+
 	public List<Statistics> getStatistics(String admissionSessionId) {
-		List<Statistics> stats = null;
-		// TODO: Implement this.
-		return stats;
+		List<Statistics> statistics = null;
+		try {
+			if (StringUtils.isNotBlank(admissionSessionId)) {
+				AdmissionSession admissionSession = findById(admissionSessionId);
+				if (admissionSession != null) {
+					List<AdmissionSpecialization> admissionSpecializations = admissionSession
+							.getAdmissionSpecializations();
+					if (admissionSpecializations != null && !admissionSpecializations.isEmpty()) {
+						List<AppliedSession> appliedSessions = this.appliedSessionService
+								.findAppliedSessionsByAdmissionSpecializations(admissionSpecializations);
+						if (appliedSessions != null && !appliedSessions.isEmpty()) {
+							statistics = this.statisticsUtil.createAllStatistics(appliedSessions);
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+			logger.error("Get statistics for admission session id: " + admissionSessionId, e);
+		}
+
+		return statistics;
 	}
 }

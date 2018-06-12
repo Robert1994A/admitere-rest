@@ -57,13 +57,43 @@ admitereApp.controller('admissionSessionsController', function($scope,
 
 // Admission session controller for statistics.
 admitereApp.controller('admissionSessionStatisticsController', function($scope,
-		comunicationFactory, $state) {
-	$scope.labels = [ '2006', '2007', '2008', '2009', '2010', '2011', '2012' ];
-	$scope.series = [ 'Series A' ];
-	$scope.data = [ 65, 59, 80, 81, 56, 55, 40 ];
+		comunicationFactory, $state, $rootScope) {
+	$scope.containerId = "admission-specialization-statistics-container";
+	$scope.statistics = {};
+	$scope.statisticsFound = false;
+	$scope.getStatistics = function() {
+		$rootScope.showLoader($scope.containerId);
+		var successCallback = function(response) {
+			if (response.data.content == undefined) {
+				return;
+			}
+			$scope.statistics = response.data.content;
+			if ($scope.statistics.length > 0) {
+				$scope.statisticsFound = true;
+			}
+			$rootScope.hideLoader($scope.containerId);
+		};
 
-	console.log("Admission session statistics page",
-			$state.params.admissionSessionId)
+		var errorCallback = function(response) {
+			$rootScope.hideLoader($scope.containerId);
+		};
+
+		comunicationFactory.makeRequest("admission_session/"
+				+ $state.params.admissionSessionId + "/statistics", "GET",
+				null, successCallback, errorCallback, "");
+	};
+
+	$scope.chartOptions = {
+		scales : {
+			yAxes : [ {
+				ticks : {
+					beginAtZero : true
+				}
+			} ]
+		}
+	};
+
+	$scope.getStatistics();
 });
 
 // Admission specialization controller for statistics.
@@ -95,14 +125,14 @@ admitereApp.controller('admissionSpecializationStatisticsController', function(
 	};
 
 	$scope.chartOptions = {
-		scales: {
-	        yAxes: [{
-	            ticks: {
-	                beginAtZero: true
-	            }
-	        }]
-	    }
+		scales : {
+			yAxes : [ {
+				ticks : {
+					beginAtZero : true
+				}
+			} ]
+		}
 	};
-	
+
 	$scope.getStatistics();
 });
