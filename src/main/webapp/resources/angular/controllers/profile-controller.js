@@ -27,7 +27,7 @@ admitereApp.controller('profileController', function($scope, $rootScope,
 	};
 
 	$scope.initInterfaceData = function() {
-		if ($scope.profileCreated && $scope.profileCreated == false) {
+		if ($scope.profileCreated == false) {
 			var successCallback = function(response) {
 				$scope.countries = response.data.content;
 			}
@@ -82,10 +82,12 @@ admitereApp.controller('profileController', function($scope, $rootScope,
 
 	$scope.saveProfile = function() {
 		var successCallback = function(response) {
+			$rootScope.successModal(response);
 			$scope.profileCreated = true;
 		};
 
 		var errorCallback = function(response) {
+			$rootScope.errorModal(response);
 		};
 
 		comunicationFactory.makeRequest("profile", "POST", $scope.profile,
@@ -110,7 +112,8 @@ admitereApp.controller('profileController', function($scope, $rootScope,
 
 	}
 
+	$scope.initInterfaceData();
+
 	$scope.getProfile();
 
-	$scope.initInterfaceData();
 });

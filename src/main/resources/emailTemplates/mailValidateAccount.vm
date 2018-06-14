@@ -2,7 +2,7 @@
 	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
 	<div class="row">
-		<a class="btn btn-primary btn-lg" href="${linkToValidate}">Apasa aici pentru a valida contul</a>
+		<a class="btn btn-primary btn-lg" href="${linkToValidate}">Click here to validate account</a>
 	</div>
 
 

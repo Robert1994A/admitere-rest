@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import ro.inf.ucv.admitere.controller.html.BaseController;
@@ -17,9 +18,10 @@ import ro.inf.ucv.admitere.wrapper.AuthenticatedUser;
 import ro.inf.ucv.admitere.wrapper.Response;
 
 @RestController
+@RequestMapping("/security")
 public class SecurityControllerRest extends BaseController {
 
-	@GetMapping("/security/roles")
+	@GetMapping("/roles")
 	private ResponseEntity<Response> roles(Principal principal) {
 		List<Role> roles = roleService.getUserRoles(principal);
 		if (!ListUtils.isEmpty(roles)) {
@@ -28,7 +30,7 @@ public class SecurityControllerRest extends BaseController {
 		return new ResponseEntity<Response>(HttpStatus.UNAUTHORIZED);
 	}
 
-	@GetMapping("/security/authenticationDetails")
+	@GetMapping("/authenticationDetails")
 	private ResponseEntity<Response> isAuthenticated() {
 		if (SecurityContextHolder.getContext().getAuthentication() != null
 				&& SecurityContextHolder.getContext().getAuthentication().isAuthenticated()

@@ -21,12 +21,7 @@
 		<security:logout
 			delete-cookies="JSESSIONID,REMEMBER_ME" invalidate-session="true"
 			logout-url="/logout" logout-success-url="/#!login?logout=true" />
-		<security:intercept-url pattern="/login"
-			access="permitAll()" />
-		<security:intercept-url pattern="/register"
-			access="permitAll()" />
-		<security:intercept-url pattern="/recover"
-			access="permitAll()" />
+
 		<security:intercept-url pattern="/logout"
 			access="isAuthenticated()" />
 		<security:intercept-url pattern="/account"
@@ -37,16 +32,45 @@
 			access="isAuthenticated()" />
 		<security:intercept-url pattern="/faculties**"
 			access="isAuthenticated()" />
-		<security:intercept-url pattern="/security**"
-			access="isAuthenticated()" />
 		<security:intercept-url
 			pattern="/universities**" access="isAuthenticated()" />
+		<security:intercept-url pattern="/cities**"
+			access="isAuthenticated()" />
+		<security:intercept-url pattern="/countries**"
+			access="isAuthenticated()" />
+		<security:intercept-url pattern="/states**"
+			access="isAuthenticated()" />
+		<security:intercept-url pattern="/security**"
+			access="isAuthenticated()" />
+		<security:intercept-url pattern="/profile**"
+			access="isAuthenticated()" />
+		<security:intercept-url
+			pattern="/applied_sessions**" access="isAuthenticated()" />
+		<security:intercept-url
+			pattern="/admission_session**" access="isAuthenticated()" />
+		<security:intercept-url
+			pattern="/admission_specialization**" access="isAuthenticated()" />
+		<security:intercept-url
+			pattern="/admission_specialization/*/users"
+			access="hasRole('ROLE_ADMIN')" />
+		<security:intercept-url
+			pattern="/admission_session/*/users"
+			access="hasRole('ROLE_ADMIN')" />
+
 		<security:intercept-url
 			pattern="/pages/profile**" access="isAuthenticated()" />
 		<security:intercept-url
-			pattern="/pages/users**" access="isAuthenticated()" />
+			pattern="/pages/users**" access="hasRole('ROLE_ADMIN')" />
+		<security:intercept-url
+			pattern="/pages/admission_specialization_users**"
+			access="hasRole('ROLE_ADMIN')" />
 		<security:intercept-url
 			pattern="/pages/universities**" access="isAuthenticated()" />
+
+		<security:intercept-url pattern="/roles**"
+			access="hasRole('ROLE_ADMIN')" />
+		<security:intercept-url pattern="/users**"
+			access="hasRole('ROLE_ADMIN')" />
 		<security:csrf />
 
 		<security:remember-me use-secure-cookie="false"

@@ -51,8 +51,19 @@ admitereApp
 					templateUrl : 'modals/error-modal.html',
 					controller : "errorModalController"
 				});
-
-				$rootScope.message = message;
+				switch (message.status) {
+				case 417:
+					$rootScope.message = "Please complete the profile before to apply.";
+					break;
+				case 404:
+					$rootScope.message = "Not found.";
+					break;
+				case 500:
+					$rootScope.message = "Internal server error.";
+					break;
+				default:
+					$rootScope.message = message.data;
+				}
 			};
 
 			// Open success modal
@@ -62,8 +73,16 @@ admitereApp
 					templateUrl : 'modals/success-modal.html',
 					controller : "successModalController"
 				});
-
-				$rootScope.message = message;
+				switch (message.status) {
+				case 417:
+					$rootScope.message = "Please complete the profile before to apply";
+					break;
+				case 404:
+					$rootScope.message = "Not found.";
+					break;
+				default:
+					$rootScope.message = message.data;
+				}
 			};
 
 			$rootScope.mainContainerId = "container-loader";
@@ -186,367 +205,439 @@ admitereApp
 		});
 
 // configure our routes
-admitereApp.config(function($stateProvider, $urlRouterProvider) {
-	$stateProvider.state('home', {
-		url : '/',
-		cache : false,
-		templateUrl : 'pages/home.html',
-		controller : 'homeController',
-		ncyBreadcrumb : {
-			label : 'Home'
-		}
-	})
+admitereApp
+		.config(function($stateProvider, $urlRouterProvider) {
+			$stateProvider
+					.state('home', {
+						url : '/',
+						cache : false,
+						templateUrl : 'pages/home.html',
+						controller : 'homeController',
+						ncyBreadcrumb : {
+							label : 'Home'
+						}
+					})
 
-	// route for the users page.
-	.state('users', {
-		url : '/users',
-		cache : false,
-		templateUrl : 'pages/users.html',
-		controller : 'usersController',
-		ncyBreadcrumb : {
-			label : 'Users'
-		}
-	}).state('users.add', {
-		url : '/add',
-		cache : false,
-		views : {
-			"@" : {
-				templateUrl : 'pages/add_user.html',
-				controller : 'addUserController'
-			}
-		},
-		ncyBreadcrumb : {
-			label : 'Add',
-			parent : "users"
-		}
-	})
+					// route for the users page.
+					.state('users', {
+						url : '/users',
+						cache : false,
+						templateUrl : 'pages/users.html',
+						controller : 'usersController',
+						ncyBreadcrumb : {
+							label : 'Users'
+						}
+					})
+					.state('users.add', {
+						url : '/add',
+						cache : false,
+						views : {
+							"@" : {
+								templateUrl : 'pages/add_user.html',
+								controller : 'addUserController'
+							}
+						},
+						ncyBreadcrumb : {
+							label : 'Add',
+							parent : "users"
+						}
+					})
 
-	// route for the universities page.
-	.state('universities', {
-		url : '/universities',
-		cache : false,
-		templateUrl : 'pages/universities.html',
-		controller : 'universitiesController',
-		ncyBreadcrumb : {
-			label : 'Universities'
-		}
-	})
+					// route for the universities page.
+					.state('universities', {
+						url : '/universities',
+						cache : false,
+						templateUrl : 'pages/universities.html',
+						controller : 'universitiesController',
+						ncyBreadcrumb : {
+							label : 'Universities'
+						}
+					})
 
-	// Get university page.
-	.state('universities.detail', {
-		url : '/:universityId',
-		cache : false,
-		resolve : {
-			universityId : [ '$stateParams', function($stateParams) {
-				return $stateParams.universityId;
-			} ]
-		},
-		views : {
-			"@" : {
-				templateUrl : 'pages/university.html',
-				controller : "universityController"
-			}
-		},
-		ncyBreadcrumb : {
-			label : 'University',
-			parent : "universities"
-		}
-	})
+					// Get university page.
+					.state(
+							'universities.detail',
+							{
+								url : '/:universityId',
+								cache : false,
+								resolve : {
+									universityId : [
+											'$stateParams',
+											function($stateParams) {
+												return $stateParams.universityId;
+											} ]
+								},
+								views : {
+									"@" : {
+										templateUrl : 'pages/university.html',
+										controller : "universityController"
+									}
+								},
+								ncyBreadcrumb : {
+									label : 'University',
+									parent : "universities"
+								}
+							})
 
-	// Add new university
-	.state('universities.add', {
-		url : '/add',
-		cache : false,
-		views : {
-			"@" : {
-				templateUrl : 'pages/add_university.html',
-				controller : "addUniversityController"
-			}
-		},
-		ncyBreadcrumb : {
-			label : 'Add',
-			parent : "universities"
-		}
-	})
+					// Add new university
+					.state('universities.add', {
+						url : '/add',
+						cache : false,
+						views : {
+							"@" : {
+								templateUrl : 'pages/add_university.html',
+								controller : "addUniversityController"
+							}
+						},
+						ncyBreadcrumb : {
+							label : 'Add',
+							parent : "universities"
+						}
+					})
 
-	// Get all faculties for university.
-	.state('universities.detail.faculties', {
-		url : '/faculties',
-		views : {
-			"@" : {
-				templateUrl : 'pages/faculties.html',
-				controller : 'universityFacultiesController'
-			}
-		},
-		ncyBreadcrumb : {
-			label : 'Faculties',
-			parent : "universities.detail"
-		}
-	})
+					// Get all faculties for university.
+					.state('universities.detail.faculties', {
+						url : '/faculties',
+						views : {
+							"@" : {
+								templateUrl : 'pages/faculties.html',
+								controller : 'universityFacultiesController'
+							}
+						},
+						ncyBreadcrumb : {
+							label : 'Faculties',
+							parent : "universities.detail"
+						}
+					})
 
-	// Get faculty details.
-	.state('universities.detail.faculties.detail', {
-		url : '/:facultyId',
-		views : {
-			"@" : {
-				templateUrl : 'pages/faculty.html',
-				controller : 'facultyController'
-			}
-		},
-		ncyBreadcrumb : {
-			label : 'Faculty',
-			parent : "universities.detail.faculties"
-		}
-	})
+					// Get faculty details.
+					.state('universities.detail.faculties.detail', {
+						url : '/:facultyId',
+						views : {
+							"@" : {
+								templateUrl : 'pages/faculty.html',
+								controller : 'facultyController'
+							}
+						},
+						ncyBreadcrumb : {
+							label : 'Faculty',
+							parent : "universities.detail.faculties"
+						}
+					})
 
-	// Add new faculty.
-	.state('universities.detail.faculties.add', {
-		url : '/add',
-		views : {
-			"@" : {
-				templateUrl : 'pages/add_faculty.html',
-				controller : 'addFacultyController'
-			}
-		},
-		ncyBreadcrumb : {
-			label : 'Add',
-			parent : "universities.detail.faculties"
-		}
-	})
+					// Add new faculty.
+					.state('universities.detail.faculties.add', {
+						url : '/add',
+						views : {
+							"@" : {
+								templateUrl : 'pages/add_faculty.html',
+								controller : 'addFacultyController'
+							}
+						},
+						ncyBreadcrumb : {
+							label : 'Add',
+							parent : "universities.detail.faculties"
+						}
+					})
 
-	// List domains for faculty.
-	.state('universities.detail.faculties.detail.domains', {
-		url : '/domains',
-		views : {
-			"@" : {
-				templateUrl : 'pages/domains.html',
-				controller : 'facultyDomainsController'
-			}
-		},
-		ncyBreadcrumb : {
-			label : 'Domains',
-			parent : "universities.detail.faculties.detail"
-		}
-	})
+					// List domains for faculty.
+					.state('universities.detail.faculties.detail.domains', {
+						url : '/domains',
+						views : {
+							"@" : {
+								templateUrl : 'pages/domains.html',
+								controller : 'facultyDomainsController'
+							}
+						},
+						ncyBreadcrumb : {
+							label : 'Domains',
+							parent : "universities.detail.faculties.detail"
+						}
+					})
 
-	// Add new domain for faculty.
-	.state('universities.detail.faculties.detail.domains.add', {
-		url : '/add',
-		views : {
-			"@" : {
-				templateUrl : 'pages/add_domain.html',
-				controller : 'facultyAddDomainController'
-			}
-		},
-		ncyBreadcrumb : {
-			label : 'Add',
-			parent : "universities.detail.faculties.detail.domains"
-		}
-	})
+					// Add new domain for faculty.
+					.state(
+							'universities.detail.faculties.detail.domains.add',
+							{
+								url : '/add',
+								views : {
+									"@" : {
+										templateUrl : 'pages/add_domain.html',
+										controller : 'facultyAddDomainController'
+									}
+								},
+								ncyBreadcrumb : {
+									label : 'Add',
+									parent : "universities.detail.faculties.detail.domains"
+								}
+							})
 
-	// List admission sessions
-	.state('universities.detail.faculties.detail.sessions', {
-		url : '/admission_sessions',
-		views : {
-			"@" : {
-				templateUrl : 'pages/admission_sessions.html',
-				controller : 'admissionSessionsController'
-			}
-		},
-		ncyBreadcrumb : {
-			label : 'Admission sessions',
-			parent : "universities.detail.faculties.detail"
-		}
-	})
+					// List admission sessions
+					.state('universities.detail.faculties.detail.sessions', {
+						url : '/admission_sessions',
+						views : {
+							"@" : {
+								templateUrl : 'pages/admission_sessions.html',
+								controller : 'admissionSessionsController'
+							}
+						},
+						ncyBreadcrumb : {
+							label : 'Admission sessions',
+							parent : "universities.detail.faculties.detail"
+						}
+					})
 
-	// Add new admission session page.
-	.state('universities.detail.faculties.detail.sessions.add', {
-		url : '/add',
-		views : {
-			"@" : {
-				templateUrl : 'pages/add_session.html',
-				controller : 'facultyAddSessionController'
-			}
-		},
-		ncyBreadcrumb : {
-			label : 'Add',
-			parent : "universities.detail.faculties.detail.sessions"
-		}
-	})
+					// Add new admission session page.
+					.state(
+							'universities.detail.faculties.detail.sessions.add',
+							{
+								url : '/add',
+								views : {
+									"@" : {
+										templateUrl : 'pages/add_session.html',
+										controller : 'facultyAddSessionController'
+									}
+								},
+								ncyBreadcrumb : {
+									label : 'Add',
+									parent : "universities.detail.faculties.detail.sessions"
+								}
+							})
 
-	// Get admission session page
-	.state('universities.detail.faculties.detail.sessions.detail', {
-		url : '/:admissionSessionId',
-		views : {
-			"@" : {
-				templateUrl : 'pages/admission_session.html',
-				controller : 'admissionSessionController'
-			}
-		},
-		ncyBreadcrumb : {
-			label : 'Admission Session',
-			parent : "universities.detail.faculties.detail.sessions"
-		}
-	})
+					// Get admission session page
+					.state(
+							'universities.detail.faculties.detail.sessions.detail',
+							{
+								url : '/:admissionSessionId',
+								views : {
+									"@" : {
+										templateUrl : 'pages/admission_session.html',
+										controller : 'admissionSessionController'
+									}
+								},
+								ncyBreadcrumb : {
+									label : 'Admission Session',
+									parent : "universities.detail.faculties.detail.sessions"
+								}
+							})
 
-	// Get admission session statistics page
-	.state('universities.detail.faculties.detail.sessions.detail.statistics', {
-		url : '/statistics',
-		views : {
-			"@" : {
-				templateUrl : 'pages/admission_specialization_statistics.html',
-				controller : 'admissionSessionStatisticsController'
-			}
-		},
-		ncyBreadcrumb : {
-			label : 'Statistics',
-			parent : "universities.detail.faculties.detail.sessions.detail"
-		}
-	})
-	
-	// Get admission session statistics page
-	.state('universities.detail.faculties.detail.sessions.specialization_statistics', {
-		url : '/admission_specialization/:admissionSpecializationId/statistics',
-		views : {
-			"@" : {
-				templateUrl : 'pages/admission_specialization_statistics.html',
-				controller : 'admissionSpecializationStatisticsController'
-			}
-		},
-		ncyBreadcrumb : {
-			label : 'Statistics',
-			parent : "universities.detail.faculties.detail.sessions"
-		}
-	})
+					// Get admission session statistics page
+					.state(
+							'universities.detail.faculties.detail.sessions.detail.statistics',
+							{
+								url : '/statistics',
+								views : {
+									"@" : {
+										templateUrl : 'pages/admission_specialization_statistics.html',
+										controller : 'admissionSessionStatisticsController'
+									}
+								},
+								ncyBreadcrumb : {
+									label : 'Statistics',
+									parent : "universities.detail.faculties.detail.sessions.detail"
+								}
+							})
 
-	// List all specializations
-	.state('universities.detail.faculties.detail.specializations', {
-		url : '/specializations',
-		views : {
-			"@" : {
-				templateUrl : 'pages/specializations.html',
-				controller : 'facultySpecializationsController'
-			}
-		},
-		ncyBreadcrumb : {
-			label : 'Specializations',
-			parent : "universities.detail.faculties.detail"
-		}
-	})
-	// Add specialization page.
-	.state('universities.detail.faculties.detail.specializations.add', {
-		url : '/add',
-		views : {
-			"@" : {
-				templateUrl : 'pages/add_specialization.html',
-				controller : 'facultyAddSpecializationController'
-			}
-		},
-		ncyBreadcrumb : {
-			label : 'Add',
-			parent : "universities.detail.faculties.detail.specializations"
-		}
-	})
+					// Get admission session users page
+					.state(
+							'universities.detail.faculties.detail.sessions.detail.users',
+							{
+								url : '/users',
+								views : {
+									"@" : {
+										templateUrl : 'pages/admission_specialization_users.html',
+										controller : 'admissionSessionUsersController'
+									}
+								},
+								ncyBreadcrumb : {
+									label : 'Users',
+									parent : "universities.detail.faculties.detail.sessions.detail"
+								}
+							})
 
-	// route for the users page.
-	.state('profile', {
-		url : '/profile',
-		cache : false,
-		templateUrl : 'pages/profile.html',
-		controller : 'profileController',
-		ncyBreadcrumb : {
-			label : 'Profile'
-		}
-	})
+					// Get admission specialization page
+					.state(
+							'universities.detail.faculties.detail.sessions.admission_specialization',
+							{
+								url : ':admissionSessionId/admission_specialization/:admissionSpecializationId',
+								views : {
+									"@" : {
+										templateUrl : 'pages/admission_specialization.html',
+										controller : 'admissionSpecializationController'
+									}
+								},
+								ncyBreadcrumb : {
+									label : 'Admission specialization',
+									parent : "universities.detail.faculties.detail.sessions"
+								}
+							})
 
-	// route for the applied sessions page page.
-	.state('appliedSessions', {
-		url : '/applied_sessions',
-		cache : false,
-		templateUrl : 'pages/applied_sessions.html',
-		controller : 'appliedSessionsController',
-		ncyBreadcrumb : {
-			label : 'Applied sessions'
-		}
-	})
+					// Get admission specialization statistics page
+					.state(
+							'universities.detail.faculties.detail.sessions.admission_specialization.statistics',
+							{
+								url : '/statistics',
+								views : {
+									"@" : {
+										templateUrl : 'pages/admission_specialization_statistics.html',
+										controller : 'admissionSpecializationStatisticsController'
+									}
+								},
+								ncyBreadcrumb : {
+									label : 'Statistics',
+									parent : "universities.detail.faculties.detail.sessions.admission_specialization"
+								}
+							})
 
-	// route for the about page
-	.state('about', {
-		url : '/about',
-		cache : false,
-		templateUrl : 'pages/about.html',
-		controller : 'aboutController',
-		ncyBreadcrumb : {
-			label : 'About'
-		}
-	})
+					// Get admission specialization users page
+					.state(
+							'universities.detail.faculties.detail.sessions.admission_specialization.users',
+							{
+								url : '/users',
+								views : {
+									"@" : {
+										templateUrl : 'pages/admission_specialization_users.html',
+										controller : 'admissionSpecializationUsersController'
+									}
+								},
+								ncyBreadcrumb : {
+									label : 'Users',
+									parent : "universities.detail.faculties.detail.sessions.admission_specialization"
+								}
+							})
 
-	// route for the account page
-	.state('account', {
-		url : '/account',
-		cache : false,
-		templateUrl : 'pages/account.html',
-		controller : 'accountController',
-		ncyBreadcrumb : {
-			label : 'My account'
-		}
-	})
+					// List all specializations
+					.state(
+							'universities.detail.faculties.detail.specializations',
+							{
+								url : '/specializations',
+								views : {
+									"@" : {
+										templateUrl : 'pages/specializations.html',
+										controller : 'facultySpecializationsController'
+									}
+								},
+								ncyBreadcrumb : {
+									label : 'Specializations',
+									parent : "universities.detail.faculties.detail"
+								}
+							})
+					// Add specialization page.
+					.state(
+							'universities.detail.faculties.detail.specializations.add',
+							{
+								url : '/add',
+								views : {
+									"@" : {
+										templateUrl : 'pages/add_specialization.html',
+										controller : 'facultyAddSpecializationController'
+									}
+								},
+								ncyBreadcrumb : {
+									label : 'Add',
+									parent : "universities.detail.faculties.detail.specializations"
+								}
+							})
 
-	// route for the contact page
-	.state('contact', {
-		url : '/contact',
-		cache : false,
-		templateUrl : 'pages/contact.html',
-		controller : 'contactController',
-		ncyBreadcrumb : {
-			label : 'Contact'
-		}
-	})
+					// route for the users page.
+					.state('profile', {
+						url : '/profile',
+						cache : false,
+						templateUrl : 'pages/profile.html',
+						controller : 'profileController',
+						ncyBreadcrumb : {
+							label : 'Profile'
+						}
+					})
 
-	// route for the login page
-	.state('login', {
-		url : '/login',
-		cache : false,
-		templateUrl : 'pages/login.html',
-		controller : 'loginController',
-		ncyBreadcrumb : {
-			label : 'Login'
-		}
-	})
+					// route for the applied sessions page page.
+					.state('appliedSessions', {
+						url : '/applied_sessions',
+						cache : false,
+						templateUrl : 'pages/applied_sessions.html',
+						controller : 'appliedSessionsController',
+						ncyBreadcrumb : {
+							label : 'Applied sessions'
+						}
+					})
 
-	// route for the register page.
-	.state('register', {
-		url : '/register',
-		cache : false,
-		templateUrl : 'pages/register.html',
-		controller : 'registerController',
-		ncyBreadcrumb : {
-			label : 'Register'
-		}
-	})
+					// route for the about page
+					.state('about', {
+						url : '/about',
+						cache : false,
+						templateUrl : 'pages/about.html',
+						controller : 'aboutController',
+						ncyBreadcrumb : {
+							label : 'About'
+						}
+					})
 
-	.state('recover', {
-		url : '/recover',
-		cache : false,
-		templateUrl : 'pages/recover.html',
-		controller : 'recoverController',
-		ncyBreadcrumb : {
-			label : 'Recover'
-		}
-	})
+					// route for the account page
+					.state('account', {
+						url : '/account',
+						cache : false,
+						templateUrl : 'pages/account.html',
+						controller : 'accountController',
+						ncyBreadcrumb : {
+							label : 'My account'
+						}
+					})
 
-	// route for the 404 not found.
-	.state('404', {
-		url : '/404',
-		templateUrl : 'pages/404.html',
-		controller : 'notFoundController',
-		ncyBreadcrumb : {
-			label : '404 Not Found'
-		}
-	})
+					// route for the contact page
+					.state('contact', {
+						url : '/contact',
+						cache : false,
+						templateUrl : 'pages/contact.html',
+						controller : 'contactController',
+						ncyBreadcrumb : {
+							label : 'Contact'
+						}
+					})
 
-	$urlRouterProvider.otherwise('/');
-});
+					// route for the login page
+					.state('login', {
+						url : '/login',
+						cache : false,
+						templateUrl : 'pages/login.html',
+						controller : 'loginController',
+						ncyBreadcrumb : {
+							label : 'Login'
+						}
+					})
+
+					// route for the register page.
+					.state('register', {
+						url : '/register',
+						cache : false,
+						templateUrl : 'pages/register.html',
+						controller : 'registerController',
+						ncyBreadcrumb : {
+							label : 'Register'
+						}
+					})
+
+					.state('recover', {
+						url : '/recover',
+						cache : false,
+						templateUrl : 'pages/recover.html',
+						controller : 'recoverController',
+						ncyBreadcrumb : {
+							label : 'Recover'
+						}
+					})
+
+					// route for the 404 not found.
+					.state('404', {
+						url : '/404',
+						templateUrl : 'pages/404.html',
+						controller : 'notFoundController',
+						ncyBreadcrumb : {
+							label : '404 Not Found'
+						}
+					})
+
+			$urlRouterProvider.otherwise('/');
+		});
 
 // Read CSRF value.
 var csrfHeaderName = $("meta[name='_csrf_header']").attr("content");

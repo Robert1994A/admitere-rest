@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ro.inf.ucv.admitere.controller.html.BaseController;
 import ro.inf.ucv.admitere.entity.AdmissionSession;
@@ -18,9 +19,10 @@ import ro.inf.ucv.admitere.wrapper.Response;
 import ro.inf.ucv.admitere.wrapper.SearchModel;
 
 @RestController
+@RequestMapping("/universities")
 public class UniversityControllerRest extends BaseController {
 
-	@GetMapping("/universities")
+	@GetMapping
 	public ResponseEntity<Response> getUniversities(@ModelAttribute("searchModel") SearchModel searchModel)
 			throws Exception {
 		Page<University> universities = this.universityService.inteligentPagination(searchModel);
@@ -31,7 +33,7 @@ public class UniversityControllerRest extends BaseController {
 		return new ResponseEntity<Response>(HttpStatus.NOT_FOUND);
 	}
 
-	@GetMapping("/universities/{universityId}")
+	@GetMapping("/{universityId}")
 	public ResponseEntity<Response> getUniversityById(@PathVariable("universityId") Integer universityId)
 			throws Exception {
 		University university = this.universityService.findById(universityId);
@@ -42,7 +44,7 @@ public class UniversityControllerRest extends BaseController {
 		return new ResponseEntity<Response>(HttpStatus.NOT_FOUND);
 	}
 
-	@GetMapping("/universities/{id}/faculties")
+	@GetMapping("/{id}/faculties")
 	public ResponseEntity<Response> getFaculties(@PathVariable("id") Integer universityId) throws Exception {
 		List<Faculty> faculties = this.universityService.getFaculties(universityId);
 		if (faculties != null && !faculties.isEmpty()) {
@@ -52,7 +54,7 @@ public class UniversityControllerRest extends BaseController {
 		return new ResponseEntity<Response>(HttpStatus.NOT_FOUND);
 	}
 
-	@GetMapping("/universities/{universityId}/faculties/{facultyId}")
+	@GetMapping("/{universityId}/faculties/{facultyId}")
 	public ResponseEntity<Response> getFacultyById(@PathVariable("universityId") Integer universityId,
 			@PathVariable("facultyId") Integer facultyId) throws Exception {
 		Faculty faculty = this.universityService.getFacultyByUniversityAndFacultyId(universityId, facultyId);
@@ -63,11 +65,11 @@ public class UniversityControllerRest extends BaseController {
 		return new ResponseEntity<Response>(HttpStatus.NOT_FOUND);
 	}
 
-	@GetMapping("/universities/{universityId}/faculties/{facultyId}/domains")
+	@GetMapping("/{universityId}/faculties/{facultyId}/domains")
 	public ResponseEntity<Response> getDomainsByFaculty(@PathVariable("universityId") Integer universityId,
 			@PathVariable("facultyId") Integer facultyId) throws Exception {
-		List<FacultyDomainNomenclature> facultyDomainNomenclatures = this.universityService.getFacultyDomains(universityId,
-				facultyId);
+		List<FacultyDomainNomenclature> facultyDomainNomenclatures = this.universityService
+				.getFacultyDomains(universityId, facultyId);
 		if (facultyDomainNomenclatures != null && !facultyDomainNomenclatures.isEmpty()) {
 			return new ResponseEntity<Response>(new Response(facultyDomainNomenclatures), HttpStatus.OK);
 		}
@@ -75,7 +77,7 @@ public class UniversityControllerRest extends BaseController {
 		return new ResponseEntity<Response>(HttpStatus.NOT_FOUND);
 	}
 
-	@GetMapping("/universities/{universityId}/faculties/{facultyId}/specializations")
+	@GetMapping("/{universityId}/faculties/{facultyId}/specializations")
 	public ResponseEntity<Response> getSpecializationsByFaculty(@PathVariable("universityId") Integer universityId,
 			@PathVariable("facultyId") Integer facultyId) throws Exception {
 		List<FacultySpecializationNomenclature> facultySpecializationNomenclatures = this.universityService
@@ -87,7 +89,7 @@ public class UniversityControllerRest extends BaseController {
 		return new ResponseEntity<Response>(HttpStatus.NOT_FOUND);
 	}
 
-	@GetMapping("/universities/{universityId}/faculties/{facultyId}/sessions")
+	@GetMapping("/{universityId}/faculties/{facultyId}/sessions")
 	public ResponseEntity<Response> getSessionsByFaculty(@PathVariable("universityId") Integer universityId,
 			@PathVariable("facultyId") Integer facultyId) throws Exception {
 		List<AdmissionSession> admissionSessions = this.universityService.getFacultySessions(universityId, facultyId);

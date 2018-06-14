@@ -7,7 +7,6 @@ admitereApp.controller('usersController', function($scope, $rootScope,
 
 	// Search initialization.
 	$scope.pagination = {};
-	// $scope.searchText = "";
 	$scope.sortDirection = config.sortDirection;
 	$scope.sortBy = config.sortBy;
 	$scope.perPage = config.perPage;
@@ -114,22 +113,27 @@ admitereApp.controller('userDetailsController', function($scope, $rootScope,
 // User details modal controller.
 admitereApp.controller('userProfileController', function($scope, $rootScope,
 		$uibModalInstance, comunicationFactory) {
-	$scope.profileFound = false;
-
+	$scope.profileFound = true;
+	$scope.containerId = "user-profile-container";
 	// Retrieve user profile.
 	userProfile($scope.userIDModal);
 
 	// Get user profile based on his identifier.
 	function userProfile(id) {
+		$rootScope.showLoader($scope.containerId);
 		var successCallback = function(response) {
 			$scope.profile = response.data.content;
-			if ($scope.profile && $scope.profile != null) {
-				$scope.profileFound = true;
+			if (!($scope.profile && $scope.profile != null)) {
+				$scope.profileFound = false;
 			}
 		};
 
+		var errorCallback = function(response) {
+			$rootScope.hideLoader($scope.containerId);
+		};
+
 		comunicationFactory.makeRequest("users/" + id + "/profile", "GET",
-				null, successCallback, null, null);
+				null, successCallback, errorCallback, null);
 	}
 
 	// Close the modal.

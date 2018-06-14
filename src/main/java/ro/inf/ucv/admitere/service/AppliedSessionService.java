@@ -11,10 +11,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import ro.inf.ucv.admitere.entity.AdmissionSession;
 import ro.inf.ucv.admitere.entity.AdmissionSpecialization;
 import ro.inf.ucv.admitere.entity.AppliedSession;
 import ro.inf.ucv.admitere.entity.User;
 import ro.inf.ucv.admitere.exceptions.AlreadyAppliedException;
+import ro.inf.ucv.admitere.exceptions.DisabledAdmissionSessionException;
 import ro.inf.ucv.admitere.exceptions.NotAuthenticatedException;
 import ro.inf.ucv.admitere.exceptions.ProfileNotFoundException;
 import ro.inf.ucv.admitere.repository.AppliedSessionRepository;
@@ -38,7 +40,7 @@ public class AppliedSessionService {
 	public List<AppliedSession> findAll() {
 		List<AppliedSession> appliedSessions = null;
 		try {
-			appliedSessions = appliedSessionRepository.findAll();
+			appliedSessions = this.appliedSessionRepository.findAll();
 		} catch (Exception e) {
 			logger.error("Find all applied sessions: ", e);
 		}
@@ -50,9 +52,9 @@ public class AppliedSessionService {
 		try {
 			if (appliedSession != null) {
 				if (flush) {
-					savedAppliedSession = appliedSessionRepository.saveAndFlush(appliedSession);
+					savedAppliedSession = this.appliedSessionRepository.saveAndFlush(appliedSession);
 				} else {
-					savedAppliedSession = appliedSessionRepository.save(appliedSession);
+					savedAppliedSession = this.appliedSessionRepository.save(appliedSession);
 				}
 			}
 		} catch (Exception e) {
@@ -62,31 +64,38 @@ public class AppliedSessionService {
 		return savedAppliedSession;
 	}
 
-	public void applyAtAdmissionSession(String admissionSpecializationId, String name)
-			throws AlreadyAppliedException, NotAuthenticatedException, ProfileNotFoundException {
-		User authenticatedUser = userService.findByUsername(name);
+	public void applyAtAdmissionSession(String admissionSpecializationId, String name) throws AlreadyAppliedException,
+			NotAuthenticatedException, ProfileNotFoundException, DisabledAdmissionSessionException {
+		User authenticatedUser = this.userService.findByUsername(name);
 		if (authenticatedUser != null) {
 			if (authenticatedUser.getProfile() == null || authenticatedUser.getProfile().getId() == null) {
 				throw new ProfileNotFoundException();
 			}
-			AdmissionSpecialization admissionSpecialization = admissionSpecializationService
+			AdmissionSpecialization admissionSpecialization = this.admissionSpecializationService
 					.findById(admissionSpecializationId);
 			if (admissionSpecialization != null) {
-				AppliedSession appliedSession = appliedSessionRepository
-						.findByUserAndAdmissionSpecialization(authenticatedUser, admissionSpecialization);
-				if (appliedSession != null) {
-					throw new AlreadyAppliedException();
-				} else {
-					AppliedSession sessionToSave = new AppliedSession();
-					sessionToSave.setAdmissionSpecialization(admissionSpecialization);
-					sessionToSave.setUser(authenticatedUser);
-					sessionToSave = this.save(sessionToSave, true);
-					List<AppliedSession> appliedSessions = authenticatedUser.getAppliedSessions();
-					if (ListUtils.isEmpty(appliedSessions)) {
-						appliedSessions = new ArrayList<AppliedSession>();
+				AdmissionSession admissionSession = admissionSpecialization.getAdmissionSession();
+				if (admissionSession != null) {
+					if (admissionSession.isEnabled()) {
+						AppliedSession appliedSession = this.appliedSessionRepository
+								.findByUserAndAdmissionSpecialization(authenticatedUser, admissionSpecialization);
+						if (appliedSession != null) {
+							throw new AlreadyAppliedException();
+						} else {
+							AppliedSession sessionToSave = new AppliedSession();
+							sessionToSave.setAdmissionSpecialization(admissionSpecialization);
+							sessionToSave.setUser(authenticatedUser);
+							sessionToSave = this.save(sessionToSave, true);
+							List<AppliedSession> appliedSessions = authenticatedUser.getAppliedSessions();
+							if (ListUtils.isEmpty(appliedSessions)) {
+								appliedSessions = new ArrayList<AppliedSession>();
+							}
+							appliedSessions.add(sessionToSave);
+							this.userService.save(authenticatedUser, false);
+						}
+					} else {
+						throw new DisabledAdmissionSessionException();
 					}
-					appliedSessions.add(sessionToSave);
-					this.userService.save(authenticatedUser, false);
 				}
 			}
 		} else {
@@ -96,9 +105,9 @@ public class AppliedSessionService {
 
 	public List<AppliedSession> findAppliedSessionsByUserOrderByDateDESC(String name) throws NotAuthenticatedException {
 		List<AppliedSession> appliedSessions = null;
-		User user = userService.findByUsername(name);
+		User user = this.userService.findByUsername(name);
 		if (user != null) {
-			appliedSessions = appliedSessionRepository.findByUser(user, new Sort(Direction.DESC, "creationDate"));
+			appliedSessions = this.appliedSessionRepository.findByUser(user, new Sort(Direction.DESC, "creationDate"));
 		} else {
 			throw new NotAuthenticatedException();
 		}

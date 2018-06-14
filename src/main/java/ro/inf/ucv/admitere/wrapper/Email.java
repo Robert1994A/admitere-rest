@@ -4,12 +4,16 @@ import java.util.List;
 
 import javax.validation.constraints.NotEmpty;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class Email {
 
 	@NotEmpty
 	private List<String> to;
 
 	private List<String> cc;
+
+	private List<MultipartFile> attachments;;
 
 	@NotEmpty
 	private String subject;
@@ -57,6 +61,14 @@ public class Email {
 
 	public void setUseMyEmailAddress(boolean useMyEmailAddress) {
 		this.useMyEmailAddress = useMyEmailAddress;
+	}
+
+	public List<MultipartFile> getAttachments() {
+		return attachments;
+	}
+
+	public void setAttachments(List<MultipartFile> attachments) {
+		this.attachments = attachments;
 	}
 
 }

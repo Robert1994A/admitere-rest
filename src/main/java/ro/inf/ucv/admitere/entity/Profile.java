@@ -136,7 +136,6 @@ public class Profile implements Serializable {
 	@JoinColumn(name = "state_id")
 	private State state;
 
-	@NotNull
 	@JsonIgnore
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import ro.inf.ucv.admitere.controller.html.BaseController;
-import ro.inf.ucv.admitere.entity.User;
 import ro.inf.ucv.admitere.exceptions.FieldValidationException;
 import ro.inf.ucv.admitere.wrapper.Email;
 import ro.inf.ucv.admitere.wrapper.Response;
@@ -29,15 +28,7 @@ public class EmailController extends BaseController {
 			throw new FieldValidationException(bindingResult.getFieldErrors());
 		}
 
-		String myEmail = null;
-		if (email.isUseMyEmailAddress()) {
-			User authenticatedUser = this.userService.findByUsername(principal.getName());
-			if (authenticatedUser != null) {
-				myEmail = authenticatedUser.getEmail();
-			}
-		}
-
-		if (this.mailer.sendMail(myEmail, email.getTo(), email.getCc(), email.getSubject(), email.getContent())) {
+		if (this.mailer.sendMail(email, principal)) {
 			return new ResponseEntity<Response>(HttpStatus.OK);
 		}
 

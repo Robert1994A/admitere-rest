@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import ro.inf.ucv.admitere.controller.html.BaseController;
@@ -24,12 +25,13 @@ import ro.inf.ucv.admitere.wrapper.ProfileWrapper;
 import ro.inf.ucv.admitere.wrapper.Response;
 
 @RestController
+@RequestMapping("/profile")
 public class ProfileControllerRest extends BaseController {
 
 	@Autowired
 	protected ProfileService profileService;
-	
-	@GetMapping("/profile")
+
+	@GetMapping
 	private ResponseEntity<Response> getProfile(Principal principal) throws Exception {
 		Profile profile = userService.getProfile(principal);
 		if (profile != null && profile.getId() != null) {
@@ -38,7 +40,7 @@ public class ProfileControllerRest extends BaseController {
 		return new ResponseEntity<Response>(HttpStatus.NOT_FOUND);
 	}
 
-	@PostMapping(value = "/profile", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	private ResponseEntity<Response> saveProfile(@Valid @RequestBody Profile profile, BindingResult bindingResult,
 			Principal principal) throws Exception {
 		if (bindingResult.hasErrors()) {
@@ -53,13 +55,13 @@ public class ProfileControllerRest extends BaseController {
 		return new ResponseEntity<Response>(HttpStatus.BAD_REQUEST);
 	}
 
-	@GetMapping("/profile/data")
+	@GetMapping("/data")
 	private ResponseEntity<ProfileWrapper> getProfileDetails() throws Exception {
 		return new ResponseEntity<ProfileWrapper>(createProfileWrapper(), HttpStatus.OK);
 	}
 
 	@InitBinder
 	private void initBinder(WebDataBinder binder) {
-		binder.setValidator(profileValidator);
+		binder.setValidator(this.profileValidator);
 	}
 }

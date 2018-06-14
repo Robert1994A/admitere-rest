@@ -28,15 +28,15 @@ public class RecoverPasswordControllerRest extends BaseController {
 			HttpServletRequest request) throws UserNotFoundException {
 		try {
 			String responseToken = request.getParameter("g-recaptcha-response");
-			captchaService.processResponse(responseToken);
-			User user = userService.findByUsernameOrEmail(username, username);
+			this.captchaService.processResponse(responseToken);
+			User user = this.userService.findByUsernameOrEmail(username, username);
 			String recoverToken = user.getRecoverPaswordToken();
 			user.setEnabled(false);
-			userService.save(user, true);
+			this.userService.save(user, true);
 			HashMap<String, String> velocityContext = new HashMap<>();
 			velocityContext.put("linkToRecover",
 					URLUtils.getBaseUrl(request) + "/recoverPassword?recoverToken=" + recoverToken);
-			mailer.sendMail(Arrays.asList(user.getEmail()), null, "Recover Password","mailRecoverPassword.vm",
+			this.mailer.sendMail(Arrays.asList(user.getEmail()), null, "Recover Password", "mailRecoverPassword.vm",
 					velocityContext);
 			return new ResponseEntity<Response>(HttpStatus.OK);
 		} catch (Exception e) {
@@ -52,12 +52,12 @@ public class RecoverPasswordControllerRest extends BaseController {
 			@RequestParam(value = "retypeNewPassword") String retypeNewPassword) {
 		try {
 			if (newPassword.equals(retypeNewPassword)) {
-				User user = userService.findByRecoverPaswordToken(recoverToken);
+				User user = this.userService.findByRecoverPaswordToken(recoverToken);
 				if (user != null) {
 					user.setPassword(securityUtils.encode(newPassword));
 					user.setRecoverPaswordToken(securityUtils.getEncodedRandomString());
 					user.setEnabled(true);
-					userService.save(user, true);
+					this.userService.save(user, true);
 					return new ResponseEntity<Response>(HttpStatus.OK);
 				}
 			}

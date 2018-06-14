@@ -1,5 +1,6 @@
 package ro.inf.ucv.admitere.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -12,8 +13,10 @@ import org.springframework.stereotype.Service;
 import ro.inf.ucv.admitere.entity.AdmissionSession;
 import ro.inf.ucv.admitere.entity.AdmissionSpecialization;
 import ro.inf.ucv.admitere.entity.AppliedSession;
+import ro.inf.ucv.admitere.entity.User;
 import ro.inf.ucv.admitere.repository.AdmissionSessionRepository;
 import ro.inf.ucv.admitere.service.utils.StatisticsUtil;
+import ro.inf.ucv.admitere.utils.ListUtils;
 import ro.inf.ucv.admitere.wrapper.Statistics;
 
 @Service
@@ -94,5 +97,40 @@ public class AdmisionSessionService {
 		}
 
 		return statistics;
+	}
+
+	public List<User> getUsers(String admissionSessionId) {
+		List<User> users = null;
+		try {
+			if (StringUtils.isNotBlank(admissionSessionId)) {
+				AdmissionSession admissionSession = findById(admissionSessionId);
+				if (admissionSession != null) {
+					List<AdmissionSpecialization> admissionSpecializations = admissionSession
+							.getAdmissionSpecializations();
+					if (!ListUtils.isEmpty(admissionSpecializations)) {
+						users = new ArrayList<>();
+						for (AdmissionSpecialization admissionSpecialization : admissionSpecializations) {
+							if (admissionSpecialization != null) {
+								List<AppliedSession> appliedSessions = admissionSpecialization.getAppliedSessions();
+								if (!ListUtils.isEmpty(appliedSessions)) {
+									for (AppliedSession appliedSession : appliedSessions) {
+										if (appliedSession != null) {
+											User user = appliedSession.getUser();
+											if (user != null) {
+												users.add(user);
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+			logger.error("Get users based on admission session id: " + admissionSessionId);
+		}
+
+		return users;
 	}
 }

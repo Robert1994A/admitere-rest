@@ -40,19 +40,62 @@ admitereApp.controller('admissionSessionsController', function($scope,
 	$scope.apply = function(admissionSpecializationId) {
 		$rootScope.showLoader($scope.containerId);
 		var successCallback = function(response) {
-			$rootScope.successModal(response.message);
+			$rootScope.successModal(response);
 			$rootScope.hideLoader($scope.containerId);
 		};
 
 		var errorCallback = function(response) {
-			$rootScope.errorModal(response.message);
+			$rootScope.errorModal(response);
 			$rootScope.hideLoader($scope.containerId);
 		};
 
-		comunicationFactory.makeRequest("admission_session/apply/"
-				+ admissionSpecializationId, "POST", null, successCallback,
-				errorCallback, "");
+		comunicationFactory.makeRequest("admission_specialization/"
+				+ admissionSpecializationId + "/apply", "POST", null,
+				successCallback, errorCallback, "");
 	}
+});
+
+// Admission specialization controller for users.
+admitereApp.controller('admissionSessionUsersController', function($scope,
+		comunicationFactory, $state, $rootScope, $uibModal) {
+	$scope.containerId = "admission-specialization-users-container";
+	$scope.users = {};
+	$scope.usersFound = false;
+	$scope.getUsers = function() {
+		$rootScope.showLoader($scope.containerId);
+		var successCallback = function(response) {
+			if (response.data.content == undefined) {
+				return;
+			}
+			$scope.users = response.data.content;
+			if ($scope.users.length > 0) {
+				$scope.usersFound = true;
+			}
+			$rootScope.hideLoader($scope.containerId);
+		};
+
+		var errorCallback = function(response) {
+			$rootScope.hideLoader($scope.containerId);
+		};
+
+		comunicationFactory.makeRequest("admission_session/"
+				+ $state.params.admissionSessionId + "/users", "GET", null,
+				successCallback, errorCallback, "");
+	};
+
+	$scope.getUsers();
+
+	// Get user details.
+	$scope.userProfile = function(userID) {
+		$scope.userIDModal = userID;
+		// Open user details modal.
+		$uibModal.open({
+			scope : $scope,
+			animation : false,
+			templateUrl : 'modals/userProfile.html',
+			controller : 'userProfileController'
+		});
+	};
 });
 
 // Admission session controller for statistics.
@@ -96,6 +139,49 @@ admitereApp.controller('admissionSessionStatisticsController', function($scope,
 	$scope.getStatistics();
 });
 
+// Admission specialization controller for users.
+admitereApp.controller('admissionSpecializationUsersController', function(
+		$scope, comunicationFactory, $state, $rootScope, $uibModal) {
+	$scope.containerId = "admission-specialization-users-container";
+	$scope.users = {};
+	$scope.usersFound = false;
+	$scope.getUsers = function() {
+		$rootScope.showLoader($scope.containerId);
+		var successCallback = function(response) {
+			if (response.data.content == undefined) {
+				return;
+			}
+			$scope.users = response.data.content;
+			if ($scope.users.length > 0) {
+				$scope.usersFound = true;
+			}
+			$rootScope.hideLoader($scope.containerId);
+		};
+
+		var errorCallback = function(response) {
+			$rootScope.hideLoader($scope.containerId);
+		};
+
+		comunicationFactory.makeRequest("admission_specialization/"
+				+ $state.params.admissionSpecializationId + "/users", "GET",
+				null, successCallback, errorCallback, "");
+	};
+
+	$scope.getUsers();
+
+	// Get user details.
+	$scope.userProfile = function(userID) {
+		$scope.userIDModal = userID;
+		// Open user details modal.
+		$uibModal.open({
+			scope : $scope,
+			animation : false,
+			templateUrl : 'modals/userProfile.html',
+			controller : 'userProfileController'
+		});
+	};
+});
+
 // Admission specialization controller for statistics.
 admitereApp.controller('admissionSpecializationStatisticsController', function(
 		$scope, $rootScope, comunicationFactory, $state) {
@@ -135,4 +221,11 @@ admitereApp.controller('admissionSpecializationStatisticsController', function(
 	};
 
 	$scope.getStatistics();
+});
+
+admitereApp.controller('admissionSpecializationController', function($scope,
+		comunicationFactory, $state) {
+
+	// $state.params.admissionSessionId
+
 });

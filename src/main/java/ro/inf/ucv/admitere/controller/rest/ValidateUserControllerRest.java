@@ -21,19 +21,19 @@ public class ValidateUserControllerRest extends BaseController {
 	private static final Logger logger = Logger.getLogger(ValidateUserControllerRest.class);
 
 	@GetMapping("/validateAccount")
-	public ResponseEntity<Response> validateAccount(@RequestParam("registerToken") String registerToken)
-			throws UserNotFoundException {
+	public ResponseEntity<Response> validateAccount(@RequestParam("registerToken") String registerToken,
+			@RequestParam("email") String email) throws UserNotFoundException {
 		try {
-			User user = userService.findByRegisterToken(registerToken);
+			User user = userService.findByRegisterTokenAndEmail(registerToken, email);
 			if (user == null) {
 				return new ResponseEntity<Response>(HttpStatus.NOT_FOUND);
 			}
 			user.setEnabled(true);
-			user.setRegisterToken(securityUtils.getEncodedRandomString());
-			userService.save(user, true);
+			user.setRegisterToken(this.securityUtils.getEncodedRandomString());
+			this.userService.save(user, true);
 			HashMap<String, String> context = new HashMap<>();
 			context.put("username", user.getUsername());
-			mailer.sendMail(Arrays.asList(user.getEmail()), null, "Account validated succesfully.",
+			this.mailer.sendMail(Arrays.asList(user.getEmail()), null, "Account validated succesfully.",
 					"mailAcountValidated.vm", context);
 			return new ResponseEntity<Response>(HttpStatus.OK);
 		} catch (Exception e) {

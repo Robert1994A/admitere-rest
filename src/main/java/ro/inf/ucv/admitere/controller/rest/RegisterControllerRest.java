@@ -1,5 +1,6 @@
 package ro.inf.ucv.admitere.controller.rest;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -36,7 +37,7 @@ public class RegisterControllerRest extends BaseController {
 
 	@PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Response> registerPOST(@Valid @RequestBody RegisterUserForm registerUserForm,
-			BindingResult result, HttpServletRequest request) {
+			BindingResult result, HttpServletRequest request) throws Exception {
 		if (result.hasErrors()) {
 			return new ResponseEntity<Response>(new Response(result.getFieldError()), HttpStatus.BAD_REQUEST);
 		} else {
@@ -61,11 +62,13 @@ public class RegisterControllerRest extends BaseController {
 
 				HashMap<String, String> velocityContext = new HashMap<>();
 				velocityContext.put("linkToValidate",
-						URLUtils.getBaseUrl(request) + "/validateAccount?registerToken=" + registerToken);
-				boolean emailSend = mailer.sendMail(Arrays.asList(user.getEmail()), null, "Validate account",
+						URLUtils.getBaseUrl(request) + "/validateAccount?registerToken="
+								+ URLEncoder.encode(registerToken, "UTF-8") + "&email="
+								+ URLEncoder.encode(user.getEmail(), "UTF-8"));
+				boolean emailSend = this.mailer.sendMail(Arrays.asList(user.getEmail()), null, "Validate account",
 						"mailValidateAccount.vm", velocityContext);
 				if (emailSend) {
-					userService.save(user, true);
+					this.userService.save(user, true);
 				} else {
 					return new ResponseEntity<Response>(HttpStatus.INTERNAL_SERVER_ERROR);
 				}

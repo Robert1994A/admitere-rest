@@ -37,9 +37,9 @@ public class UserService {
 		try {
 			if (user != null) {
 				if (flush) {
-					savedUser = userRepository.saveAndFlush(user);
+					savedUser = this.userRepository.saveAndFlush(user);
 				} else {
-					savedUser = userRepository.save(user);
+					savedUser = this.userRepository.save(user);
 				}
 			}
 		} catch (Exception e) {
@@ -54,7 +54,7 @@ public class UserService {
 		User user = null;
 		try {
 			if (StringUtils.isNotBlank(id)) {
-				user = userRepository.findById(id).get();
+				user = this.userRepository.findById(id).get();
 			}
 		} catch (Exception e) {
 			logger.error("Find user by id: ", e);
@@ -67,7 +67,7 @@ public class UserService {
 		User user = null;
 		try {
 			if (StringUtils.isNotBlank(username)) {
-				user = userRepository.findByUsername(username);
+				user = this.userRepository.findByUsername(username);
 			}
 		} catch (Exception e) {
 			logger.error("Find user by username: " + username, e);
@@ -80,7 +80,7 @@ public class UserService {
 		Page<User> users = null;
 		try {
 			if (pageable != null) {
-				users = userRepository.findAll(pageable);
+				users = this.userRepository.findAll(pageable);
 			}
 		} catch (Exception e) {
 			logger.error("Find all users with pageable: ", e);
@@ -89,24 +89,11 @@ public class UserService {
 		return users;
 	}
 
-	public User findByRegisterToken(String registerToken) {
-		User user = null;
-		try {
-			if (StringUtils.isNotBlank(registerToken)) {
-				user = userRepository.findByRegisterToken(registerToken);
-			}
-		} catch (Exception e) {
-			logger.error("Find user by register token: ", e);
-		}
-
-		return user;
-	}
-
 	public User findByUsernameOrEmail(String username, String email) {
 		User user = null;
 		try {
 			if (StringUtils.isNotBlank(email) && StringUtils.isNotBlank(username)) {
-				user = userRepository.findByUsernameOrEmail(username, email);
+				user = this.userRepository.findByUsernameOrEmail(username, email);
 			}
 		} catch (Exception e) {
 			logger.error("Find user by username and email: ", e);
@@ -118,7 +105,7 @@ public class UserService {
 		User user = null;
 		try {
 			if (StringUtils.isNotBlank(recoverToken)) {
-				user = userRepository.findByRecoverPaswordToken(recoverToken);
+				user = this.userRepository.findByRecoverPaswordToken(recoverToken);
 			}
 		} catch (Exception e) {
 			logger.error("Find user by recover token: ", e);
@@ -130,7 +117,7 @@ public class UserService {
 		Page<User> users = null;
 		try {
 			if (StringUtils.isNotBlank(search) && pageable != null) {
-				users = userRepository.findByUsernameOrEmailAllIgnoreCaseContaining(search, search, pageable);
+				users = this.userRepository.findByUsernameOrEmailAllIgnoreCaseContaining(search, search, pageable);
 			}
 		} catch (Exception e) {
 			logger.error("Paginate users: ", e);
@@ -143,7 +130,7 @@ public class UserService {
 		User user = null;
 		try {
 			if (StringUtils.isNotBlank(email)) {
-				user = userRepository.findByEmail(email);
+				user = this.userRepository.findByEmail(email);
 			}
 		} catch (Exception e) {
 			logger.error("Find user by email: ", e);
@@ -155,7 +142,7 @@ public class UserService {
 		Page<User> users = null;
 		try {
 			if (searchModel != null) {
-				Pageable pageable = paginationUtils.getPageRequest(new User(), searchModel);
+				Pageable pageable = this.paginationUtils.getPageRequest(new User(), searchModel);
 				if (StringUtils.isNotBlank(searchModel.getSearch())) {
 					users = pagination(searchModel.getSearch(), pageable);
 				} else {
@@ -187,19 +174,44 @@ public class UserService {
 
 	public void deleteUsers(List<String> ids) {
 		if (!ListUtils.isEmpty(ids)) {
-			List<User> users = userRepository.findAllById(ids);
+			List<User> users = this.userRepository.findAllById(ids);
 			if (!ListUtils.isEmpty(users)) {
-				userRepository.deleteInBatch(users);
+				this.userRepository.deleteInBatch(users);
 			}
 		}
 	}
 
 	public long count() {
-		return userRepository.count();
+		return this.userRepository.count();
 	}
 
 	public List<User> searchAdvanced(Specification<User> specification) {
-		return userRepository.findAll(specification);
+		return this.userRepository.findAll(specification);
+	}
+
+	public User findByRegisterTokenAndEmail(String registerToken, String email) {
+		User user = null;
+		try {
+			if (StringUtils.isNotBlank(registerToken) && StringUtils.isNotBlank(email)) {
+				user = this.userRepository.findByRegisterTokenAndEmail(registerToken, email);
+			}
+		} catch (Exception e) {
+			logger.error("Find user by register token and email: " + registerToken + " " + email, e);
+		}
+		return user;
+	}
+
+	public List<User> findAllById(List<String> list) {
+		List<User> users = null;
+		try {
+			if (!ListUtils.isEmpty(list)) {
+				users = this.userRepository.findAllById(list);
+			}
+		} catch (Exception e) {
+			logger.error("Find users by a list with usernames, ids or emails: " + list, e);
+		}
+
+		return users;
 	}
 
 }

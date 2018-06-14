@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import ro.inf.ucv.admitere.controller.html.BaseController;
 import ro.inf.ucv.admitere.exceptions.AlreadyAppliedException;
+import ro.inf.ucv.admitere.exceptions.DisabledAdmissionSessionException;
 import ro.inf.ucv.admitere.exceptions.FieldValidationException;
 import ro.inf.ucv.admitere.exceptions.NotAuthenticatedException;
 import ro.inf.ucv.admitere.exceptions.ProfileNotFoundException;
@@ -38,6 +39,14 @@ public class AppplicationExceptionHandler extends BaseController {
 		logger.error("Field validation exception: ", ex);
 		return new ResponseEntity<Response>(new Response(ex.getMessage(), null, ex.getFieldErrors()),
 				HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(value = { DisabledAdmissionSessionException.class })
+	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+	public ResponseEntity<Response> disabledAdmissionSessionException(DisabledAdmissionSessionException ex,
+			HttpServletRequest request) {
+		logger.error("Disabled admission session exception: ", ex);
+		return new ResponseEntity<Response>(new Response(ex.getCause().getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 	@ExceptionHandler(value = { DataIntegrityViolationException.class })

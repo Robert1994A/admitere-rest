@@ -76,7 +76,6 @@
 
 												<b>Expiration date: </b>{{session.expirationDate | date:
 												'yyyy-MM-dd'}}<br />
-
 												<div class="text-center clearfix">
 													<div class="btn-group">
 														<button type="button" class="btn btn-primary btn-icon"
@@ -84,9 +83,9 @@
 															<i class=" icon-add-to-list"></i>
 														</button>
 														<button type="button"
-															ui-sref=".specialization_statistics({admissionSpecializationId: admissionSpecialization.id})"
+															ui-sref=".admission_specialization({admissionSessionId: session.id, admissionSpecializationId: admissionSpecialization.id})"
 															class="btn btn-primary btn-icon">
-															<i class="icon-stats-bars2"></i>
+															<i class="icon-info3"></i>
 														</button>
 													</div>
 												</div>

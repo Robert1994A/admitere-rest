@@ -4,7 +4,7 @@
 	<h4 class="modal-title" id="modal-label">User profile</h4>
 </div>
 <div class="modal-body">
-	<div class="row">
+	<div class="row" id="user-profile-container">
 		<div class="col-md-12">
 			<div ng-if="!profileFound">
 				<span ng-include src="'no-data-found.html'"></span>
@@ -92,7 +92,6 @@
 					</div>
 				</div>
 				</uib-accordion>
-
 			</div>
 		</div>
 	</div>

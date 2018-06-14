@@ -7,12 +7,15 @@ import javax.validation.Valid;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ro.inf.ucv.admitere.controller.html.BaseController;
@@ -20,18 +23,22 @@ import ro.inf.ucv.admitere.entity.Profile;
 import ro.inf.ucv.admitere.entity.User;
 import ro.inf.ucv.admitere.exceptions.UserNotFoundException;
 import ro.inf.ucv.admitere.service.UserService;
+import ro.inf.ucv.admitere.utils.search.CriteriaParser;
+import ro.inf.ucv.admitere.utils.search.GenericSpecification;
+import ro.inf.ucv.admitere.utils.search.GenericSpecificationsBuilder;
 import ro.inf.ucv.admitere.wrapper.Response;
 import ro.inf.ucv.admitere.wrapper.SearchModel;
 
 @RestController
+@RequestMapping("/users")
 public class UsersControllerRest extends BaseController {
 
 	private static final Logger logger = Logger.getLogger(UsersControllerRest.class);
 
 	@Autowired
 	protected UserService userService;
-	
-	@GetMapping("/users")
+
+	@GetMapping
 	public ResponseEntity<Response> getUsers(@Valid @ModelAttribute("searchModel") SearchModel searchModel)
 			throws Exception {
 		Page<User> users = userService.inteligentPagination(searchModel);
@@ -42,7 +49,7 @@ public class UsersControllerRest extends BaseController {
 		return new ResponseEntity<Response>(HttpStatus.NOT_FOUND);
 	}
 
-	@GetMapping("/users/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<Response> getUserDetails(@PathVariable("id") String id) throws UserNotFoundException {
 		try {
 			User user = userService.findOne(id);
@@ -56,7 +63,7 @@ public class UsersControllerRest extends BaseController {
 		return new ResponseEntity<Response>(HttpStatus.NOT_FOUND);
 	}
 
-	@GetMapping("/users/{id}/profile")
+	@GetMapping("/{id}/profile")
 	public ResponseEntity<Response> getUserProfile(@PathVariable("id") String id) throws UserNotFoundException {
 		try {
 			User user = userService.findOne(id);
@@ -73,13 +80,27 @@ public class UsersControllerRest extends BaseController {
 		return new ResponseEntity<Response>(HttpStatus.NOT_FOUND);
 	}
 
-	@DeleteMapping("/users/{id}")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<Response> deleteUser(@PathVariable("id") List<String> ids) throws UserNotFoundException {
 		try {
 			userService.deleteUsers(ids);
 			return new ResponseEntity<Response>(HttpStatus.OK);
 		} catch (Exception e) {
 			logger.error("Cannot delete users with id: " + ids + ": " + e.getMessage());
+		}
+
+		return new ResponseEntity<Response>(HttpStatus.NOT_FOUND);
+	}
+
+	@GetMapping("/advancedSearch")
+	public ResponseEntity<Response> statistics(@RequestParam("search") String searchParameters) {
+		CriteriaParser parser = new CriteriaParser();
+		GenericSpecificationsBuilder<User> specBuilder = new GenericSpecificationsBuilder<>();
+		Specification<User> specification = specBuilder.build(parser.parse(searchParameters),
+				GenericSpecification::new);
+		List<User> users = this.userService.searchAdvanced(specification);
+		if (users != null && !users.isEmpty()) {
+			return new ResponseEntity<Response>(new Response(users), HttpStatus.OK);
 		}
 
 		return new ResponseEntity<Response>(HttpStatus.NOT_FOUND);

@@ -1,5 +1,6 @@
 package ro.inf.ucv.admitere.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import ro.inf.ucv.admitere.entity.AdmissionSpecialization;
 import ro.inf.ucv.admitere.entity.AppliedSession;
+import ro.inf.ucv.admitere.entity.User;
 import ro.inf.ucv.admitere.repository.AdmissionSpecializationRepository;
 import ro.inf.ucv.admitere.service.utils.StatisticsUtil;
 import ro.inf.ucv.admitere.wrapper.Statistics;
@@ -37,6 +39,7 @@ public class AdmissionSpecializationService {
 		} catch (Exception e) {
 			logger.error("Find all addmision specializations: ", e);
 		}
+
 		return addmisionSpecializationRepositories;
 	}
 
@@ -55,6 +58,7 @@ public class AdmissionSpecializationService {
 			logger.error("Save addmision specialization sample: " + admissionSpecialization, e);
 			throw e;
 		}
+
 		return savedAdmissionSpecialization;
 	}
 
@@ -68,6 +72,7 @@ public class AdmissionSpecializationService {
 		} catch (Exception e) {
 			logger.error("Find admission specialization by id: " + admissionSpecializationId, e);
 		}
+
 		return admissionSpecialization;
 	}
 
@@ -75,8 +80,8 @@ public class AdmissionSpecializationService {
 		List<Statistics> statistics = null;
 		try {
 			if (StringUtils.isNotBlank(admissionSpecializationId)) {
-				AdmissionSpecialization admissionSpecialization = findById(admissionSpecializationId);
-				if (admissionSpecializationId != null) {
+				AdmissionSpecialization admissionSpecialization = this.findById(admissionSpecializationId);
+				if (admissionSpecialization != null) {
 					List<AppliedSession> appliedSessions = this.appliedSessionService
 							.findAppliedSessionsByAdmissionSpecialization(admissionSpecialization);
 					if (appliedSessions != null && !appliedSessions.isEmpty()) {
@@ -89,5 +94,28 @@ public class AdmissionSpecializationService {
 		}
 
 		return statistics;
+	}
+
+	public List<User> getUsers(String admissionSpecializationId) {
+		List<User> users = null;
+		try {
+			AdmissionSpecialization admissionSpecialization = this.findById(admissionSpecializationId);
+			if (admissionSpecialization != null) {
+				List<AppliedSession> appliedSessions = admissionSpecialization.getAppliedSessions();
+				if (appliedSessions != null && !appliedSessions.isEmpty()) {
+					users = new ArrayList<>();
+					for (AppliedSession appliedSession : appliedSessions) {
+						User user = appliedSession.getUser();
+						if (user != null) {
+							users.add(appliedSession.getUser());
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+			logger.error("Get users by admission specialization id: " + admissionSpecializationId, e);
+		}
+
+		return users;
 	}
 }
