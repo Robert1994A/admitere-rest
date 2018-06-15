@@ -30,4 +30,14 @@ public class LogoutController {
 
 		return new ResponseEntity<Response>(HttpStatus.OK);
 	}
+
+	@RequestMapping(value = "/logoutWeb", method = RequestMethod.GET)
+	public String logoutWeb(HttpServletRequest request, HttpServletResponse response) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (auth != null) {
+			new SecurityContextLogoutHandler().logout(request, response, auth);
+		}
+
+		return "redirect:/#!login?logout=true";
+	}
 }

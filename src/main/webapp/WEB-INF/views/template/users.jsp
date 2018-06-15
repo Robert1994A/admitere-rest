@@ -46,7 +46,7 @@
 							<td>{{user.username}}</td>
 							<td>{{user.email}}</td>
 							<td><span
-								ng-class="user.enabled ? 'label label-success' : 'label label-danger'">{{user.enabled}}</span></td>
+								ng-class="!user.enabled ? 'label label-success' : 'label label-danger'">{{user.enabled}}</span></td>
 							<td>
 								<div class="btn-group">
 									<button type="button" ng-click="userDetails(user.id)"

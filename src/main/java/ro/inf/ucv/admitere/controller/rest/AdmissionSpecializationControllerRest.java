@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import ro.inf.ucv.admitere.controller.html.BaseController;
+import ro.inf.ucv.admitere.entity.AdmissionSpecialization;
 import ro.inf.ucv.admitere.entity.User;
 import ro.inf.ucv.admitere.handler.AppplicationExceptionHandler;
 import ro.inf.ucv.admitere.wrapper.Response;
@@ -20,6 +21,21 @@ import ro.inf.ucv.admitere.wrapper.Statistics;
 @RestController
 @RequestMapping("/admission_specialization")
 public class AdmissionSpecializationControllerRest extends BaseController {
+
+	@GetMapping("/{id}")
+	private ResponseEntity<Response> getAdmisisonSpecialization(
+			@PathVariable(value = "id", required = true) String admissionSpecializationId) {
+		try {
+			AdmissionSpecialization admissionSpecialization = this.admissionSpecializationService
+					.findById(admissionSpecializationId);
+			if (admissionSpecialization == null) {
+				return new ResponseEntity<Response>(HttpStatus.NOT_FOUND);
+			}
+			return new ResponseEntity<Response>(new Response(admissionSpecialization), HttpStatus.OK);
+		} catch (Exception e) {
+			return AppplicationExceptionHandler.catchExceptions(e);
+		}
+	}
 
 	@GetMapping("/{id}/statistics")
 	private ResponseEntity<Response> getAdmisisonSpecializationStatistics(

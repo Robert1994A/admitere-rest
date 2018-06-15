@@ -173,11 +173,15 @@ public class UserService {
 	}
 
 	public void deleteUsers(List<String> ids) {
-		if (!ListUtils.isEmpty(ids)) {
-			List<User> users = this.userRepository.findAllById(ids);
-			if (!ListUtils.isEmpty(users)) {
-				this.userRepository.deleteInBatch(users);
+		try {
+			if (!ListUtils.isEmpty(ids)) {
+				List<User> users = this.userRepository.findAllById(ids);
+				if (!ListUtils.isEmpty(users)) {
+					this.userRepository.deleteInBatch(users);
+				}
 			}
+		} catch (Exception e) {
+			logger.error("Delete users by ids: " + ids);
 		}
 	}
 
@@ -214,4 +218,47 @@ public class UserService {
 		return users;
 	}
 
+	public void enableUsers(List<String> ids) {
+		try {
+			if (!ListUtils.isEmpty(ids)) {
+				for (String id : ids) {
+					if (StringUtils.isNotBlank(id)) {
+						User user = this.findOne(id);
+						if (user != null) {
+							if (user.isEnabled()) {
+								logger.warn("User is already enabled: " + user.getId());
+							} else {
+								user.setEnabled(true);
+								this.save(user, true);
+							}
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+			logger.error("Enable users by ids: " + ids, e);
+		}
+	}
+
+	public void disableUsers(List<String> ids) {
+		try {
+			if (!ListUtils.isEmpty(ids)) {
+				for (String id : ids) {
+					if (StringUtils.isNotBlank(id)) {
+						User user = this.findOne(id);
+						if (user != null) {
+							if (!user.isEnabled()) {
+								logger.warn("User is already disabled: " + user.getId());
+							} else {
+								user.setEnabled(false);
+								this.save(user, true);
+							}
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+			logger.error("Disable users by ids: " + ids, e);
+		}
+	}
 }

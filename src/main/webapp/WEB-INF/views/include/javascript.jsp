@@ -85,6 +85,9 @@
 	src="<c:url value="/resources/angular/controllers/admission-session-controller.js"/>"></script>
 
 <script type="text/javascript"
+	src="<c:url value="/resources/angular/controllers/admission-specialization-controller.js"/>"></script>
+
+<script type="text/javascript"
 	src="<c:url value="/resources/angular/controllers/applied-session-controller.js"/>"></script>
 
 <script type="text/javascript"

@@ -12,7 +12,11 @@ admitereApp.controller('contactController', function($scope) {
 });
 
 // Login controller.
-admitereApp.controller('loginController', function($scope) {
+admitereApp.controller('loginController', function($scope, $location) {
+	$scope.successfully = false;
+	if ($location.search() && $location.search().logout) {
+		$scope.successfullyLogout = true;
+	}
 });
 
 // Recover controller.

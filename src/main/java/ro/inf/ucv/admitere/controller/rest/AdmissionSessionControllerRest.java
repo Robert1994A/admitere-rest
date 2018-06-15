@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import ro.inf.ucv.admitere.controller.html.BaseController;
+import ro.inf.ucv.admitere.entity.AdmissionSession;
 import ro.inf.ucv.admitere.entity.User;
 import ro.inf.ucv.admitere.handler.AppplicationExceptionHandler;
 import ro.inf.ucv.admitere.wrapper.Response;
@@ -19,6 +20,19 @@ import ro.inf.ucv.admitere.wrapper.Statistics;
 @RestController
 @RequestMapping("/admission_session")
 public class AdmissionSessionControllerRest extends BaseController {
+	@GetMapping("/{id}")
+	private ResponseEntity<Response> getAdmisisonSession(
+			@PathVariable(value = "id", required = true) String admissionSessionId) {
+		try {
+			AdmissionSession admissionSession = this.admisionSessionService.findById(admissionSessionId);
+			if (admissionSession == null) {
+				return new ResponseEntity<Response>(HttpStatus.NOT_FOUND);
+			}
+			return new ResponseEntity<Response>(new Response(admissionSession), HttpStatus.OK);
+		} catch (Exception e) {
+			return AppplicationExceptionHandler.catchExceptions(e);
+		}
+	}
 
 	@GetMapping("/{id}/statistics")
 	private ResponseEntity<Response> getAdmisisonSessionStatistics(

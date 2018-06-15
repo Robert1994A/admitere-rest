@@ -1,10 +1,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
 <div class="panel panel-default border-grey">
 	<div class="panel-heading">
 		<h4 class="panel-title">Login</h4>
 	</div>
-
 	<div class="panel-body">
 		<div class="row">
 			<c:if test="${SPRING_SECURITY_LAST_EXCEPTION != null}">
@@ -17,15 +15,15 @@
 					.
 				</div>
 			</c:if>
-			<c:if test="${not empty param.logout && param.logout == 'true'}">
-				<div class="alert bg-success alert-styled-right">
-					<button type="button" class="close" data-dismiss="alert">
-						<span>×</span><span class="sr-only">Close</span>
-					</button>
-					<span class="text-semibold">Success!</span> Successfully logout
-					from application.
-				</div>
-			</c:if>
+
+			<div class="alert bg-success alert-styled-right"
+				ng-if="successfullyLogout">
+				<button type="button" class="close" data-dismiss="alert">
+					<span>×</span><span class="sr-only">Close</span>
+				</button>
+				<span class="text-semibold">Success!</span> Successfully logout from
+				application.
+			</div>
 
 			<form name="loginForm" action="<c:url value="/login_security"/>"
 				method="post">
@@ -58,7 +56,7 @@
 						<label><input type="checkbox" name="remember_me"><small>Remember
 								me</small> </label>
 					</div>
-					<a href="#!recover" class="right"><small>Lost your
+					<a ui-sref="recover()" class="right"><small>Lost your
 							Password?</small></a>
 				</div>
 				<div class="form-group">
@@ -66,12 +64,10 @@
 				</div>
 
 				<p class="small">
-					Don't have an account yet? <a href="#!register">Register New
+					Don't have an account yet? <a ui-sref="register()">Register New
 						Account</a>
 				</p>
 			</form>
 		</div>
 	</div>
 </div>
-
-

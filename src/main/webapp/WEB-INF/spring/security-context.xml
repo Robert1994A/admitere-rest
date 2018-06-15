@@ -11,7 +11,6 @@
 		jsr250-annotations="enabled" />
 
 	<security:http auto-config="true" use-expressions="true">
-		<security:http-basic />
 		<security:form-login login-page="/login"
 			always-use-default-target="true"
 			authentication-failure-url="/#!login?error=true"
@@ -54,8 +53,7 @@
 			pattern="/admission_specialization/*/users"
 			access="hasRole('ROLE_ADMIN')" />
 		<security:intercept-url
-			pattern="/admission_session/*/users"
-			access="hasRole('ROLE_ADMIN')" />
+			pattern="/admission_session/*/users" access="hasRole('ROLE_ADMIN')" />
 
 		<security:intercept-url
 			pattern="/pages/profile**" access="isAuthenticated()" />
@@ -71,13 +69,29 @@
 			access="hasRole('ROLE_ADMIN')" />
 		<security:intercept-url pattern="/users**"
 			access="hasRole('ROLE_ADMIN')" />
+
+		<!-- CRSF -->
 		<security:csrf />
 
+		<!-- Remember me. -->
 		<security:remember-me use-secure-cookie="false"
 			remember-me-parameter="REMEMBER_ME"
 			key="eTLDmHISnXtALQThmwe2TNDxoKB9SUgpm97krH8mR5AaGpA6Urnc6MkoI9mqFP"
 			token-validity-seconds="${rememberMe.time}" />
 
+		<!-- Session management. -->
+		<security:session-management
+			session-fixation-protection="migrateSession"
+			session-authentication-error-url="/#!login?error=true">
+			<security:concurrency-control
+				max-sessions="1" error-if-maximum-exceeded="true"
+				expired-url="/login" session-registry-alias="sessionRegistry" />
+		</security:session-management>
+
+		<!-- Authentication for API using Basic -->
+		<security:http-basic />
+
+		<!-- Headers security -->
 		<security:headers>
 			<security:cache-control disabled="false" />
 			<security:content-type-options
@@ -87,6 +101,7 @@
 		</security:headers>
 	</security:http>
 
+	<!-- Login -->
 	<security:authentication-manager>
 		<security:authentication-provider>
 			<security:password-encoder hash="bcrypt" />
